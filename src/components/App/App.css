@@ -1,0 +1,15 @@
+.App {
+  background-image: url(../../images/header_bg.jpg);
+  background-size: cover;
+  background-repeat: round;
+  max-width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  color: #FFFFFF;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+}
