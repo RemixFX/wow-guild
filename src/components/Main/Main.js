@@ -1,11 +1,11 @@
 import News from '../News/News'
 import Online from '../Online/Online'
 
-function Main() {
+function Main(props) {
   return (
     <section className="main">
       <News />
-      <Online />
+      <Online players={props.players}/>
     </section>
   )
 }

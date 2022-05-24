@@ -11,13 +11,9 @@ function App() {
   const getUsers = () => {
     api.getUsers()
     .then((data) => {
-       data.members.filter((player) => {
-        if (player.online) {
-          console.log(player.name)
-        }
-      })
+      return data.members.filter((player) => player.online)
     })
-    .then((players) => console.log(players))
+    .then((player) => setPlayers(player))
     .catch((err) => {
       console.log(err.message)
     })
@@ -27,7 +23,7 @@ function App() {
     getUsers()
   }, [])
 
-
+  console.log(players)
 
   return (
   <div className="App">

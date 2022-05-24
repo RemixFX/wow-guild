@@ -1,9 +1,10 @@
 .online {
-  height: 800px;
+  min-height: 800px;
   background-image: url('../../images/online_bg.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,4 +15,18 @@
   border-image: url(../../images/border3.svg) round round;
   border-image-slice: 3%;
   box-shadow: 1px 0px 50px 0px #91ddfff7;
+}
+
+.online__table {
+  display: grid;
+  grid-template-columns: 20% 30% 25% 15% 10%;
+  width: 100%;
+}
+
+.online__table-cell-header {
+  font-size: 1.3rem;
+  font-weight: 500;
+  justify-self: center;
+  padding-bottom: 10px;
+
 }
