@@ -3,25 +3,28 @@ import React from "react";
 function Sheet(props) {
 
   let rank;
-    switch (props.player.pivot.rank) {
-      case 1:
-        rank = 'ГМ'
-        break;
-      case 2:
-        rank = 'банкир'
-        break;
-      case 5:
-        rank = 'ветеран'
-        break;
-      case 6:
-        rank = 'рейдер'
-        break;
-        case 9:
-          rank = 'новичек'
-          break;
-        default:
-          rank = 'хз';
-    }
+  switch (props.player.pivot.rank) {
+    case 1:
+      rank = 'ГМ'
+      break;
+    case 2:
+      rank = 'банкир'
+      break;
+    case 4:
+      rank = 'офицер'
+      break;
+    case 5:
+      rank = 'ветеран'
+      break;
+    case 6:
+      rank = 'рейдер'
+      break;
+    case 9:
+      rank = 'новичёк'
+      break;
+    default:
+      rank = 'хз';
+  }
 
   return (
     <ul className="sheet">

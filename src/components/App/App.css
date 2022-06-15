@@ -1,7 +1,4 @@
 .App {
-  background-image: url(../../images/header_bg.jpg);
-  background-size: cover;
-  background-repeat: round;
   max-width: 100%;
   min-width: 320px;
   min-height: 100vh;

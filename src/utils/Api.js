@@ -22,7 +22,7 @@ class Api {
 }
 
 const api = new Api({
-  url: "https://api.sirus.su/api/base",
+  url: "https://api.sirusq.su/api/base",
   headers: {
     'Accept': 'application/json',
     "Content-type": "application/json"
