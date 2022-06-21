@@ -4,9 +4,9 @@ function News(props) {
 
   return(
     <CSSTransition
-    in={props.isEmptyResult}
+    in={props.isShowOnline}
     classNames='transform-news'
-    timeout={4000}
+    timeout={2000}
 
     >
     <section className='news'>
@@ -18,6 +18,7 @@ function News(props) {
     </section>
     </CSSTransition>
   )
+
 }
 
 export default News;

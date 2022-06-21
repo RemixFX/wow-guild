@@ -1,41 +1,11 @@
-@keyframes maxwidth {
-  0% {
-
-  }
-  100% {
-    grid-template-columns: 80% 10%;
-  }
-}
-
 .main {
   background-image: url(../../images/header_bg.jpg);
-  background-size: cover;
+  background-size: 66% 68%;
   background-repeat: round;
   display: flex;
   margin: auto;
-  grid-template-columns: 40% 40%;
-  justify-content: center;
+  justify-content: space-around;
   padding-top: 70px;
   padding-bottom: 70px;
   overflow: hidden;
 }
-
-.news-maxwidth {
-  animation: maxwidth 4s ease-in-out forwards;
-}
-
-.width-enter {
-  grid-template-columns: 40% 40%;
-}
-
-
-
-.width-enter-done {
-  grid-template-columns: 80% 10%;
-}
-
-.width-enter-exit {
-  grid-template-columns: 40% 40%;
-}
-
-

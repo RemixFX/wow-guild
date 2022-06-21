@@ -4,12 +4,11 @@
   height: 800px;
   width: 40%;
   background-image: url('../../images/online_bg.png');
-  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   grid-column: 1 / 2;
   grid-row: 1 / 2;
-  margin-left: 10%;
+
   border: solid 10px;
   border-image: url(../../images/border2.svg) round round;
   border-image-slice: 4%;
@@ -22,12 +21,23 @@
 
  .transform-news-enter-active {
   width: 80%;
-  margin-left: 5%;
-  transition: all 3s ease-in-out;
+
+  transition: all 2s ease-in-out;
 }
 
 .transform-news-enter-done {
   width: 80%;
-  margin-left: 5%;
+
+}
+
+.transform-news-exit {
+  width: 80%;
+
+}
+
+.transform-news-exit-active {
+  width: 40%;
+
+  transition: all 2s ease-in-out;
 }
 
