@@ -18,28 +18,40 @@ function App() {
       }, 1800)
     }
 
-  //Запрос списка игроков онлайн
-  React.useEffect(() => {
-    setIsLoading(true);
-    api.getUsers()
-    .then((data) => {
-      return data.members.filter((player) => player.online)
-    })
-    .then((player) => {
-      if (player.length === 0) {
+    // Функция для запроса списка игроков онлайн
+    const getUsersData = () => {
+      setIsLoading(true);
+      api.getUsers()
+      .then((data) => {
+        return data.members.filter((player) => player.online)
+      })
+      .then((player) => {
+        if (player.length === 0) {
+          setIsLoading(false)
+          setIsEmptyResult(true)
+        } else {
+          setPlayers(player)
+          setIsLoading(false)
+        }
+      })
+      .catch((err) => {
+        console.log(err.message)
         setIsLoading(false)
         setIsEmptyResult(true)
-      } else {
-        setPlayers(player)
-        setIsLoading(false)
-      }
-    })
-    .catch((err) => {
-      console.log(err.message)
-      setIsLoading(false)
-      setIsEmptyResult(true)
-    })
+      })
+    }
+
+  //Запрос списка игроков онлайн при загрузке страницы
+  React.useEffect(() => {
+    getUsersData()
   }, [])
+
+  //Принудительный запрос списка игроков
+  const forcedRequest = (req) => {
+    if (isEmptyResult && req) {
+      getUsersData();
+    }
+  }
 
   return (
   <div className="App">
@@ -48,6 +60,7 @@ function App() {
     players={players}
     isLoading={isLoading}
     isEmptyResult={isEmptyResult}
+    getUsersData={getUsersData}
     />
   </div>
   )

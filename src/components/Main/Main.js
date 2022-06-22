@@ -5,32 +5,39 @@ import Online from '../Online/Online'
 
 function Main(props) {
 
-const [isShowOnline, setIsShowOnline] = React.useState(false);
+  const [isShowOnline, setIsShowOnline] = React.useState(false);
 
-const handleClick = () => {
+  const handleClick = () => {
     setIsShowOnline(!isShowOnline)
-    console.log(isShowOnline)
-}
+    if (props.isEmptyResult && isShowOnline) {
+      setTimeout(() => {
+        props.getUsersData();
+        if (props.isEmptyResult) {
+          setTimeout(() => setIsShowOnline(true), 2000)
+        }
+      }, 2000);
+    }
+  }
 
 React.useEffect(() => {
   props.isEmptyResult && handleClick();
 }, [props.isEmptyResult])
 
-  return (
-        <section className='main' >
-          <News
-            isEmptyResult={props.isEmptyResult}
-            isShowOnline={isShowOnline}
-          />
-          <Online
-            players={props.players}
-            isLoading={props.isLoading}
-            isEmptyResult={props.isEmptyResult}
-            handleClick={handleClick}
-            isShowOnline={isShowOnline}
-          />
-        </section>
-  )
+return (
+  <section className='main' >
+    <News
+      isEmptyResult={props.isEmptyResult}
+      isShowOnline={isShowOnline}
+    />
+    <Online
+      players={props.players}
+      isLoading={props.isLoading}
+      isEmptyResult={props.isEmptyResult}
+      handleClick={handleClick}
+      isShowOnline={isShowOnline}
+    />
+  </section>
+)
 }
 
 

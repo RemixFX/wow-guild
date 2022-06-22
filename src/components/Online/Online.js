@@ -38,7 +38,8 @@ function Online(props) {
             <h2 className="online__header">Гильдия Онлайн</h2>
             {props.isEmptyResult || props.isShowOnline ?
               <div className="online__background-preloader">
-                <p className="online-empty">Сервер не отвечает</p>
+                <p className="online-empty">{`${props.isEmptyResult ? 'Сервер не отвечает'
+                  : 'Список игроков'}`}</p>
               </div>
               :
               <div className="online__table">
