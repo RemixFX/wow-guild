@@ -1,7 +1,7 @@
 .online {
   display: flex;
   flex-direction: row;
-  width: 40%;
+  width: 45%;
   min-height: 800px;
 }
 
@@ -78,6 +78,7 @@
 
 .online-empty {
   font-size: 1.5rem;
+  text-align: center;
 }
 
 .online__background-preloader {
@@ -103,7 +104,7 @@
 }
 
 .transform-enter   {
-  width: 40%;
+  width: 45%;
 }
 
  .transform-enter-active {
@@ -124,7 +125,7 @@
 }
 
 .transform-exit-active {
-  width: 40%;
+  width: 45%;
   transition: all 2000ms ease-in-out;
   transform: translateX(0);
 }
@@ -133,12 +134,14 @@
   0% {
     opacity: 0;
     transform: rotate(90deg);
-    min-width: 200%;
+    transform-origin: top;
+    min-width: 193%;
   }
   100% {
     opacity: 1;
     transform: rotate(90deg);
-    min-width: 200%;
+    transform-origin: top;
+    min-width: 193%;
   }
 }
 
