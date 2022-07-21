@@ -1,0 +1,31 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px #7792a4 dashed;
+  color: #bdbde0;
+}
+
+.content__container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 15px;
+  align-items: flex-end;
+}
+
+.content__owner {
+  margin: 0;
+  font-weight: 500;
+  color: #eebc1deb;
+}
+
+.content__date {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #54a4ff;
+}
+
+.content__message {
+  white-space: pre-line;
+}

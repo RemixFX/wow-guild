@@ -19,9 +19,18 @@ class Api {
     })
       .then(this._checkResponse);
   }
+
+  getMessages() {
+    return fetch(`${this._url}/discord`, {
+      method: 'GET',
+//      credentials: 'include',
+      headers: this._headers
+    })
+      .then(this._checkResponse);
+  }
 }
 
-const api = new Api({
+const sirusApi = new Api({
   url: "https://api.sirus.su/api/base",
   headers: {
     'Accept': 'application/json',
@@ -29,4 +38,12 @@ const api = new Api({
   }
 });
 
-export default api;
+const dbApi = new Api({
+  url: "https://wow-guild.herokuapp.com",
+  headers: {
+    'Accept': 'application/json',
+    "Content-type": "application/json"
+  }
+});
+
+export {sirusApi, dbApi};

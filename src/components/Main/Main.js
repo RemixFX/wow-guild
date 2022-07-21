@@ -28,6 +28,8 @@ return (
     <News
       isEmptyResult={props.isEmptyResult}
       isShowOnline={isShowOnline}
+      guildMessages={props.guildMessages}
+      serverMessages={props.serverMessages}
     />
     <Online
       players={props.players}
