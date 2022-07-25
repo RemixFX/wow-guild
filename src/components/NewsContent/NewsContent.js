@@ -11,4 +11,4 @@ function NewsContent(props) {
   )
 }
 
-export default NewsContent;
+  export default NewsContent;

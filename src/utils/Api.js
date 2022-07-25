@@ -12,7 +12,7 @@ class Api {
   }
 
   getUsers() {
-    return fetch(`${this._url}/guilds/57/1`, {
+    return fetch(`${this._url}/guilds/57/5`, {
       method: 'GET',
 //      credentials: 'include',
       headers: this._headers
@@ -39,7 +39,8 @@ const sirusApi = new Api({
 });
 
 const dbApi = new Api({
-  url: "https://wow-guild.herokuapp.com",
+  url: "http://localhost:3001",
+   //url: "https://wow-guild.herokuapp.com",
   headers: {
     'Accept': 'application/json',
     "Content-type": "application/json"

@@ -4,7 +4,6 @@ import Main from '../Main/Main'
 import { sirusApi, dbApi } from '../../utils/Api'
 
 function App() {
-
   const [players, setPlayers] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isEmptyResult, setIsEmptyResult] = React.useState(false);

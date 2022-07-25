@@ -4,13 +4,21 @@
   background-image: url('../../images/online_bg.png');
   background-repeat: no-repeat;
   background-size: cover;
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
-
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: solid 10px;
   border-image: url(../../images/border2.svg) round round;
   border-image-slice: 4%;
   box-shadow: 1px 0px 50px 0px #f30505;
+}
+
+.news::-webkit-scrollbar {
+  width: 10px;
+}
+
+.news::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: linear-gradient(180deg, #2f9dff, #91ddff);
 }
 
 .transform-news-enter {
@@ -38,11 +46,6 @@
 
   transition: all 2s ease-in-out;
 }
-
-.tab {
-
-}
-
 
 .tab button {
   background-color: #00000045;
