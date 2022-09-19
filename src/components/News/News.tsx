@@ -2,7 +2,7 @@ import React from 'react';
 import { CSSTransition } from 'react-transition-group';
 import NewsContent from '../NewsContent/NewsContent';
 
-function News(props) {
+function News(props: any) {
 
   const [activeNewsGuild, setActiveNewsGuild] = React.useState('active');
   const [activeNewsServer, setActiveNewsServer] = React.useState('');
@@ -31,7 +31,7 @@ function News(props) {
           >Новости сервера</button>
         </div>
         <div className='tabcontent'>
-          {(activeNewsGuild === 'active' ? props.guildMessages : props.serverMessages).map((message) =>
+          {(activeNewsGuild === 'active' ? props.guildMessages : props.serverMessages).map((message: any) =>
             <NewsContent message={message} key={message.id} />
           )}
         </div>

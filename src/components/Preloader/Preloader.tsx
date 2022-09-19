@@ -1,5 +1,5 @@
 
-const Preloader = (props) => {
+const Preloader = (props: any) => {
 
   return props.isLoading && (
     <div className="boxes">

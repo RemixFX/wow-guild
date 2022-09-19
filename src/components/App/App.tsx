@@ -2,25 +2,27 @@ import React from "react";
 import Header from '../Header/Header'
 import Main from '../Main/Main'
 import { sirusApi, dbApi } from '../../utils/Api'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { fetchPlayers } from "../../store/reducers/ActionCreators";
 
 function App() {
-  const [players, setPlayers] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+  //const [players, setPlayers] = React.useState([]);
+  //const [isLoading, setIsLoading] = React.useState(false);
   const [isEmptyResult, setIsEmptyResult] = React.useState(false);
   const [guildMessages, setGuildMessages] = React.useState([]);
   const [serverMessages, setServerMessages] = React.useState([]);
 
     // Показ сообщения, если игроки не найдены
-    const showPreloaderMessage = () => {
+/*     const showPreloaderMessage = () => {
       setIsEmptyResult(true)
       setTimeout(() => {
         setIsLoading(false)
         setIsEmptyResult(false)
       }, 1800)
-    }
+    } */
 
     // Функция для запроса списка игроков онлайн
-    const getUsersData = () => {
+/*     const getUsersData = () => {
       setIsLoading(true);
       sirusApi.getUsers()
       .then((data) => {
@@ -33,6 +35,7 @@ function App() {
         } else {
           setPlayers(player)
           setIsLoading(false)
+          console.log(player)
         }
       })
       .catch((err) => {
@@ -40,7 +43,7 @@ function App() {
         setIsLoading(false)
         setIsEmptyResult(true)
       })
-    }
+    } */
 
   // Функция для запроса сообщений сервера
 
@@ -50,27 +53,27 @@ function App() {
     .catch((err) => console.log(err.message))
   }
 
-  //Запрос списка игроков онлайн при загрузке страницы
+/*   //Запрос списка игроков онлайн при загрузке страницы
   React.useEffect(() => {
-    getUsersData()
+    dispatch(fetchPlayers())
     getServerMessages()
-  }, [])
+  }, []) */
 
   //Принудительный запрос списка игроков
-  const forcedRequest = (req) => {
+/*   const forcedRequest = (req) => {
     if (isEmptyResult && req) {
       getUsersData();
     }
-  }
+  } */
 
   return (
   <div className="App">
     <Header/>
     <Main
-    players={players}
-    isLoading={isLoading}
+    //players={players}
+    //isLoading={loading}
     isEmptyResult={isEmptyResult}
-    getUsersData={getUsersData}
+    //getUsersData={getUsersData}
     guildMessages={guildMessages}
     serverMessages={serverMessages}
     />

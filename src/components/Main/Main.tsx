@@ -3,7 +3,7 @@ import React from 'react';
 import News from '../News/News'
 import Online from '../Online/Online'
 
-function Main(props) {
+function Main(props: any) {
 
   const [isShowOnline, setIsShowOnline] = React.useState(false);
 

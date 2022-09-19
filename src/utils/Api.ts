@@ -1,18 +1,20 @@
 class Api {
-  constructor(options) {
+  private _url: any;
+  private _headers: any;
+  constructor(options: { url: any; headers: any; }) {
     this._url = options.url;
     this._headers = options.headers;
   }
 
-  _checkResponse(res) {
+  _checkResponse(res: { ok: any; json: () => Promise<any>; }) {
     if (res.ok) {
       return res.json();
     }
-    return res.json().then((message) => Promise.reject(message))
+    return res.json().then((message: any) => Promise.reject(message))
   }
 
   getUsers() {
-    return fetch(`${this._url}/guilds/57/5`, {
+    return fetch(`${this._url}/guilds/57/225`, {
       method: 'GET',
 //      credentials: 'include',
       headers: this._headers

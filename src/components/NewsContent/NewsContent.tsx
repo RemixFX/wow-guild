@@ -1,5 +1,5 @@
 
-function NewsContent(props) {
+function NewsContent(props: any) {
   return (
     <article className="content">
       <div className="content__container">

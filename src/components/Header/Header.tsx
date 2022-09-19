@@ -1,7 +1,8 @@
-import logo_sirus from '../../images/logo_sirus1.png';
-import guild_logo from '../../images/guild_name2.png';
+import React from 'react';
+const logo_sirus = require('../../images/logo_sirus1.png');
+const guild_logo = require('../../images/guild_name2.png');
 
-function Header() {
+const Header: React.FC = () => {
   return (
     <header className="header">
       <div className='header__container'>
