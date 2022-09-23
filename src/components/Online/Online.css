@@ -213,7 +213,7 @@
 .transform-exit .online-empty {
   opacity: 1;
   transform: rotate(90deg);
-  min-width: 200%;
+  min-width: 230%;
 }
 
 .transform-exit-active .online-empty {

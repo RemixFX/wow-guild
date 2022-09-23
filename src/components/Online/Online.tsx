@@ -6,52 +6,48 @@ import { OnlineComponentSlice } from '../../store/reducers/onlineComponentSlice'
 import Preloader from "../Preloader/Preloader";
 import Sheet from "../Sheet/Sheet";
 
-const Online = (props: any) => {
+const Online = () => {
 
   const dispatch = useAppDispatch();
   const { players, loading, error, onlinePlayers, textOnline, noOnline } = useAppSelector(state => state.player)
   const { isShowOnline, waitingForAnimation } = useAppSelector(state => state.online)
   const [showAllPlayers, setShowAllPlayers] = useState(false)
 
+  // Первичный запрос игроков с сервера для модуля "Онлайн"
   useEffect(() => {
     dispatch(fetchPlayers())
   }, [])
 
-  const showOnlinePlayers = () => {
+  // Кнопка открытия/закрытия модуля "Онлайн"
+  const showOnlinePlayers = async () => {
     isShowOnline ?
       dispatch(OnlineComponentSlice.actions.hideOnline()) :
       dispatch(OnlineComponentSlice.actions.showOnline()) &&
       setTimeout(() => dispatch(OnlineComponentSlice.actions.showTimedOnline()), 2010)
   }
 
+  // Принудительный запрос игроков при открытия модуля "Онлайн",
+  // если изначально их нет или была ошибка сервера
+  const handleAnimationEnd = () => {
+    if (isShowOnline && (noOnline || error)) {
+      dispatch(fetchPlayers())
+        .then(() => {
+          error && dispatch(OnlineComponentSlice.actions.hideOnline())
+        })
+    }
+  }
+
+  // Кнопка переключения отображать всех/только онлайн икроков
   const showHiddenPlayers = () => {
     setShowAllPlayers(!showAllPlayers)
   }
 
-  console.log(waitingForAnimation)
-  /*   if (loading) {
-      return (
-        <section className="online">
-          <button className='online__button' type="button">
-            <div className='online__button-image'></div>
-          </button>
-          <div className='online__block'>
-            <h2 className="online__header">Гильдия Онлайн</h2>
-            <div className="online__background-preloader">
-              <Preloader isLoading={loading} />
-            </div>
-          </div>
-        </section>
-      )
-    } else { */
   return (
     <CSSTransition
       in={!isShowOnline}
       classNames='transform'
-      //onEnter={() => setShowButton(false)}
-      //onExited={() => ()}
       timeout={2000}
-    //appear={true}
+      onAnimationEnd={handleAnimationEnd}
     >
       <section className="online">
         <button className='online__button' type="button" onClick={showOnlinePlayers}>
@@ -91,6 +87,5 @@ const Online = (props: any) => {
     </CSSTransition>
   )
 }
-/* } */
 
 export default Online;

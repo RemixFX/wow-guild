@@ -32,11 +32,6 @@ return (
       serverMessages={props.serverMessages}
     />
     <Online
-      players={props.players}
-      isLoading={props.isLoading}
-      isEmptyResult={props.isEmptyResult}
-      handleClick={handleClick}
-      isShowOnline={isShowOnline}
     />
   </section>
 )

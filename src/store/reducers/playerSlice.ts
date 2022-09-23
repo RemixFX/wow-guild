@@ -45,7 +45,7 @@ export const playerSlice = createSlice({
       state.onlinePlayers = []
       state.loading = false
       state.error = action.payload
-      state.textOnline = 'Нет ответа от сервера'
+      state.textOnline = 'Сервер не отвечает'
       state.noOnline = false
     }
 
