@@ -1,5 +1,6 @@
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { useAppSelector } from '../../store/hooks';
 import NewsContent from '../NewsContent/NewsContent';
 
 function News(props: any) {
@@ -7,9 +8,11 @@ function News(props: any) {
   const [activeNewsGuild, setActiveNewsGuild] = React.useState('active');
   const [activeNewsServer, setActiveNewsServer] = React.useState('');
 
+  const {isShowOnline} = useAppSelector(state => state.online)
+
   return (
     <CSSTransition
-      in={props.isShowOnline}
+      in={!isShowOnline}
       classNames='transform-news'
       timeout={2000}
     >

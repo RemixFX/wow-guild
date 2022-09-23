@@ -7,6 +7,7 @@ export interface PlayerState {
   loading: boolean;
   error: boolean;
   textOnline: string;
+  noOnline: boolean;
 }
 
 const initialState: PlayerState = {
@@ -14,7 +15,8 @@ const initialState: PlayerState = {
   onlinePlayers: [],
   loading: false,
   error: false,
-  textOnline: 'Список игроков'
+  textOnline: 'Список игроков',
+  noOnline: false
 }
 
 export const playerSlice = createSlice({
@@ -27,14 +29,16 @@ export const playerSlice = createSlice({
       state.loading = true
       state.error = false
       state.textOnline = ''
+      state.noOnline = false
     },
     playersFetchingSuccess: (state, action: PayloadAction<IPlayer[]>) => {
       state.players = action.payload
       state.onlinePlayers = action.payload.filter((p)=> p.online === 1)
       state.loading = false
       state.error = false
-      state.textOnline = state.onlinePlayers.length === 0 ? 'Нет игроков онлайн'
+      state.textOnline = state.onlinePlayers.length === 0 ? 'Нет никого онлайн'
       : 'Список игроков'
+      state.noOnline = state.onlinePlayers.length === 0 && true
     },
     playersFetchingError: (state, action: PayloadAction<boolean>) => {
       state.players = []
@@ -42,6 +46,7 @@ export const playerSlice = createSlice({
       state.loading = false
       state.error = action.payload
       state.textOnline = 'Нет ответа от сервера'
+      state.noOnline = false
     }
 
   }
