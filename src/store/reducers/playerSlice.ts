@@ -40,11 +40,11 @@ export const playerSlice = createSlice({
       : 'Список игроков'
       state.noOnline = state.onlinePlayers.length === 0 && true
     },
-    playersFetchingError: (state, action: PayloadAction<boolean>) => {
+    playersFetchingError: state => {
       state.players = []
       state.onlinePlayers = []
       state.loading = false
-      state.error = action.payload
+      state.error = true
       state.textOnline = 'Сервер не отвечает'
       state.noOnline = false
     }

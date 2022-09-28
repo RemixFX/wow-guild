@@ -14,7 +14,8 @@ export const fetchPlayers = () => async (dispatch: AppDispatch) => {
       players.sort((prev, next) => prev.pivot.rank - next.pivot.rank)
       ))
   } catch (error: any) {
-    dispatch(playerSlice.actions.playersFetchingError(true))
+    dispatch(playerSlice.actions.playersFetchingError())
+    setTimeout(() => dispatch(OnlineComponentSlice.actions.hideOnline()), 700)
   }
 }
 
