@@ -18,11 +18,6 @@ const Online = () => {
     dispatch(fetchPlayers())
   }, [])
 
-
-
-  //console.log(readyToCheck)
-  console.log(isShowOnline, noOnline )
-
   // Кнопка открытия/закрытия модуля "Онлайн"
   const showOnlinePlayers = () => {
     if (isShowOnline) {
@@ -30,7 +25,7 @@ const Online = () => {
       setShowAllPlayers(false)
     } else {
       dispatch(OnlineComponentSlice.actions.showOnline())
-      setTimeout(() => dispatch(OnlineComponentSlice.actions.showTimedOnline()), 2010)
+      //setTimeout(() => dispatch(OnlineComponentSlice.actions.showTimedOnline()), 2010)
     }
   }
 
@@ -40,9 +35,8 @@ const Online = () => {
     console.log('тута')
     if (isShowOnline && (error || noOnline)) {
       dispatch(fetchPlayers())
-/*         .then(() => {
-          error && setTimeout(() => dispatch(OnlineComponentSlice.actions.hideOnline()), 700)
-        }) */
+    } else {
+      dispatch(OnlineComponentSlice.actions.showTimedOnline())
     }
   }
 
@@ -58,7 +52,7 @@ const Online = () => {
       in={!isShowOnline}
       classNames='transform'
       timeout={2000}
-      //onAnimationEnd={handleAnimationEnd}
+    //onAnimationEnd={handleAnimationEnd}
     >
       <section className="online">
         <button className='online__button' type="button" onClick={showOnlinePlayers}>
@@ -73,7 +67,7 @@ const Online = () => {
               {`${!showAllPlayers ? 'показать всех' : 'скрыть не в сети'}`}
             </button>)}
           </div>
-          {(noOnline || error || loading || !waitingForAnimation) &&
+          {((noOnline && !showAllPlayers) || error || loading || !waitingForAnimation) &&
             (<div className="online__background-preloader">
               {loading && <Preloader isLoading={loading} />}
               <p className="online-empty">{textOnline}</p>

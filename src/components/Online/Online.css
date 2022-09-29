@@ -133,6 +133,8 @@
 .online-empty {
   font-size: 1.5rem;
   text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .online__background-preloader {
