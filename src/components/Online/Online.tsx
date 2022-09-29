@@ -10,8 +10,9 @@ const Online = () => {
 
   const dispatch = useAppDispatch();
   const { players, loading, error, onlinePlayers, textOnline, noOnline } = useAppSelector(state => state.player)
-  const { isShowOnline, waitingForAnimation } = useAppSelector(state => state.online)
+  const { isShowOnline } = useAppSelector(state => state.online)
   const [showAllPlayers, setShowAllPlayers] = useState(false)
+  const [isEndAnimation, setEndAnimation] = useState(true)
 
   // Первичный запрос игроков с сервера для модуля "Онлайн"
   useEffect(() => {
@@ -23,20 +24,18 @@ const Online = () => {
     if (isShowOnline) {
       dispatch(OnlineComponentSlice.actions.hideOnline())
       setShowAllPlayers(false)
+      setEndAnimation(false)
     } else {
       dispatch(OnlineComponentSlice.actions.showOnline())
-      //setTimeout(() => dispatch(OnlineComponentSlice.actions.showTimedOnline()), 2010)
     }
   }
 
   // Принудительный запрос игроков при открытия модуля "Онлайн",
   // если изначально их нет или была ошибка сервера
   const handleAnimationEnd = () => {
-    console.log('тута')
-    if (isShowOnline && (error || noOnline)) {
+    setEndAnimation(true)
+    if (error || noOnline) {
       dispatch(fetchPlayers())
-    } else {
-      dispatch(OnlineComponentSlice.actions.showTimedOnline())
     }
   }
 
@@ -52,7 +51,6 @@ const Online = () => {
       in={!isShowOnline}
       classNames='transform'
       timeout={2000}
-    //onAnimationEnd={handleAnimationEnd}
     >
       <section className="online">
         <button className='online__button' type="button" onClick={showOnlinePlayers}>
@@ -61,18 +59,18 @@ const Online = () => {
         <div className='online__block'>
           <div className='online__header-block'>
             <h2 className="online__header">Гильдия Онлайн</h2>
-            {(waitingForAnimation && !error) && (<button className={`online__switch-button
+            {(isEndAnimation && !error) && (<button className={`online__switch-button
              ${showAllPlayers && 'online__switch-button_toggle-on'}`}
               type='button' onClick={showHiddenPlayers}>
               {`${!showAllPlayers ? 'показать всех' : 'скрыть не в сети'}`}
             </button>)}
           </div>
-          {((noOnline && !showAllPlayers) || error || loading || !waitingForAnimation) &&
+          {((noOnline && !showAllPlayers) || error || loading || !isShowOnline) &&
             (<div className="online__background-preloader">
               {loading && <Preloader isLoading={loading} />}
               <p className="online-empty">{textOnline}</p>
             </div>)}
-          {((waitingForAnimation && !error && !loading && !noOnline) || (waitingForAnimation && noOnline && showAllPlayers)) &&
+          {((isEndAnimation && !error && !loading && !noOnline) || (noOnline && showAllPlayers)) &&
             (<div className="online__table">
               <span className="online__table-cell-header">Звание</span>
               <span className="online__table-cell-header">Имя</span>
