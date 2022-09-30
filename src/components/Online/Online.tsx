@@ -47,7 +47,6 @@ const Online = () => {
   return (
     <CSSTransition
       onExited={handleAnimationEnd}
-      onEntered={() => console.log('зашло')}
       in={!isShowOnline}
       classNames='transform'
       timeout={2000}

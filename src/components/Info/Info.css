@@ -1,0 +1,12 @@
+.info {
+  background-color: blueviolet;
+  display: flex;
+  justify-content: center;
+}
+
+.info__text {
+  padding-top: 3%;
+  margin: 0;
+  width: 80%;
+  min-height: 50%;
+}

@@ -14,7 +14,7 @@ class Api {
   }
 
   getUsers() {
-    return fetch(`${this._url}/guilds/57/50`, {
+    return fetch(`${this._url}/guilds/57/506`, {
       method: 'GET',
 //      credentials: 'include',
       headers: this._headers

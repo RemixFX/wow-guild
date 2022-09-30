@@ -1,0 +1,9 @@
+.layout {
+  min-height: 100vh;
+  background-image: url(../../images/header_bg.jpg);
+  background-size: 66% 68%;
+  background-repeat: round;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}

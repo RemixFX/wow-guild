@@ -1,84 +1,40 @@
 import React from "react";
 import Header from '../Header/Header'
 import Main from '../Main/Main'
-import { sirusApi, dbApi } from '../../utils/Api'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { fetchPlayers } from "../../store/reducers/ActionCreators";
+import { dbApi } from '../../utils/Api'
+import { Route, Routes } from "react-router-dom";
+import Info from "../Info/Info";
+import News from "../News/News";
+import Online from "../Online/Online";
+import Layout from "../Layout/Layout";
 
 function App() {
-  //const [players, setPlayers] = React.useState([]);
-  //const [isLoading, setIsLoading] = React.useState(false);
-  const [isEmptyResult, setIsEmptyResult] = React.useState(false);
   const [guildMessages, setGuildMessages] = React.useState([]);
   const [serverMessages, setServerMessages] = React.useState([]);
 
-    // Показ сообщения, если игроки не найдены
-/*     const showPreloaderMessage = () => {
-      setIsEmptyResult(true)
-      setTimeout(() => {
-        setIsLoading(false)
-        setIsEmptyResult(false)
-      }, 1800)
-    } */
-
-    // Функция для запроса списка игроков онлайн
-/*     const getUsersData = () => {
-      setIsLoading(true);
-      sirusApi.getUsers()
-      .then((data) => {
-        return data.members.filter((player) => player.online)
-      })
-      .then((player) => {
-        if (player.length === 0) {
-          setIsLoading(false)
-          setIsEmptyResult(true)
-        } else {
-          setPlayers(player)
-          setIsLoading(false)
-          console.log(player)
-        }
-      })
-      .catch((err) => {
-        console.log(err.message)
-        setIsLoading(false)
-        setIsEmptyResult(true)
-      })
-    } */
-
   // Функция для запроса сообщений сервера
-
   const getServerMessages = () => {
     dbApi.getMessages()
-    .then((messages) => setServerMessages(messages))
-    .catch((err) => console.log(err.message))
+      .then((messages) => setServerMessages(messages))
+      .catch((err) => console.log(err.message))
   }
 
-/*   //Запрос списка игроков онлайн при загрузке страницы
-  React.useEffect(() => {
-    dispatch(fetchPlayers())
-    getServerMessages()
-  }, []) */
-
-  //Принудительный запрос списка игроков
-/*   const forcedRequest = (req) => {
-    if (isEmptyResult && req) {
-      getUsersData();
-    }
-  } */
-
   return (
-  <div className="App">
-    <Header/>
-    <Main
-    //players={players}
-    //isLoading={loading}
-    isEmptyResult={isEmptyResult}
-    //getUsersData={getUsersData}
-    guildMessages={guildMessages}
-    serverMessages={serverMessages}
-    />
-  </div>
+    <div className="App">
+      <Routes>
+
+        <Route element={<Layout />}>
+          <Route path="/info" element={<Info />} />
+          <Route path="/" element={<Main
+            guildMessages={guildMessages}
+            serverMessages={serverMessages} />
+          } />
+        </Route>
+      </Routes>
+    </div>
   )
 }
 
 export default App;
+
+

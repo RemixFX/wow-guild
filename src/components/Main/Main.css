@@ -1,9 +1,5 @@
 .main {
-  background-image: url(../../images/header_bg.jpg);
-  background-size: 66% 68%;
-  background-repeat: round;
   display: flex;
-  margin: auto;
   justify-content: space-around;
   padding-top: 70px;
   padding-bottom: 70px;
