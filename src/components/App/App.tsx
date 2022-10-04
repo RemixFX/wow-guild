@@ -4,8 +4,6 @@ import Main from '../Main/Main'
 import { dbApi } from '../../utils/Api'
 import { Route, Routes } from "react-router-dom";
 import Info from "../Info/Info";
-import News from "../News/News";
-import Online from "../Online/Online";
 import Layout from "../Layout/Layout";
 
 function App() {
