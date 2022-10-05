@@ -16,6 +16,13 @@
 	}
 }
 
+@keyframes shadowPulse {
+	50% {
+    box-shadow: inset 0px 0px 16px 4px #8cd7f978, 0px 0px 20px 3px #c1c8ff;
+    color: #c1c8ff;
+	}
+}
+
 .header {
   display: flex;
   background-image: url(../../images/header_bg2.png);
@@ -97,10 +104,12 @@
 .header__link {
   text-decoration: none;
   color: inherit;
+  transition: all 0.2s linear;
 }
 
 .header__link:hover {
-  box-shadow: #0b9495;
+  box-shadow: inset 0px 0px 16px 4px #8cd7f978, 0px 0px 8px 3px #f9f9f982;
+  animation: shadowPulse 1.2s ease infinite;
 }
 
 @media screen and (max-width: 1279px) {

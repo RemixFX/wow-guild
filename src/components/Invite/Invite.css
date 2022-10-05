@@ -1,0 +1,142 @@
+@keyframes animate {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  50.1% {
+    transform: scaleX(1);
+    transform-origin: right;
+
+  }
+
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+
+  }
+
+}
+
+.invite {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.invite__text {
+  padding-top: 3%;
+  padding-bottom: 3%;
+  margin: 0;
+  width: 80%;
+  min-height: 50%;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #eebc1deb;
+  text-align: center;
+}
+
+.invite__widget {
+  border: 1px solid gray;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 50px;
+  transform: translateY(-80px);
+}
+
+.invite__image {
+  width: 550px;
+  z-index: 2;
+  position: relative;
+  border: 1px solid gray;
+  border-bottom: none;
+  border-radius: 10px;
+  border-bottom-right-radius: inherit;
+  border-bottom-left-radius: inherit;
+  transition: all 0.1s linear;
+}
+
+.invite__link {
+  position: relative;
+  overflow: hidden;
+}
+
+.invite__span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  box-sizing: border-box;
+  z-index: 3;
+
+}
+
+.invite__link .invite__span:nth-child(1) {
+  transform: rotate(0deg);
+}
+
+.invite__link .invite__span:nth-child(2) {
+  transform: rotate(90deg) translateY(-49%);
+}
+
+.invite__link .invite__span:nth-child(3) {
+  transform: rotate(180deg);
+}
+
+.invite__link .invite__span:nth-child(4) {
+  transform: rotate(270deg) translateY(-49%);
+}
+
+.invite__link .invite__span:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #e2c600;
+  box-shadow: 0px 0px 6px 1px #fff5c7;
+  animation: animate 2s linear infinite;
+}
+
+.invite__link:hover .invite__span {
+  display: block;
+}
+
+.invite__link:active .invite__image{
+  transform: scale(2.4);
+}
+
+@media screen and (max-width: 1023px) {
+  .invite__text {
+    font-size: 1.0rem;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .invite__widget iframe {
+    width: 450px;
+    height: 400px;
+  }
+
+  .invite__image {
+    width: 450px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .invite__widget iframe {
+    width: 320px;
+    height: 400px;
+  }
+
+  .invite__image {
+    width: 320px;
+  }
+}

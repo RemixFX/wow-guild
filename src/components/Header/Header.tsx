@@ -17,7 +17,7 @@ const Header: React.FC = () => {
               isActive ? "active" : "header__link"}>Информация гильдии</NavLink>
           </li>
           <li className='header__title'>
-            <NavLink to='info' className={({ isActive }) =>
+            <NavLink to='invite' className={({ isActive }) =>
               isActive ? "active" : "header__link"}>Оставить заявку</NavLink>
           </li>
         </ul>

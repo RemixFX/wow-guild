@@ -5,6 +5,7 @@ import { dbApi } from '../../utils/Api'
 import { Route, Routes } from "react-router-dom";
 import Info from "../Info/Info";
 import Layout from "../Layout/Layout";
+import Invite from "../Invite/Invite";
 
 function App() {
   const [guildMessages, setGuildMessages] = React.useState([]);
@@ -23,6 +24,7 @@ function App() {
 
         <Route element={<Layout />}>
           <Route path="/info" element={<Info />} />
+          <Route path="/invite" element={<Invite />} />
           <Route path="/" element={<Main
             guildMessages={guildMessages}
             serverMessages={serverMessages} />
