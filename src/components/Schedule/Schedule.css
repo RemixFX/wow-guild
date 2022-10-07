@@ -1,0 +1,81 @@
+
+
+.schedule {
+  background-color: rgb(27, 27, 27);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule__header {
+  align-self: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: #d8b0157a;
+}
+
+.card__date {
+  margin-top: 5px;
+  margin-bottom: 3px;
+}
+
+.card__layout-element {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  color: black;
+  font-weight: 500;
+}
+
+.card__element {
+  display: flex;
+  flex-direction: column;
+  min-width: 20%;
+  min-height:  56px;
+  padding: 10px;
+  border-radius: 22px;
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+.card__element-owner {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.card__element_hidden {
+  background-color: #ffffff69;
+  background-image: url(../../images/cross.svg);
+  background-size: 64px;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.8;
+}
+
+@media screen and (max-width: 640px) {
+  .card {
+    font-size: 0.9rem;
+  }
+  .card__element_hidden {
+    background-size: 42px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .card {
+    font-size: 0.7rem;
+  }
+  .card__element {
+    min-height: 50px;
+    padding: 6px 1px 6px 1px;
+    border-radius: 10px;
+    margin: 3px;
+  }
+  .card__element_hidden {
+    background-size: 32px;
+  }
+}

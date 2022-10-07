@@ -32,7 +32,7 @@ const Header: React.FC = () => {
               isActive ? "active" : "header__link"}>Составы 25ок</NavLink>
           </li>
           <li className='header__title'>
-            <NavLink to='info' className={({ isActive }) =>
+            <NavLink to='schedule' className={({ isActive }) =>
               isActive ? "active" : "header__link"}>Расписание РТ</NavLink>
           </li>
         </ul>
