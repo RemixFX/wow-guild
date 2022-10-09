@@ -1,4 +1,15 @@
 const Schedule = () => {
+
+  const card = [
+    {date: 1},
+    {date: 2},
+    {date: 3},
+    {date: 4},
+    {date: 5},
+    {date: 6},
+    {date: 7}
+  ]
+
   return (
     <section className="schedule">
       <nav className="schedule__navigation">
@@ -6,8 +17,9 @@ const Schedule = () => {
       </nav>
       <h1 className="schedule__header">Расписание рейдов</h1>
       <div className="chedule__block">
-        <article className="card">
-          <p className="card__date">Сегодня</p>
+        {card.map((element) =>
+        (<article className="card" key={element.date}>
+          <p className="card__date">{element.date}</p>
           <div className="card__layout-element">
             <div className="card__element" style={{backgroundColor: '#7cc210'}}>
               <span className="card__element-title">ИВК 25</span>
@@ -30,8 +42,8 @@ const Schedule = () => {
               <span className="card__element-time"></span>
             </div>
           </div>
-
-        </article>
+        </article>)
+        )}
       </div>
 
     </section>
