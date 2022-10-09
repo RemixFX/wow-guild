@@ -11,6 +11,10 @@
   align-self: center;
 }
 
+.schedule__block {
+  overflow: overlay;
+}
+
 .card {
   display: flex;
   flex-direction: column;
