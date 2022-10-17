@@ -1,53 +1,74 @@
+import React, { WheelEvent } from "react";
+import { isNumberObject } from "util/types";
+
 const Schedule = () => {
 
-  const card = [
-    {date: 1},
-    {date: 2},
-    {date: 3},
-    {date: 4},
-    {date: 5},
-    {date: 6},
-    {date: 7}
-  ]
+  interface IArrAllDays {
+    date: Date;
+    events?: [
+      {
+        name: string,
+        type: string;
+      }
+    ]
+  }
+
   let nowDate = new Date();
   //let curDate = new Date(year, month, day);
-  let arrMonthName = ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь']
+  let arrMonthName = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
   let monthName = arrMonthName[nowDate.getMonth()]
   let nowDateNumber = nowDate.getDate()
   let nowMonth = nowDate.getMonth()
   let nowYear = nowDate.getFullYear()
+  const nowDateWithoutTime = new Date(nowYear, nowMonth, nowDateNumber)
   let monthDays = new Date(nowYear, nowMonth + 1, 0).getDate()
   let previousMonthDays = new Date(nowYear, nowMonth, 0).getDate()
-  let nextMonthDays = new Date(nowYear, nowMonth, 0).getDate()
+  let nextMonthDays = new Date(nowYear, nowMonth + 2, 0).getDate()
 
-  let arrMonthDays: string[] = []
-  for (let i = 1; i <= monthDays ; i++){
-    arrMonthDays.push(String(i));
-  }
-  let arrPreviousMonthDays: string[] = []
-  for (let i = 1; i <= previousMonthDays ; i++){
-    arrPreviousMonthDays.push(String(i));
-  }
-  let arrNextMonthDays: string[] = []
-  for (let i = 1; i <= nextMonthDays ; i++){
-    arrNextMonthDays.push(String(i));
-  }
-  const arrAllDays: string[] = arrPreviousMonthDays.concat(arrMonthDays, arrNextMonthDays)
-  let indexCurrentData: number = Number(arrPreviousMonthDays.length) + Number(arrMonthDays[nowDateNumber - 1])
-  let arrCurrent: string[] = arrAllDays.slice(
-    indexCurrentData - 1, indexCurrentData + 6
-  )
+  const arrAllDays: IArrAllDays[] = []
+  const startingDate = new Date(nowYear, nowMonth - 1)
 
-  const hundleMouseUp = () => {
-    arrCurrent = arrCurrent.slice(0, 4)
-    arrCurrent.unshift(arrAllDays[indexCurrentData -4], arrAllDays[indexCurrentData -3], arrAllDays[indexCurrentData -2])
-    indexCurrentData = indexCurrentData - 3
-    console.log(arrCurrent)
+  for (let i = 0; i < previousMonthDays + monthDays + nextMonthDays; i++) {
+    const date = new Date(startingDate)
+    arrAllDays.push({ date })
+    startingDate.setDate(startingDate.getDate() + 1)
   }
 
-  //console.log(hundleMouseUp())
+  const ROW_COUNT: number = 7
 
 
+  const indexCurrentData = arrAllDays.findIndex(((element) =>
+    element.date.getTime() === nowDateWithoutTime.getTime()))
+  console.log(arrAllDays)
+  let currentArr: IArrAllDays[] = arrAllDays.slice(indexCurrentData, indexCurrentData + 7)
+
+  const [data, setData] = React.useState(currentArr)
+  const [index, setIndex] = React.useState(4)
+
+  const hundleMouseUp = (e: WheelEvent) => {
+    if (e.deltaY < 0) {
+      console.log(arrAllDays[indexCurrentData - index])
+      if (index > indexCurrentData) return
+      setData((data.unshift(
+        arrAllDays[indexCurrentData - index],
+        arrAllDays[indexCurrentData - (index - 1)],
+        arrAllDays[indexCurrentData - (index - 2)],
+        arrAllDays[indexCurrentData - (index - 3)]
+      ), data).slice(0, 7));
+      setIndex(index + 4)
+    } else {
+      console.log(index, arrAllDays[indexCurrentData - index])
+      if (-(index - 15) + indexCurrentData > arrAllDays.length) return
+      setData((data.push(
+        arrAllDays[indexCurrentData - (index - 11)],
+        arrAllDays[indexCurrentData - (index - 12)],
+        arrAllDays[indexCurrentData - (index - 13)],
+        arrAllDays[indexCurrentData - (index - 14)]
+      ), data).slice(4, 11));
+      setIndex(index - 4)
+    }
+
+  }
 
   return (
     <section className="schedule">
@@ -55,33 +76,33 @@ const Schedule = () => {
         На главную страницу
       </nav>
       <h1 className="schedule__header">Расписание рейдов</h1>
-      <div className="schedule__block" onClick={hundleMouseUp}>
-        {card.map((element) =>
-        (<article className="card" key={element.date}>
-          <p className="card__date">{element.date}</p>
-          <div className="card__layout-element">
-            <div className="card__element" style={{backgroundColor: '#7cc210'}}>
-              <span className="card__element-title">ИВК 25</span>
-              <span className="card__element-owner">РЛ</span>
-              <span className="card__element-time">19-30</span>
+      <div className="schedule__block" onWheel={hundleMouseUp} >
+        {data.map((element, index) =>
+          <article className="card" key={index}>
+            <p className="card__date">{`${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}</p>
+            <div className="card__layout-element">
+              <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
+                <span className="card__element-title">ИВК 25</span>
+                <span className="card__element-owner">РЛ</span>
+                <span className="card__element-time">19-30</span>
+              </div>
+              <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
+                <span className="card__element-title">ИВК 25</span>
+                <span className="card__element-owner">РЛ</span>
+                <span className="card__element-time">19-30</span>
+              </div>
+              <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
+                <span className="card__element-title">ИВК 25</span>
+                <span className="card__element-owner">РЛ: dsddddddd3dsa</span>
+                <span className="card__element-time">19-30</span>
+              </div>
+              <div className="card__element card__element_hidden" style={{ backgroundColor: '#7cc210' }}>
+                <span className="card__element-title"></span>
+                <span className="card__element-owner"></span>
+                <span className="card__element-time"></span>
+              </div>
             </div>
-            <div className="card__element" style={{backgroundColor: '#7cc210'}}>
-              <span className="card__element-title">ИВК 25</span>
-              <span className="card__element-owner">РЛ</span>
-              <span className="card__element-time">19-30</span>
-            </div>
-            <div className="card__element" style={{backgroundColor: '#7cc210'}}>
-              <span className="card__element-title">ИВК 25</span>
-              <span className="card__element-owner">РЛ: dsddddddd3dsa</span>
-              <span className="card__element-time">19-30</span>
-            </div>
-            <div className="card__element card__element_hidden" style={{backgroundColor: '#7cc210'}}>
-              <span className="card__element-title"></span>
-              <span className="card__element-owner"></span>
-              <span className="card__element-time"></span>
-            </div>
-          </div>
-        </article>)
+          </article>
         )}
       </div>
 

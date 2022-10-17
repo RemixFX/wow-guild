@@ -13,6 +13,7 @@
 
 .schedule__block {
   overflow: overlay;
+  max-height: 81vh;
 }
 
 .card {
