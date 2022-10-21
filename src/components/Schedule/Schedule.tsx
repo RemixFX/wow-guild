@@ -1,5 +1,6 @@
 import React, { WheelEvent, useState } from "react";
 import { CSSTransition } from 'react-transition-group';
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 const Schedule = () => {
 
@@ -35,6 +36,10 @@ const Schedule = () => {
   }
 
   const ROW_COUNT: number = 7
+
+const dispatch = useAppDispatch();
+const { loggedIn } = useAppSelector(state => state.admin)
+console.log(loggedIn)
 
 
   const indexCurrentData = arrAllDays.findIndex(((element) =>
