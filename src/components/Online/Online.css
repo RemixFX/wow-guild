@@ -161,6 +161,8 @@
   padding-bottom: 10px;
 }
 
+/* CSSTransition start ====> */
+
 .transform-enter   {
   width: 45%;
 }
@@ -187,6 +189,8 @@
   transition: all 2000ms ease-in-out;
   transform: translateX(0);
 }
+
+/* <==== CSSTransition end */
 
 @keyframes closed {
   0% {

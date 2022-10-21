@@ -1,5 +1,5 @@
-import React, { WheelEvent } from "react";
-import { isNumberObject } from "util/types";
+import React, { WheelEvent, useState } from "react";
+import { CSSTransition } from 'react-transition-group';
 
 const Schedule = () => {
 
@@ -42,71 +42,87 @@ const Schedule = () => {
   console.log(arrAllDays)
   let currentArr: IArrAllDays[] = arrAllDays.slice(indexCurrentData, indexCurrentData + 7)
 
-  const [data, setData] = React.useState(currentArr)
-  const [index, setIndex] = React.useState(4)
+  const [data, setData] = useState(currentArr)
+  const [index, setIndex] = useState(1)
+  const [isScrollUp, setIsScrollUp] = useState(false)
+  const [isScrollDown, setIsScrollDown] = useState(false)
+  const [isScroll, setIsScroll] = useState(false)
+  const [toggleStyle, setToggleStyle] = useState(false)
 
   const hundleMouseUp = (e: WheelEvent) => {
+    setIsScroll(true)
+
     if (e.deltaY < 0) {
+      setIsScrollDown(false)
+      setIsScrollUp(true)
       console.log(arrAllDays[indexCurrentData - index])
       if (index > indexCurrentData) return
       setData((data.unshift(
-        arrAllDays[indexCurrentData - index],
-        arrAllDays[indexCurrentData - (index - 1)],
-        arrAllDays[indexCurrentData - (index - 2)],
-        arrAllDays[indexCurrentData - (index - 3)]
+        arrAllDays[indexCurrentData - index]
       ), data).slice(0, 7));
-      setIndex(index + 4)
+      setIndex(index + 1)
     } else {
-      console.log(index, arrAllDays[indexCurrentData - index])
-      if (-(index - 15) + indexCurrentData > arrAllDays.length) return
+      setIsScrollUp(false)
+      setIsScrollDown(true)
+      if (-(index - 9) + indexCurrentData > arrAllDays.length) return
       setData((data.push(
-        arrAllDays[indexCurrentData - (index - 11)],
-        arrAllDays[indexCurrentData - (index - 12)],
-        arrAllDays[indexCurrentData - (index - 13)],
-        arrAllDays[indexCurrentData - (index - 14)]
-      ), data).slice(4, 11));
-      setIndex(index - 4)
+        arrAllDays[indexCurrentData - (index - 8)]
+      ), data).slice(1, 8));
+      setIndex(index - 1)
     }
+  }
 
+  const cardStyle = (element: IArrAllDays) => {
+    if (element.date)
+      return {backgroundColor: '#7cc210'}
   }
 
   return (
-    <section className="schedule">
-      <nav className="schedule__navigation">
-        На главную страницу
-      </nav>
-      <h1 className="schedule__header">Расписание рейдов</h1>
-      <div className="schedule__block" onWheel={hundleMouseUp} >
-        {data.map((element, index) =>
-          <article className="card" key={index}>
-            <p className="card__date">{`${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}</p>
-            <div className="card__layout-element">
-              <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
-                <span className="card__element-title">ИВК 25</span>
-                <span className="card__element-owner">РЛ</span>
-                <span className="card__element-time">19-30</span>
+    <CSSTransition
+      in={!isScroll}
+      classNames={`${(isScrollUp && 'scroll') || (isScrollDown && 'scrolldown')}`}
+      timeout={500}
+      onExit={() => setIsScroll(false)}
+    >
+      <section className="schedule">
+        <nav className="schedule__navigation">
+          На главную страницу
+        </nav>
+        <h1 className="schedule__header">Расписание рейдов</h1>
+        <div className={`schedule__block ${toggleStyle ? 'schedule__block_style_second' : ''}`}
+          onWheel={hundleMouseUp} >
+          {data.map((element, index) =>
+            <article className={`card ${toggleStyle ? 'card_style_second' : ''}`} key={index}>
+              <p className="card__date">{`${nowDateWithoutTime.getTime() === element.date.getTime() ? 'Cегодня,' : ''}
+             ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}</p>
+              <div className="card__layout-element">
+                <div className="card__element" style={cardStyle(element)}>
+                  <span className="card__element-title">ИВК 25</span>
+                  <span className="card__element-owner">РЛ</span>
+                  <span className="card__element-time">19-30</span>
+                </div>
+                <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
+                  <span className="card__element-title"></span>
+                  <span className="card__element-owner"></span>
+                  <span className="card__element-time"></span>
+                </div>
+                <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
+                  <span className="card__element-title">ИВК 25</span>
+                  <span className="card__element-owner">РЛ: dsddddddd3dsa</span>
+                  <span className="card__element-time">19-30</span>
+                </div>
+                <div className="card__element card__element_hidden" style={{ backgroundColor: '#7cc210' }}>
+                  <span className="card__element-title"></span>
+                  <span className="card__element-owner"></span>
+                  <span className="card__element-time"></span>
+                </div>
               </div>
-              <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
-                <span className="card__element-title">ИВК 25</span>
-                <span className="card__element-owner">РЛ</span>
-                <span className="card__element-time">19-30</span>
-              </div>
-              <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
-                <span className="card__element-title">ИВК 25</span>
-                <span className="card__element-owner">РЛ: dsddddddd3dsa</span>
-                <span className="card__element-time">19-30</span>
-              </div>
-              <div className="card__element card__element_hidden" style={{ backgroundColor: '#7cc210' }}>
-                <span className="card__element-title"></span>
-                <span className="card__element-owner"></span>
-                <span className="card__element-time"></span>
-              </div>
-            </div>
-          </article>
-        )}
-      </div>
-
-    </section>
+            </article>
+          )}
+        </div>
+        <button className="schedule__style-button" onClick={() => setToggleStyle(!toggleStyle)}></button>
+      </section>
+    </CSSTransition>
   )
 }
 
