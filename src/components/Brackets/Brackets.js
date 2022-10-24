@@ -254,7 +254,7 @@ const Feedback = ({ message, type }) => {
 const Grid = ({ date, events, setViewingEvent, setShowingEventForm, actualDate }) => {
   const ROWS_COUNT = 5
   const currentDate = toStartOfDay(new Date())
-  console.log(+currentDate)
+  console.log(events)
 
 	// Finds the closest Monday relative to the first day of
   // the target month/year combination

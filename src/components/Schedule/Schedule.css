@@ -108,7 +108,7 @@
   overflow: hidden;
 }
 
-.card__element_hidden {
+.card__element_admin {
   background-color: #ffffff69;
   background-image: url(../../images/cross.svg);
   background-size: 64px;

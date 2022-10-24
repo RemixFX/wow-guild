@@ -44,7 +44,6 @@ console.log(loggedIn)
 
   const indexCurrentData = arrAllDays.findIndex(((element) =>
     element.date.getTime() === nowDateWithoutTime.getTime()))
-  console.log(arrAllDays)
   let currentArr: IArrAllDays[] = arrAllDays.slice(indexCurrentData, indexCurrentData + 7)
 
   const [data, setData] = useState(currentArr)
@@ -116,7 +115,7 @@ console.log(loggedIn)
                   <span className="card__element-owner">РЛ: dsddddddd3dsa</span>
                   <span className="card__element-time">19-30</span>
                 </div>
-                <div className="card__element card__element_hidden" style={{ backgroundColor: '#7cc210' }}>
+                <div className="card__element card__element_admin" style={{ backgroundColor: '#7cc210' }}>
                   <span className="card__element-title"></span>
                   <span className="card__element-owner"></span>
                   <span className="card__element-time"></span>

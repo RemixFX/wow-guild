@@ -19,4 +19,8 @@ export const fetchPlayers = () => async (dispatch: AppDispatch) => {
   }
 }
 
-
+/* export const fetchEvents = () => async (dispatch: AppDispatch) => {
+  try {
+    dispatch
+  }
+} */
