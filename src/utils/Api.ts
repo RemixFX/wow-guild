@@ -59,6 +59,14 @@ class Api {
     })
       .then(this._checkResponse);
   }
+
+  deleteEvent(id: number) {
+    return fetch(`${this._url}/events/${id}`, {
+      method: 'DELETE',
+      headers: this._headers
+    })
+      .then(this._checkResponse);
+  }
 }
 
 const headers = new Headers(
