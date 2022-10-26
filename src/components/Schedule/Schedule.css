@@ -102,6 +102,24 @@
   box-sizing: border-box;
 }
 
+.card__element-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card__change-event-button {
+  width: 16px;
+  height: 100%;
+  background-image: url(../../images/change.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+  border: 0;
+}
+
 .card__element-owner {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -118,10 +136,6 @@
 }
 
 /* CSSTransition start ====> */
-/* .scroll-enter .card:last-of-type {
-  opacity: 0;
-  transform: translateY(100%);
-} */
 
 .scrolldown-enter .card:last-of-type ::after {
   opacity: 0;
@@ -138,17 +152,6 @@
 .scrolldown-enter-done .card:last-of-type ::after {
   display: none;
 }
-
-
-/*  .scroll-enter-active .card:last-of-type {
-  transform: translateY(0);
-  transition: all 420ms ease-in-out;
-  opacity: 1;
-} */
-
-/* .scroll-enter-done .card:last-of-type {
-  transform: translateY(0);
-} */
 
 .scroll-enter .card:first-of-type ::after {
   opacity: 0;

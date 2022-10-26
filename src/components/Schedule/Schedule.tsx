@@ -1,6 +1,7 @@
 import React, { WheelEvent, useState } from "react";
 import { CSSTransition } from 'react-transition-group';
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import EventForm from "../EventForm/EventForm";
 
 const Schedule = () => {
 
@@ -37,9 +38,9 @@ const Schedule = () => {
 
   const ROW_COUNT: number = 7
 
-const dispatch = useAppDispatch();
-const { loggedIn } = useAppSelector(state => state.admin)
-console.log(loggedIn)
+  const dispatch = useAppDispatch();
+  const { loggedIn } = useAppSelector(state => state.admin)
+  console.log(loggedIn)
 
 
   const indexCurrentData = arrAllDays.findIndex(((element) =>
@@ -52,6 +53,7 @@ console.log(loggedIn)
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [isScroll, setIsScroll] = useState(false)
   const [toggleStyle, setToggleStyle] = useState(false)
+  const [showingEventForm, setShowingEventForm] = useState(false)
 
   const hundleMouseUp = (e: WheelEvent) => {
     setIsScroll(true)
@@ -78,30 +80,41 @@ console.log(loggedIn)
 
   const cardStyle = (element: IArrAllDays) => {
     if (element.date)
-      return {backgroundColor: '#7cc210'}
+      return { backgroundColor: '#7cc210' }
+  }
+
+  const handleOpenModal = () => {
+    setShowingEventForm(true)
   }
 
   return (
-    <CSSTransition
-      in={!isScroll}
-      classNames={`${(isScrollUp && 'scroll') || (isScrollDown && 'scrolldown')}`}
-      timeout={500}
-      onExit={() => setIsScroll(false)}
-    >
-      <section className="schedule">
-        <nav className="schedule__navigation">
-          На главную страницу
-        </nav>
-        <h1 className="schedule__header">Расписание рейдов</h1>
+
+    <section className="schedule">
+
+      <nav className="schedule__navigation">
+        На главную страницу
+      </nav>
+      <h1 className="schedule__header">Расписание рейдов</h1>
+      <CSSTransition
+        in={!isScroll}
+        classNames={`${(isScrollUp && 'scroll') || (isScrollDown && 'scrolldown')}`}
+        timeout={500}
+        onExit={() => setIsScroll(false)}
+      >
         <div className={`schedule__block ${toggleStyle ? 'schedule__block_style_second' : ''}`}
           onWheel={hundleMouseUp} >
+
           {data.map((element, index) =>
             <article className={`card ${toggleStyle ? 'card_style_second' : ''}`} key={index}>
               <p className="card__date">{`${nowDateWithoutTime.getTime() === element.date.getTime() ? 'Cегодня,' : ''}
              ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}</p>
               <div className="card__layout-element">
                 <div className="card__element" style={cardStyle(element)}>
-                  <span className="card__element-title">ИВК 25</span>
+                  <div className="card__element-top">
+                    <span className="card__element-title">ИВК 25</span>
+                    <button className="card__change-event-button"
+                      onClick={handleOpenModal}></button>
+                  </div>
                   <span className="card__element-owner">РЛ</span>
                   <span className="card__element-time">19-30</span>
                 </div>
@@ -124,9 +137,17 @@ console.log(loggedIn)
             </article>
           )}
         </div>
-        <button className="schedule__style-button" onClick={() => setToggleStyle(!toggleStyle)}></button>
-      </section>
-    </CSSTransition>
+      </CSSTransition>
+      <button className="schedule__style-button" onClick={() => setToggleStyle(!toggleStyle)}></button>
+
+
+      ({showingEventForm &&
+        <EventForm
+          title={'Изменить событие'}
+          setShowingEventForm={setShowingEventForm}
+        />
+      })
+    </section>
   )
 }
 
