@@ -1,8 +1,10 @@
+import { IEvents } from "../../models/eventsModel"
 import { IPlayer } from "../../models/playerModel"
-import { sirusApi } from "../../utils/Api"
+import { dbApi, sirusApi } from "../../utils/Api"
 import { AppDispatch } from "../store"
 import { OnlineComponentSlice } from "./onlineComponentSlice"
 import { playerSlice } from "./playerSlice"
+import { scheduleSlice } from "./scheduleSlice"
 
 export const fetchPlayers = () => async (dispatch: AppDispatch) => {
   try {
@@ -19,8 +21,14 @@ export const fetchPlayers = () => async (dispatch: AppDispatch) => {
   }
 }
 
-/* export const fetchEvents = () => async (dispatch: AppDispatch) => {
+export const fetchEvents = () => async (dispatch: AppDispatch) => {
   try {
-    dispatch
+    dispatch(scheduleSlice.actions.eventsFetching());
+    const response = await dbApi.getEvents();
+
+    const events: IEvents[] = response;
+    dispatch(scheduleSlice.actions.eventsFetchingSuccess(events))
+  } catch (error) {
+    dispatch(scheduleSlice.actions.eventsFetchingError())
   }
-} */
+}

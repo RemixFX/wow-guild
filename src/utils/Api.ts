@@ -1,3 +1,5 @@
+import { IEvents } from "../models/eventsModel";
+
 class Api {
   private _url: string;
   private _headers;
@@ -38,15 +40,15 @@ class Api {
       .then(this._checkResponse);
   }
 
-  postEvent(date: Date, name: string, raidleader: string, time: string) {
+  postEvent(event: IEvents) {
     return fetch(`${this._url}/events`, {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
-        date,
-        name,
-        raidleader,
-        time
+        date: event.date,
+        name: event.name,
+        raidleader: event.raidleader,
+        time: event.time
       })
     })
       .then(this._checkResponse);

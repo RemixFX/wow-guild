@@ -8,13 +8,22 @@
 }
 
 .modal {
-  background: white;
+  background: rgb(3,2,2);
+background: linear-gradient(90deg, rgba(3,2,2,1) 0%, rgba(255,214,0,1) 50%, rgba(3,2,2,1) 100%);
   position: absolute;
   width: 50%;
   text-align: center;
   left: 25%;
   top: 5%;
+  border: 5px inset #503b9f5c;
+  border-radius: 10px;
   border-radius: 5px;
+}
+
+.modal__header {
+  margin: 0;
+  background: #503b9fab;
+  padding: 12px;
 }
 
 .modal__inner {

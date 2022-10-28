@@ -5,7 +5,7 @@ const Modal:FC<{children: ReactNode, onClose: MouseEventHandler, title: string}>
       <>
       <div className="overlay" onClick={onClose} />
       <div className='modal'>
-      <h3>{title}</h3>
+      <h3 className="modal__header">{title}</h3>
       <div className="modal__inner">
         {children}
       </div>

@@ -1,19 +1,18 @@
-import React, { WheelEvent, useState } from "react";
+import React, { WheelEvent, useState, useEffect } from "react";
 import { CSSTransition } from 'react-transition-group';
+import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { fetchEvents } from "../../store/reducers/ActionCreators";
+import { dbApi } from "../../utils/Api";
 import EventForm from "../EventForm/EventForm";
 
 const Schedule = () => {
 
   interface IArrAllDays {
     date: Date;
-    events?: [
-      {
-        name: string,
-        type: string;
-      }
-    ]
+    eventsOfDay: IEvents[]
   }
+
 
   let nowDate = new Date();
   //let curDate = new Date(year, month, day);
@@ -27,20 +26,43 @@ const Schedule = () => {
   let previousMonthDays = new Date(nowYear, nowMonth, 0).getDate()
   let nextMonthDays = new Date(nowYear, nowMonth + 2, 0).getDate()
 
+
+
+
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchEvents())
+  }, [])
+
+  const { loggedIn } = useAppSelector(state => state.admin)
+  const { events, loading, error } = useAppSelector(state => state.schedule)
+
+
+  const findEvent = (date: Date) => {
+
+      return events.filter((event) => event.date.getTime() === date.getTime())
+
+  }
+
   const arrAllDays: IArrAllDays[] = []
   const startingDate = new Date(nowYear, nowMonth - 1)
-
   for (let i = 0; i < previousMonthDays + monthDays + nextMonthDays; i++) {
     const date = new Date(startingDate)
-    arrAllDays.push({ date })
+    arrAllDays.push({ date, eventsOfDay: events })
     startingDate.setDate(startingDate.getDate() + 1)
   }
+  events.forEach((e) => console.log(`${e.date.}`))
+  arrAllDays.forEach((e) => console.log(e.date.toISOString()))
 
   const ROW_COUNT: number = 7
 
-  const dispatch = useAppDispatch();
-  const { loggedIn } = useAppSelector(state => state.admin)
-  console.log(loggedIn)
+
+  //"2022-08-31T21:00:00.000Z"
+
+
+
 
 
   const indexCurrentData = arrAllDays.findIndex(((element) =>
@@ -54,6 +76,7 @@ const Schedule = () => {
   const [isScroll, setIsScroll] = useState(false)
   const [toggleStyle, setToggleStyle] = useState(false)
   const [showingEventForm, setShowingEventForm] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const hundleMouseUp = (e: WheelEvent) => {
     setIsScroll(true)
@@ -79,13 +102,21 @@ const Schedule = () => {
   }
 
   const cardStyle = (element: IArrAllDays) => {
-    if (element.date)
+    if (element)
       return { backgroundColor: '#7cc210' }
   }
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (date: Date | null) => {
     setShowingEventForm(true)
+    setSelectedDate(date)
   }
+
+  const changeEvent = (event: IEvents) => {
+    setShowingEventForm(false)
+    dbApi.postEvent(event)
+  }
+
+
 
   return (
 
@@ -109,30 +140,16 @@ const Schedule = () => {
               <p className="card__date">{`${nowDateWithoutTime.getTime() === element.date.getTime() ? 'Cегодня,' : ''}
              ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}</p>
               <div className="card__layout-element">
-                <div className="card__element" style={cardStyle(element)}>
-                  <div className="card__element-top">
-                    <span className="card__element-title">ИВК 25</span>
-                    <button className="card__change-event-button"
-                      onClick={handleOpenModal}></button>
-                  </div>
-                  <span className="card__element-owner">РЛ</span>
-                  <span className="card__element-time">19-30</span>
-                </div>
-                <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
-                  <span className="card__element-title"></span>
-                  <span className="card__element-owner"></span>
-                  <span className="card__element-time"></span>
-                </div>
-                <div className="card__element" style={{ backgroundColor: '#7cc210' }}>
-                  <span className="card__element-title">ИВК 25</span>
-                  <span className="card__element-owner">РЛ: dsddddddd3dsa</span>
-                  <span className="card__element-time">19-30</span>
-                </div>
-                <div className="card__element card__element_admin" style={{ backgroundColor: '#7cc210' }}>
-                  <span className="card__element-title"></span>
-                  <span className="card__element-owner"></span>
-                  <span className="card__element-time"></span>
-                </div>
+                {element.eventsOfDay.map((event) =>
+                  <div className="card__element" style={cardStyle(element)} key={event.id}>
+                    <div className="card__element-top">
+                      <span className="card__element-title">{event.name}</span>
+                      <button className="card__change-event-button"
+                        onClick={() => handleOpenModal(element.date)}></button>
+                    </div>
+                    <span className="card__element-owner">{event.raidleader}</span>
+                    <span className="card__element-time">{event.time}</span>
+                  </div>)}
               </div>
             </article>
           )}
@@ -143,6 +160,8 @@ const Schedule = () => {
 
       ({showingEventForm &&
         <EventForm
+          date={selectedDate}
+          submit={changeEvent}
           title={'Изменить событие'}
           setShowingEventForm={setShowingEventForm}
         />

@@ -9,20 +9,7 @@ export interface ScheduleState {
 }
 
 const initialState: ScheduleState = {
-  events: [
-    {
-      date: '' as unknown as Date,
-      name: 'ИВК 25',
-      raidLeader: 'Remix',
-      time: '19:30'
-    },
-    {
-      date: '' as unknown as Date,
-      name: 'Магик',
-      raidLeader: 'Ximer',
-      time: '16:00'
-    },
-  ],
+  events: [],
   loading: false,
   error: false,
 }

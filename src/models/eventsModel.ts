@@ -1,6 +1,7 @@
 export interface IEvents {
+  id: number;
   date: Date;
   name: string;
-  raidLeader: string;
+  raidleader: string;
   time: string;
 }
