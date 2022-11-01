@@ -73,7 +73,7 @@ const parseEvents = (events) => {
 
 const findEventsForDate = (events, date) => {
 	const dateTime = date.getTime()
-
+  console.log(events)
   return events.filter(event => {
     const eventFromTime = toStartOfDay(event.from).getTime()
     const eventToTime = toStartOfDay(event.to).getTime()
@@ -254,7 +254,6 @@ const Feedback = ({ message, type }) => {
 const Grid = ({ date, events, setViewingEvent, setShowingEventForm, actualDate }) => {
   const ROWS_COUNT = 5
   const currentDate = toStartOfDay(new Date())
-  console.log(events)
 
 	// Finds the closest Monday relative to the first day of
   // the target month/year combination

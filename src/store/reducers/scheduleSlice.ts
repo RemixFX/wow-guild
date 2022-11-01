@@ -25,7 +25,7 @@ export const scheduleSlice = createSlice({
     },
     eventsFetchingSuccess: (state, action: PayloadAction<IEvents[]>) => {
       state.events = action.payload
-      state.loading = true
+      state.loading = false
       state.error = false
     },
     eventsFetchingError: state => {
