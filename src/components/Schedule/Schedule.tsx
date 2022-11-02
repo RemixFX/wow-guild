@@ -148,16 +148,24 @@ const Schedule = () => {
     return background
   }
 
+
   // Открытие формы
   const handleOpenModal = (date: Date | null) => {
+    console.log(date, selectedDate)
     setShowingEventForm(true)
     setSelectedDate(date)
+  }
+
+  //Создание события
+  const createEvent = () => {
+
   }
 
   // Изменение события
   const changeEvent = (event: IEvents) => {
     setShowingEventForm(false)
     dbApi.postEvent(event)
+    setSelectedDate(null)
   }
 
   return (
@@ -183,18 +191,7 @@ const Schedule = () => {
              ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}</p>
               <div className="card__layout-element">
                 {/* {events && findEvents(element.date, element.eventsOfDay)} */}
-                {element.eventsOfDay.length === 0 ?
-                  <div className="card__element" /* style={cardStyle(element)} */>
-                    <div className="card__element-top">
-                      <span className="card__element-title"></span>
-                      <button className="card__change-event-button"
-                        onClick={() => handleOpenModal(element.date)}></button>
-                    </div>
-                    <span className="card__element-owner"></span>
-                    <span className="card__element-time"></span>
-                  </div>
-                  :
-                  element.eventsOfDay.map((event) =>
+                {element.eventsOfDay.map((event) =>
                     <div className="card__element" style={cardStyle(event)} key={event.id}>
                       <div className="card__element-top">
                         <span className="card__element-title">{event.name}</span>
@@ -204,6 +201,16 @@ const Schedule = () => {
                       <span className="card__element-owner">{event.raidleader}</span>
                       <span className="card__element-time">{event.time}</span>
                     </div>)}
+                  {element.eventsOfDay.length < 4 &&
+                  <div className={`card__element ${loggedIn && 'card__element_admin'}`}
+                  onClick={() => handleOpenModal(element.date)} >
+                    <div className="card__element-top">
+                      <span className="card__element-title"></span>
+                    </div>
+                    <span className="card__element-owner"></span>
+                    <span className="card__element-time"></span>
+                  </div>
+                  }
               </div>
             </article>
           )}
@@ -211,14 +218,14 @@ const Schedule = () => {
       </CSSTransition>
       <button className="schedule__style-button" onClick={() => setToggleStyle(!toggleStyle)}></button>
 
-      ({showingEventForm &&
+      {showingEventForm &&
         <EventForm
           date={selectedDate}
           submit={changeEvent}
           title={'Изменить событие'}
           setShowingEventForm={setShowingEventForm}
         />
-      })
+      }
     </section>
   )
 }

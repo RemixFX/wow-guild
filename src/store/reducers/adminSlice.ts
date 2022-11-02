@@ -5,7 +5,7 @@ interface AdminState {
 }
 
 const initialState: AdminState = {
-  loggedIn: false
+  loggedIn: true
 }
 
 export const adminSlice = createSlice({

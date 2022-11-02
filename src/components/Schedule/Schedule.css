@@ -95,7 +95,7 @@
   flex-direction: column;
   flex: 1;
   max-width: calc((100% / 4) - 10px);
-  min-height:  56px;
+  min-height:  67px;
   padding: 6px;
   border-radius: 22px;
   margin: 5px;
@@ -109,21 +109,28 @@
 
 .card__change-event-button {
   width: 16px;
-  height: 18px;
-  background-image: url(../../images/change.svg);
+  height: 16px;
+  background-image: url(../../images/change_w.svg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
-  padding: 0;
+  padding: 8px;
   cursor: pointer;
   border: 0;
 }
 
-.card__element-owner {
+.card__element-owner, .card__element-title {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.card__element-title:hover {
+  overflow: inherit;
+  text-overflow: inherit;
+  white-space: inherit;
+  height: auto;
 }
 
 .card__element_admin {
@@ -133,6 +140,7 @@
   background-repeat: no-repeat;
   background-position: center;
   opacity: 0.8;
+  cursor: pointer;
 }
 
 /* CSSTransition start ====> */
