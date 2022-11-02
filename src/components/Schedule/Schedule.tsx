@@ -140,7 +140,10 @@ const Schedule = () => {
         background = { backgroundColor: '#ad4343' }
         break;
       default:
-        background = { backgroundColor: 'white' }
+        background = {
+          background: 'linear-gradient(0deg, #000, #0b1587 53%, #000 100%)',
+          color: '#fbe0ae'
+        }
     }
     return background
   }

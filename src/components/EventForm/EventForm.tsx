@@ -1,4 +1,4 @@
-import { Dispatch, FC, FormEvent, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FC, FormEvent, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
 import { IEvents } from "../../models/eventsModel";
 import Modal from "../Modal/Modal";
 
@@ -18,26 +18,23 @@ const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => 
     time: ''
   } as IEvents)
 
-
-
-  let customKeyValue: string | number | readonly string[] | undefined = 'eded'
   const keyRef: RefObject<HTMLInputElement> = useRef(null);
-  const [showKey, setShowKey] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
-  const [keyText, setKeyText] = useState("");
+  const [showInput, setShowInput] = useState(false);
 
   useEffect(() => {
-    if (selectedValue === customKeyValue) {
-      setShowKey(true);
-      if (keyRef.current) {
-        console.log(keyRef.current.focus())
-      }
-    } else {
-      setShowKey(false);
+    if (showInput && keyRef.current) {
+      keyRef.current.focus()
     }
-  }, [selectedValue, showKey, keyRef]);
+  }, [showInput, keyRef]);
 
-
+  const handleSelectEvent = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === 'Своё событие') {
+      setShowInput(true);
+    } else {
+      setShowInput(false);
+      setEvent({ ...event, name: e.target.value })
+    }
+  }
 
   const submitForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -49,7 +46,7 @@ const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => 
     <Modal onClose={() => setShowingEventForm(false)} title={title}>
       <form className="form" onSubmit={(evt) => submitForm(evt)}>
         <label>Название события
-          <select value={selectedValue} onChange={(e) => setSelectedValue(e.target.value)/* setEvent({ ...event, name: e.target.value }) */}>
+          <select onChange={(e) => handleSelectEvent(e)}>
             <option value="" hidden>Выбрать...</option>
             <optgroup label="25ки">
               <option value='ИК 25'>ИК 25</option>
@@ -67,12 +64,12 @@ const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => 
               <option value='ИВК 10 гер'>ИВК 10 гер</option>
               <option value='Ульдуар 10'>Ульдуар 10</option>
             </optgroup>
-            <option value={customKeyValue}>Своё событие</option>
+            <option value='Своё событие'>Своё событие</option>
           </select>
 
-          {showKey &&
-            <input ref={keyRef} className="form__input" type="text" placeholder="Enter key"
-            value={keyText} onChange={(e) =>setKeyText(e.target.value)} />
+          {showInput &&
+            <input ref={keyRef} className="form__input" type="text" placeholder="Описание своего события"
+              onChange={(e) => setEvent({ ...event, name: e.target.value })} />
           }
         </label>
 
