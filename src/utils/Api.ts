@@ -45,7 +45,7 @@ class Api {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
-        date: event.date,
+        date: event.date.toDateString(),
         name: event.name,
         raidleader: event.raidleader,
         time: event.time
@@ -54,10 +54,15 @@ class Api {
       .then(this._checkResponse);
   }
 
-  changeEvent(id: number) {
-    return fetch(`${this._url}/events/${id}`, {
+  changeEvent(event: IEvents) {
+    return fetch(`${this._url}/events/${event.id}`, {
       method: 'PUT',
-      headers: this._headers
+      headers: this._headers,
+      body: JSON.stringify({
+        name: event.name,
+        raidleader: event.raidleader,
+        time: event.time
+      })
     })
       .then(this._checkResponse);
   }

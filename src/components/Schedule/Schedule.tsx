@@ -52,7 +52,6 @@ const Schedule = () => {
 
   // Добавление событий в массив с датами, если события загружены
   if (events.length !== 0) {
-    console.log('события загружены', events)
     arrAllDays.map((event) => event.eventsOfDay = findEvents(event.date)
     )
   }
@@ -151,9 +150,9 @@ const Schedule = () => {
 
   // Открытие формы
   const handleOpenModal = (date: Date | null) => {
-    console.log(date, selectedDate)
-    setShowingEventForm(true)
     setSelectedDate(date)
+    setShowingEventForm(true)
+
   }
 
   //Создание события
@@ -165,6 +164,7 @@ const Schedule = () => {
   const changeEvent = (event: IEvents) => {
     setShowingEventForm(false)
     dbApi.postEvent(event)
+    //console.log(event.date)
     setSelectedDate(null)
   }
 
@@ -196,14 +196,18 @@ const Schedule = () => {
                       <div className="card__element-top">
                         <span className="card__element-title">{event.name}</span>
                         <button className="card__change-event-button"
-                          onClick={() => handleOpenModal(element.date)}></button>
+                          onClick={() => {/*
+                            setSelectedDate(element.date)
+                            handleOpenModal() */}}></button>
                       </div>
                       <span className="card__element-owner">{event.raidleader}</span>
                       <span className="card__element-time">{event.time}</span>
                     </div>)}
                   {element.eventsOfDay.length < 4 &&
                   <div className={`card__element ${loggedIn && 'card__element_admin'}`}
-                  onClick={() => handleOpenModal(element.date)} >
+                  onClick={() => {
+                    handleOpenModal(element.date)
+                    }} >
                     <div className="card__element-top">
                       <span className="card__element-title"></span>
                     </div>
@@ -222,7 +226,7 @@ const Schedule = () => {
         <EventForm
           date={selectedDate}
           submit={changeEvent}
-          title={'Изменить событие'}
+          title={`Изменить событие на ${selectedDate && selectedDate.getDate() + ' ' + arrMonthName[selectedDate.getMonth()]}`}
           setShowingEventForm={setShowingEventForm}
         />
       }

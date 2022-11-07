@@ -17,7 +17,7 @@ const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => 
     raidleader: '',
     time: ''
   } as IEvents)
-
+  console.log(date)
   const keyRef: RefObject<HTMLInputElement> = useRef(null);
   const [showInput, setShowInput] = useState(false);
 
@@ -35,7 +35,7 @@ const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => 
       setEvent({ ...event, name: e.target.value })
     }
   }
-
+  console.log(event)
   const submitForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     submit({ ...event, name: event.name, raidleader: event.raidleader, time: event.time })
