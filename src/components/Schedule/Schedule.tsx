@@ -3,6 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchEvents } from "../../store/reducers/ActionCreators";
+import { scheduleSlice } from "../../store/reducers/scheduleSlice";
 import { dbApi } from "../../utils/Api";
 import EventForm from "../EventForm/EventForm";
 
@@ -33,7 +34,7 @@ const Schedule = () => {
   const { events, loading, error } = useAppSelector(state => state.schedule)
 
   // Создание массива со всеми датами на предыдущий, текущий и следующий месяц
-  const arrAllDays: IArrAllDays[] = useMemo(() => {
+  let arrAllDays: IArrAllDays[] = useMemo(() => {
     const arr: IArrAllDays[] = []
     const startingDate = new Date(nowYear, nowMonth - 1)
     for (let i = 0; i < previousMonthDays + monthDays + nextMonthDays; i++) {
@@ -71,9 +72,10 @@ const Schedule = () => {
   const [toggleStyle, setToggleStyle] = useState(false)
   const [showingEventForm, setShowingEventForm] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<IEvents | null>(null)
 
   //Обновление отображаемого массива в зависимости от скролла
-  const hundleMouseUp = (e: WheelEvent) => {
+  const hundleMouseScroll = (e: WheelEvent) => {
     setIsScroll(true)
 
     if (e.deltaY < 0) {
@@ -148,24 +150,51 @@ const Schedule = () => {
   }
 
 
-  // Открытие формы
+  // Открытие формы для создания события
   const handleOpenModal = (date: Date | null) => {
     setSelectedDate(date)
     setShowingEventForm(true)
+  }
 
+  // Открытие формы для изменения события
+  const handleOpenModalWithEvent = (
+    date: IEvents['date'], id: IEvents['id'],
+    name: IEvents['name'], raidleader: IEvents['raidleader'],
+    time: IEvents['time']
+  ) => {
+    setSelectedEvent({ date, id, name, raidleader, time })
+    setShowingEventForm(true)
   }
 
   //Создание события
-  const createEvent = () => {
-
+  const createEvent = (event: IEvents) => {
+    dbApi.postEvent(event)
+      .then((res: IEvents) => {
+        dispatch(scheduleSlice.actions.eventsFetchingSuccess([...events, res]))
+        setSelectedDate(null)
+      })
+      .catch((e) => console.log(e));
+    setShowingEventForm(false)
   }
 
   // Изменение события
   const changeEvent = (event: IEvents) => {
+    dbApi.changeEvent(event)
+      .then((res) => {
+        const udpatedEvents = events.map(updatedEvent => {
+          return updatedEvent.id === event.id ? res : updatedEvent
+        })
+        dispatch(scheduleSlice.actions.eventsFetchingSuccess(udpatedEvents))
+        setSelectedEvent(null)
+      })
+      .catch((e) => console.log(e));
     setShowingEventForm(false)
-    dbApi.postEvent(event)
-    //console.log(event.date)
+  }
+
+  const onCloseModal = () => {
+    setShowingEventForm(false)
     setSelectedDate(null)
+    setSelectedEvent(null)
   }
 
   return (
@@ -183,7 +212,7 @@ const Schedule = () => {
         onExit={() => setIsScroll(false)}
       >
         <div className={`schedule__block ${toggleStyle ? 'schedule__block_style_second' : ''}`}
-          onWheel={hundleMouseUp} >
+          onWheel={hundleMouseScroll} >
 
           {data.map((element, index) =>
             <article className={`card ${toggleStyle ? 'card_style_second' : ''}`} key={index}>
@@ -192,21 +221,19 @@ const Schedule = () => {
               <div className="card__layout-element">
                 {/* {events && findEvents(element.date, element.eventsOfDay)} */}
                 {element.eventsOfDay.map((event) =>
-                    <div className="card__element" style={cardStyle(event)} key={event.id}>
-                      <div className="card__element-top">
-                        <span className="card__element-title">{event.name}</span>
-                        <button className="card__change-event-button"
-                          onClick={() => {/*
-                            setSelectedDate(element.date)
-                            handleOpenModal() */}}></button>
-                      </div>
-                      <span className="card__element-owner">{event.raidleader}</span>
-                      <span className="card__element-time">{event.time}</span>
-                    </div>)}
-                  {element.eventsOfDay.length < 4 &&
+                  <div className="card__element" style={cardStyle(event)} key={event.id}>
+                    <div className="card__element-top">
+                      <span className="card__element-title">{event.name}</span>
+                      {loggedIn && <button className="card__change-event-button"
+                        onClick={() => { handleOpenModalWithEvent(element.date, event.id, event.name, event.raidleader, event.time) }}></button>}
+                    </div>
+                    <span className="card__element-owner">{event.raidleader}</span>
+                    <span className="card__element-time">{event.time}</span>
+                  </div>)}
+                {element.eventsOfDay.length < 4 &&
                   <div className={`card__element ${loggedIn && 'card__element_admin'}`}
-                  onClick={() => {
-                    handleOpenModal(element.date)
+                    onClick={() => {
+                      handleOpenModal(element.date)
                     }} >
                     <div className="card__element-top">
                       <span className="card__element-title"></span>
@@ -214,7 +241,7 @@ const Schedule = () => {
                     <span className="card__element-owner"></span>
                     <span className="card__element-time"></span>
                   </div>
-                  }
+                }
               </div>
             </article>
           )}
@@ -222,14 +249,25 @@ const Schedule = () => {
       </CSSTransition>
       <button className="schedule__style-button" onClick={() => setToggleStyle(!toggleStyle)}></button>
 
-      {showingEventForm &&
+      {(showingEventForm && selectedDate !== null) &&
         <EventForm
           date={selectedDate}
-          submit={changeEvent}
-          title={`Изменить событие на ${selectedDate && selectedDate.getDate() + ' ' + arrMonthName[selectedDate.getMonth()]}`}
-          setShowingEventForm={setShowingEventForm}
+          submit={createEvent}
+          title={`Создать событие на ${selectedDate && selectedDate.getDate() + ' ' + arrMonthName[selectedDate.getMonth()]}`}
+          //setShowingEventForm={setShowingEventForm}
+          onClose={onCloseModal}
         />
       }
+      {(showingEventForm && selectedEvent !== null) &&
+        <EventForm
+          selectedEvent={selectedEvent}
+          submit={changeEvent}
+          title={`Изменить событие на ${selectedEvent.date.getDate() + ' ' + arrMonthName[selectedEvent.date.getMonth()]}`}
+          //setShowingEventForm={setShowingEventForm}
+          onClose={onCloseModal}
+        />
+      }
+
     </section>
   )
 }

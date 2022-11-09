@@ -59,6 +59,7 @@ class Api {
       method: 'PUT',
       headers: this._headers,
       body: JSON.stringify({
+        date: event.date.toDateString(),
         name: event.name,
         raidleader: event.raidleader,
         time: event.time

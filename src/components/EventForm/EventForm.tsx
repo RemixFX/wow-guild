@@ -3,21 +3,22 @@ import { IEvents } from "../../models/eventsModel";
 import Modal from "../Modal/Modal";
 
 interface IProps {
-  setShowingEventForm: Dispatch<SetStateAction<boolean>>;
-  date: Date | null;
+  selectedEvent?: IEvents;
+  onClose: () => void;
+  //setShowingEventForm: Dispatch<SetStateAction<boolean>>;
+  date?: Date | null;
   title: string;
   submit: (event: IEvents) => void
 }
 
-const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => {
+const EventForm: FC<IProps> = ({ selectedEvent, onClose, title, date, submit }) => {
 
-  const [event, setEvent] = useState<IEvents>({
+  const [event, setEvent] = useState(selectedEvent ? selectedEvent : {
     date,
     name: '',
     raidleader: '',
     time: ''
   } as IEvents)
-  console.log(date)
   const keyRef: RefObject<HTMLInputElement> = useRef(null);
   const [showInput, setShowInput] = useState(false);
 
@@ -35,7 +36,7 @@ const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => 
       setEvent({ ...event, name: e.target.value })
     }
   }
-  console.log(event)
+
   const submitForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     submit({ ...event, name: event.name, raidleader: event.raidleader, time: event.time })
@@ -43,10 +44,10 @@ const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => 
 
   return (
 
-    <Modal onClose={() => setShowingEventForm(false)} title={title}>
+    <Modal onClose={() => onClose()} title={title}>
       <form className="form" onSubmit={(evt) => submitForm(evt)}>
         <label>Название события
-          <select onChange={(e) => handleSelectEvent(e)}>
+          <select defaultValue={selectedEvent?.name} onChange={(e) => handleSelectEvent(e)}>
             <option value="" hidden>Выбрать...</option>
             <optgroup label="25ки">
               <option value='ИК 25'>ИК 25</option>
@@ -74,11 +75,11 @@ const EventForm: FC<IProps> = ({ setShowingEventForm, title, date, submit }) => 
         </label>
 
         <label>РЛ
-          <input type="text" onChange={(e) => setEvent({ ...event, raidleader: e.target.value })} />
+          <input type="text" defaultValue={selectedEvent?.raidleader} onChange={(e) => setEvent({ ...event, raidleader: e.target.value })} />
         </label>
 
         <label>Время
-          <input type="text" onChange={(e) => setEvent({ ...event, time: e.target.value })} />
+          <input type="text" defaultValue={selectedEvent?.time} onChange={(e) => setEvent({ ...event, time: e.target.value })} />
         </label>
         <button type="submit">Изменить событие</button>
 
