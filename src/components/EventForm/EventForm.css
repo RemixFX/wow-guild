@@ -1,0 +1,17 @@
+
+
+.form__button {
+  width: 100%;
+  border: none;
+  background: #503b9fab;
+  border-bottom: 3px solid #2d1f4c;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.form__button_type_delete {
+  margin-top: 20px;
+  background: #ab2727;
+  border-bottom: 3px solid #680c0c;
+}

@@ -1,19 +1,19 @@
-import { ChangeEvent, Dispatch, FC, FormEvent, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { IEvents } from "../../models/eventsModel";
 import Modal from "../Modal/Modal";
 
 interface IProps {
-  selectedEvent?: IEvents;
+  withEvent: IEvents | null;
   onClose: () => void;
-  //setShowingEventForm: Dispatch<SetStateAction<boolean>>;
-  date?: Date | null;
+  date: Date | null;
   title: string;
-  submit: (event: IEvents) => void
+  submit: (event: IEvents) => void;
+  onDelete: (event: IEvents) => void;
 }
 
-const EventForm: FC<IProps> = ({ selectedEvent, onClose, title, date, submit }) => {
+const EventForm: FC<IProps> = ({ withEvent, onClose, title, date, submit, onDelete }) => {
 
-  const [event, setEvent] = useState(selectedEvent ? selectedEvent : {
+  const [event, setEvent] = useState(withEvent ? withEvent : {
     date,
     name: '',
     raidleader: '',
@@ -42,12 +42,16 @@ const EventForm: FC<IProps> = ({ selectedEvent, onClose, title, date, submit }) 
     submit({ ...event, name: event.name, raidleader: event.raidleader, time: event.time })
   }
 
+  const handleDeleteEvent = () => {
+    onDelete(event)
+  }
+
   return (
 
     <Modal onClose={() => onClose()} title={title}>
       <form className="form" onSubmit={(evt) => submitForm(evt)}>
         <label>Название события
-          <select defaultValue={selectedEvent?.name} onChange={(e) => handleSelectEvent(e)}>
+          <select defaultValue={withEvent?.name} onChange={(e) => handleSelectEvent(e)}>
             <option value="" hidden>Выбрать...</option>
             <optgroup label="25ки">
               <option value='ИК 25'>ИК 25</option>
@@ -65,7 +69,7 @@ const EventForm: FC<IProps> = ({ selectedEvent, onClose, title, date, submit }) 
               <option value='ИВК 10 гер'>ИВК 10 гер</option>
               <option value='Ульдуар 10'>Ульдуар 10</option>
             </optgroup>
-            <option value='Своё событие'>Своё событие</option>
+            <option value='Своё событие'>&#10149; Своё событие</option>
           </select>
 
           {showInput &&
@@ -75,30 +79,16 @@ const EventForm: FC<IProps> = ({ selectedEvent, onClose, title, date, submit }) 
         </label>
 
         <label>РЛ
-          <input type="text" defaultValue={selectedEvent?.raidleader} onChange={(e) => setEvent({ ...event, raidleader: e.target.value })} />
+          <input type="text" defaultValue={withEvent?.raidleader} onChange={(e) => setEvent({ ...event, raidleader: e.target.value })} />
         </label>
 
         <label>Время
-          <input type="text" defaultValue={selectedEvent?.time} onChange={(e) => setEvent({ ...event, time: e.target.value })} />
+          <input type="text" defaultValue={withEvent?.time} onChange={(e) => setEvent({ ...event, time: e.target.value })} />
         </label>
-        <button type="submit">Изменить событие</button>
-
-        {/*         {withEvent ? (
-        	<Fragment>
-            <button onClick={() => editEvent(event)}>Edit event</button>
-            <a className="close" onClick={() => {
-            	setShowingEventForm({ visible: false })
-            	setViewingEvent(event)}
-            }>
-              Cancel (go back to event view)
-            </a>
-          </Fragment>
-        ) : (
-        	<Fragment>
-            <button onClick={() => addEvent(event)}>Add event to calendar</button>
-            <a className="close" onClick={() => setShowingEventForm({ visible: false })}>Cancel (go back to calendar)</a>
-          </Fragment>
-        )} */}
+        <button type="submit" className="form__button">{withEvent ? 'Изменить событие' : 'Создать событие'}</button>
+        {withEvent &&
+          <button type="button" className="form__button_type_delete" onClick={handleDeleteEvent}>Удалить событие</button>
+        }
       </form>
     </Modal>
   )

@@ -152,8 +152,11 @@ const Schedule = () => {
 
   // Открытие формы для создания события
   const handleOpenModal = (date: Date | null) => {
-    setSelectedDate(date)
-    setShowingEventForm(true)
+    if (loggedIn) {
+      setSelectedDate(date)
+      setShowingEventForm(true)
+    } else return
+
   }
 
   // Открытие формы для изменения события
@@ -191,6 +194,21 @@ const Schedule = () => {
     setShowingEventForm(false)
   }
 
+  // Удаление события
+  const deleteEvent = (event: IEvents) => {
+    dbApi.deleteEvent(event.id)
+      .then(() => {
+        const udpatedEvents = events.filter(deletedEvent => {
+          return deletedEvent.id !== event.id
+        })
+        dispatch(scheduleSlice.actions.eventsFetchingSuccess(udpatedEvents))
+        setSelectedEvent(null)
+      })
+      .catch((e) => console.log(e));
+    setShowingEventForm(false)
+  }
+
+  // Закрытие формы
   const onCloseModal = () => {
     setShowingEventForm(false)
     setSelectedDate(null)
@@ -249,24 +267,28 @@ const Schedule = () => {
       </CSSTransition>
       <button className="schedule__style-button" onClick={() => setToggleStyle(!toggleStyle)}></button>
 
-      {(showingEventForm && selectedDate !== null) &&
+      {showingEventForm &&
         <EventForm
           date={selectedDate}
-          submit={createEvent}
-          title={`Создать событие на ${selectedDate && selectedDate.getDate() + ' ' + arrMonthName[selectedDate.getMonth()]}`}
-          //setShowingEventForm={setShowingEventForm}
+          withEvent={selectedEvent}
+          submit={selectedEvent ? changeEvent : createEvent}
+          onDelete={deleteEvent}
+          title={selectedDate ? `Создать событие на ${selectedDate.getDate() + ' ' + arrMonthName[selectedDate.getMonth()]}`
+            : selectedEvent ? `Изменить событие на ${selectedEvent.date.getDate() + ' ' + arrMonthName[selectedEvent.date.getMonth()]}`
+              : ''}
           onClose={onCloseModal}
         />
       }
-      {(showingEventForm && selectedEvent !== null) &&
+      {/* {(showingEventForm && selectedEvent !== null) &&
         <EventForm
-          selectedEvent={selectedEvent}
+          withEvent={selectedEvent}
           submit={changeEvent}
+          onDelete={deleteEvent}
           title={`Изменить событие на ${selectedEvent.date.getDate() + ' ' + arrMonthName[selectedEvent.date.getMonth()]}`}
           //setShowingEventForm={setShowingEventForm}
           onClose={onCloseModal}
         />
-      }
+      } */}
 
     </section>
   )

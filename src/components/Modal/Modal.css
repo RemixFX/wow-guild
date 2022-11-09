@@ -22,7 +22,8 @@ background: linear-gradient(90deg, rgba(3,2,2,1) 0%, rgba(255,214,0,1) 50%, rgba
 
 .modal__header {
   margin: 0;
-  background: #503b9fab;
+  background: rgb(44,29,86);
+background: linear-gradient(0deg, rgba(44,29,86,1) 18%, rgba(64,48,108,1) 53%, rgba(44,29,86,1) 82%);
   padding: 12px;
   border-radius: 5px;
 }
