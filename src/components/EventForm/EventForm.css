@@ -1,17 +1,50 @@
 
 
+
+
+.form__label {
+  font-weight: bold;
+  text-align: left;
+  font-size: 0.8em;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.form__select, .form__input {
+  width: calc(100% - 16px);
+  padding: 5px;
+  margin: 6px 0 9px 0;
+  border: 3px solid #cacaca;
+  border-radius: 4px;
+  background: #f9f9f9;
+}
+
+.form__select {
+  width: 100%;
+}
+
+.form__error {
+  margin: 0px 6px 6px 6px;
+  min-height: 14.7px;
+  color: #ff0000;
+}
+
 .form__button {
   width: 100%;
   border: none;
-  background: #503b9fab;
-  border-bottom: 3px solid #2d1f4c;
+  background: #3f2f6a;
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
 }
 
+.form__button:disabled {
+  background: #3f2f6a82;
+  cursor: auto;
+}
+
 .form__button_type_delete {
   margin-top: 20px;
   background: #ab2727;
-  border-bottom: 3px solid #680c0c;
 }

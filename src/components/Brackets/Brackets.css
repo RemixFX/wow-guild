@@ -130,7 +130,7 @@
   padding: 10px;
 }
 
-.form input, .form select {
+/* .form input, .form select {
   width: calc(100% - 16px);
   padding: 5px;
   margin: 6px 0 10px 0;
@@ -148,7 +148,7 @@
   text-align: left;
   font-size: 0.8em;
   display: block;
-}
+} */
 
 button {
   width: 100%;

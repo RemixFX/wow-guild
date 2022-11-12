@@ -1,5 +1,6 @@
-import { ChangeEvent, FC, FormEvent, RefObject, useEffect, useRef, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, FC, FormEvent, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
 import { IEvents } from "../../models/eventsModel";
+import { useInput } from "../../utils/Validations";
 import Modal from "../Modal/Modal";
 
 interface IProps {
@@ -8,17 +9,11 @@ interface IProps {
   date: Date | null;
   title: string;
   submit: (event: IEvents) => void;
-  onDelete: (event: IEvents) => void;
+  onDelete: (id: number) => void;
 }
 
 const EventForm: FC<IProps> = ({ withEvent, onClose, title, date, submit, onDelete }) => {
 
-  const [event, setEvent] = useState(withEvent ? withEvent : {
-    date,
-    name: '',
-    raidleader: '',
-    time: ''
-  } as IEvents)
   const keyRef: RefObject<HTMLInputElement> = useRef(null);
   const [showInput, setShowInput] = useState(false);
 
@@ -30,28 +25,39 @@ const EventForm: FC<IProps> = ({ withEvent, onClose, title, date, submit, onDele
 
   const handleSelectEvent = (e: ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === 'Своё событие') {
+      selectInput.setValue('');
       setShowInput(true);
     } else {
       setShowInput(false);
-      setEvent({ ...event, name: e.target.value })
+      selectInput.onChange(e)
     }
   }
 
   const submitForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    submit({ ...event, name: event.name, raidleader: event.raidleader, time: event.time })
+    submit({
+      id: withEvent ? withEvent.id : 0,
+      date: date! || withEvent?.date,
+      name: selectInput.value,
+      raidleader: raidleaderInput.value,
+      time: timeInput.value
+    })
   }
 
   const handleDeleteEvent = () => {
-    onDelete(event)
+    onDelete(withEvent!.id)
   }
+
+  const raidleaderInput = useInput(withEvent ? withEvent.raidleader : '', {minLength: 2, isEmpty: true })
+  const timeInput = useInput(withEvent ? withEvent.time : '', { minLength: 2, isEmpty: true })
+  const selectInput = useInput(withEvent ? withEvent.name : '', { minLength: 2, isEmpty: true })
 
   return (
 
     <Modal onClose={() => onClose()} title={title}>
       <form className="form" onSubmit={(evt) => submitForm(evt)}>
-        <label>Название события
-          <select defaultValue={withEvent?.name} onChange={(e) => handleSelectEvent(e)}>
+        <label className="form__label" >Название события
+          <select className="form__select" value={showInput ? '' : selectInput.value} onChange={(e) => handleSelectEvent(e)}>
             <option value="" hidden>Выбрать...</option>
             <optgroup label="25ки">
               <option value='ИК 25'>ИК 25</option>
@@ -73,19 +79,33 @@ const EventForm: FC<IProps> = ({ withEvent, onClose, title, date, submit, onDele
           </select>
 
           {showInput &&
-            <input ref={keyRef} className="form__input" type="text" placeholder="Описание своего события"
-              onChange={(e) => setEvent({ ...event, name: e.target.value })} />
+            <><input ref={keyRef} className="form__input" type="text" placeholder="Описание своего события"
+              onChange={e => selectInput.onChange(e)} onBlur={selectInput.onBlur} />
+              <span className="form__error">
+                {selectInput.isDirty && selectInput.error}
+              </span></>
           }
         </label>
 
-        <label>РЛ
-          <input type="text" defaultValue={withEvent?.raidleader} onChange={(e) => setEvent({ ...event, raidleader: e.target.value })} />
+        <label className="form__label">РЛ
+          <input className="form__input" type="text" value={raidleaderInput.value}
+            onBlur={raidleaderInput.onBlur} onChange={e => raidleaderInput.onChange(e)} />
+          <span className="form__error">
+            {raidleaderInput.isDirty && raidleaderInput.error}
+          </span>
         </label>
 
-        <label>Время
-          <input type="text" defaultValue={withEvent?.time} onChange={(e) => setEvent({ ...event, time: e.target.value })} />
+        <label className="form__label">Время
+          <input className="form__input" type="text" value={timeInput.value}
+            onBlur={timeInput.onBlur} onChange={e => timeInput.onChange(e)} />
+          <span className="form__error">
+            {timeInput.isDirty && timeInput.error}
+          </span>
         </label>
-        <button type="submit" className="form__button">{withEvent ? 'Изменить событие' : 'Создать событие'}</button>
+        <button disabled={!selectInput.inputValid || !raidleaderInput.inputValid || !timeInput.inputValid}
+          type="submit" className="form__button">
+          {withEvent ? 'Изменить событие' : 'Создать событие'}
+        </button>
         {withEvent &&
           <button type="button" className="form__button_type_delete" onClick={handleDeleteEvent}>Удалить событие</button>
         }

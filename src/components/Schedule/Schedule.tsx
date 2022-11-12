@@ -195,11 +195,11 @@ const Schedule = () => {
   }
 
   // Удаление события
-  const deleteEvent = (event: IEvents) => {
-    dbApi.deleteEvent(event.id)
+  const deleteEvent = (id: number) => {
+    dbApi.deleteEvent(id)
       .then(() => {
         const udpatedEvents = events.filter(deletedEvent => {
-          return deletedEvent.id !== event.id
+          return deletedEvent.id !== id
         })
         dispatch(scheduleSlice.actions.eventsFetchingSuccess(udpatedEvents))
         setSelectedEvent(null)
