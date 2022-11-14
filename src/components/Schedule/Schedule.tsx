@@ -167,7 +167,7 @@ const Schedule = () => {
 
   // Открытие формы для создания события
   const handleOpenModal = (date: Date | null) => {
-    if (loggedIn) {
+    if (loggedIn && date! >= nowDateWithoutTime) {
       setSelectedDate(date)
       setShowingEventForm(true)
     } else return
@@ -260,7 +260,7 @@ const Schedule = () => {
                     <span className="card__element-time">{event.time}</span>
                   </div>)}
                 {element.eventsOfDay.length < 4 &&
-                  <div className={`card__element ${loggedIn && 'card__element_admin'}`}
+                  <div className={`card__element ${(loggedIn && element.date >= nowDateWithoutTime) && 'card__element_admin'}`}
                     onClick={() => {
                       handleOpenModal(element.date)
                     }} >
