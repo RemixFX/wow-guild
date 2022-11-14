@@ -46,9 +46,24 @@ const Schedule = () => {
     return arr
   }, [])
 
+  // Сортировка событий дня по полю 'time'
+
+  const sortEvents = (sortArr: IEvents[]) => {
+    return sortArr.sort((a, b) => {
+      if (a.time > b.time) {
+        return 1
+      }
+      if (a.time < b.time) {
+        return -1
+      }
+      return 0
+    })
+  }
+
   // Сравнение дат массива и дат событий
-  const findEvents = (date: IArrAllDays["date"]) => {
-    return events.filter((event) => new Date(event.date).getTime() === date.getTime())
+  const findEvents = (date: Date) => {
+    const filteredEvents = events.filter((event) => new Date(event.date).getTime() === date.getTime())
+    return sortEvents(filteredEvents)
   }
 
   // Добавление событий в массив с датами, если события загружены
@@ -160,12 +175,8 @@ const Schedule = () => {
   }
 
   // Открытие формы для изменения события
-  const handleOpenModalWithEvent = (
-    date: IEvents['date'], id: IEvents['id'],
-    name: IEvents['name'], raidleader: IEvents['raidleader'],
-    time: IEvents['time']
-  ) => {
-    setSelectedEvent({ date, id, name, raidleader, time })
+  const handleOpenModalWithEvent = (event: IEvents) => {
+    setSelectedEvent({...event, date: new Date(event.date)})
     setShowingEventForm(true)
   }
 
@@ -243,7 +254,7 @@ const Schedule = () => {
                     <div className="card__element-top">
                       <span className="card__element-title">{event.name}</span>
                       {loggedIn && <button className="card__change-event-button"
-                        onClick={() => { handleOpenModalWithEvent(element.date, event.id, event.name, event.raidleader, event.time) }}></button>}
+                        onClick={() => { handleOpenModalWithEvent(event)}}></button>}
                     </div>
                     <span className="card__element-owner">{event.raidleader}</span>
                     <span className="card__element-time">{event.time}</span>
