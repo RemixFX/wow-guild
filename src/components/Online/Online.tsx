@@ -3,7 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { OnlineComponentSlice } from '../../store/reducers/onlineComponentSlice';
-import Preloader from "../Preloader/Preloader";
+import PreloaderOnline from '../PreloaderOnline/PreloaderOnline';
 import Sheet from "../Sheet/Sheet";
 
 const Online = () => {
@@ -66,7 +66,7 @@ const Online = () => {
           </div>
           {((noOnline && !showAllPlayers) || error || loading || !isShowOnline) &&
             (<div className="online__background-preloader">
-              {loading && <Preloader isLoading={loading} />}
+              {loading && <PreloaderOnline isLoading={loading} />}
               <p className="online-empty">{textOnline}</p>
             </div>)}
           {((isEndAnimation && !error && !loading && !noOnline) || (noOnline && showAllPlayers)) &&

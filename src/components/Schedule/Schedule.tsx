@@ -6,6 +6,7 @@ import { fetchEvents } from "../../store/reducers/ActionCreators";
 import { scheduleSlice } from "../../store/reducers/scheduleSlice";
 import { dbApi } from "../../utils/Api";
 import EventForm from "../EventForm/EventForm";
+import Preloader from "../Preloader/Preloader";
 
 const Schedule = () => {
 
@@ -114,9 +115,6 @@ const Schedule = () => {
 
   // Стиль событий в зависимости от названия события
   const cardStyle = (event: IEvents) => {
-    if (loading) {
-      return { backgroundColor: 'white' }
-    }
     let background;
     switch (event.name) {
       case 'ИК 25':
@@ -187,7 +185,7 @@ const Schedule = () => {
         dispatch(scheduleSlice.actions.eventsFetchingSuccess([...events, res]))
         setSelectedDate(null)
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.log(e))
     setShowingEventForm(false)
   }
 
@@ -235,7 +233,7 @@ const Schedule = () => {
       </nav>
       <h1 className="schedule__header">Расписание рейдов</h1>
       <CSSTransition
-        in={!isScroll}
+        /* in={!isScroll} */
         classNames={`${(isScrollUp && 'scroll') || (isScrollDown && 'scrolldown')}`}
         timeout={500}
         onExit={() => setIsScroll(false)}
@@ -248,7 +246,6 @@ const Schedule = () => {
               <p className="card__date">{`${nowDateWithoutTime.getTime() === element.date.getTime() ? 'Cегодня,' : ''}
              ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}</p>
               <div className="card__layout-element">
-                {/* {events && findEvents(element.date, element.eventsOfDay)} */}
                 {element.eventsOfDay.map((event) =>
                   <div className="card__element" style={cardStyle(event)} key={event.id}>
                     <div className="card__element-top">
@@ -259,7 +256,8 @@ const Schedule = () => {
                     <span className="card__element-owner">{event.raidleader}</span>
                     <span className="card__element-time">{event.time}</span>
                   </div>)}
-                {element.eventsOfDay.length < 4 &&
+                  {loading ? <Preloader /> :
+                  element.eventsOfDay.length < 4 &&
                   <div className={`card__element ${(loggedIn && element.date >= nowDateWithoutTime) && 'card__element_admin'}`}
                     onClick={() => {
                       handleOpenModal(element.date)

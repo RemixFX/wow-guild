@@ -27,7 +27,10 @@ export const fetchEvents = () => async (dispatch: AppDispatch) => {
     const response = await dbApi.getEvents();
 
     const events: IEvents[] = response;
-    dispatch(scheduleSlice.actions.eventsFetchingSuccess(events))
+    setTimeout(() => {
+      dispatch(scheduleSlice.actions.eventsFetchingSuccess(events))
+    }, 2000)
+
   } catch (error) {
     dispatch(scheduleSlice.actions.eventsFetchingError())
   }
