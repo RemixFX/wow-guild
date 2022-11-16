@@ -1,4 +1,5 @@
 import React, { WheelEvent, useState, useEffect, useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { CSSTransition } from 'react-transition-group';
 import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -85,7 +86,6 @@ const Schedule = () => {
   const [isScrollUp, setIsScrollUp] = useState(false)
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [isScroll, setIsScroll] = useState(false)
-  const [toggleStyle, setToggleStyle] = useState(false)
   const [showingEventForm, setShowingEventForm] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<IEvents | null>(null)
@@ -227,25 +227,26 @@ const Schedule = () => {
   return (
 
     <section className="schedule">
-
       <nav className="schedule__navigation">
-        На главную страницу
+        <Link className="schedule__navigation-link" to="/">&#8635; На главную страницу</Link>
       </nav>
       <h1 className="schedule__header">Расписание рейдов</h1>
       <CSSTransition
-        /* in={!isScroll} */
-        classNames={`${(isScrollUp && 'scroll') || (isScrollDown && 'scrolldown')}`}
-        timeout={500}
+        in={!isScroll}
+        classNames={`${(isScrollUp && 'scrollup') || (isScrollDown && 'scrolldown')}`}
+        timeout={290}
         onExit={() => setIsScroll(false)}
       >
-        <div className={`schedule__block ${toggleStyle ? 'schedule__block_style_second' : ''}`}
-          onWheel={hundleMouseScroll} >
+        <div className='schedule__block' onWheel={hundleMouseScroll} >
 
           {data.map((element, index) =>
-            <article className={`card ${toggleStyle ? 'card_style_second' : ''}`} key={index}>
+            <article className='card' key={index}>
               <p className="card__date">{`${nowDateWithoutTime.getTime() === element.date.getTime() ? 'Cегодня,' : ''}
-             ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}</p>
+             ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}
+              {error && <span className="card__event-error">Не удалось загрузить события</span>}
+             </p>
               <div className="card__layout-element">
+
                 {element.eventsOfDay.map((event) =>
                   <div className="card__element" style={cardStyle(event)} key={event.id}>
                     <div className="card__element-top">
@@ -274,8 +275,6 @@ const Schedule = () => {
           )}
         </div>
       </CSSTransition>
-      <button className="schedule__style-button" onClick={() => setToggleStyle(!toggleStyle)}></button>
-
       {showingEventForm &&
         <EventForm
           date={selectedDate}
