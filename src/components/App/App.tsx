@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from '../Header/Header'
 import Main from '../Main/Main'
 import { dbApi } from '../../utils/Api'
@@ -8,11 +8,14 @@ import Layout from "../Layout/Layout";
 import Invite from "../Invite/Invite";
 import Schedule from "../Schedule/Schedule";
 import { Calendar } from "../Brackets/Brackets";
+import { fetchEvents } from "../../store/reducers/ActionCreators";
+import { useAppDispatch } from "../../store/hooks";
 
 function App() {
   const [guildMessages, setGuildMessages] = React.useState([]);
   const [serverMessages, setServerMessages] = React.useState([]);
   const SAMPLE_META = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+  const dispatch = useAppDispatch();
 
   // Функция для запроса сообщений сервера
   const getServerMessages = () => {
@@ -20,6 +23,11 @@ function App() {
       .then((messages) => setServerMessages(messages))
       .catch((err) => console.log(err.message))
   }
+
+    // Запрос массива созданных событий
+    useEffect(() => {
+      dispatch(fetchEvents())
+    }, [])
 
   return (
     <div className="App">

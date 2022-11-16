@@ -26,12 +26,6 @@ const Schedule = () => {
   const previousMonthDays = new Date(nowYear, nowMonth, 0).getDate()
   const nextMonthDays = new Date(nowYear, nowMonth + 2, 0).getDate()
   const dispatch = useAppDispatch();
-
-  // Запрос массива созданных событий
-  useEffect(() => {
-    dispatch(fetchEvents())
-  }, [])
-
   const { loggedIn } = useAppSelector(state => state.admin)
   const { events, loading, error } = useAppSelector(state => state.schedule)
 
