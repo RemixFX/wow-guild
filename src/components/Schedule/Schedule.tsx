@@ -7,6 +7,7 @@ import { fetchEvents } from "../../store/reducers/ActionCreators";
 import { scheduleSlice } from "../../store/reducers/scheduleSlice";
 import { dbApi } from "../../utils/Api";
 import EventForm from "../EventForm/EventForm";
+import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
 
 const Schedule = () => {
@@ -281,17 +282,7 @@ const Schedule = () => {
           onClose={onCloseModal}
         />
       }
-      {/* {(showingEventForm && selectedEvent !== null) &&
-        <EventForm
-          withEvent={selectedEvent}
-          submit={changeEvent}
-          onDelete={deleteEvent}
-          title={`Изменить событие на ${selectedEvent.date.getDate() + ' ' + arrMonthName[selectedEvent.date.getMonth()]}`}
-          //setShowingEventForm={setShowingEventForm}
-          onClose={onCloseModal}
-        />
-      } */}
-
+      <Footer/>
     </section>
   )
 }

@@ -29,7 +29,7 @@ export const fetchEvents = () => async (dispatch: AppDispatch) => {
     const events: IEvents[] = response;
     setTimeout(() => {
       dispatch(scheduleSlice.actions.eventsFetchingSuccess(events))
-    }, 2000)
+    }, 1000)
 
   } catch (error) {
     dispatch(scheduleSlice.actions.eventsFetchingError())
