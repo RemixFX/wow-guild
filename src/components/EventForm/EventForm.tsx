@@ -107,7 +107,7 @@ const EventForm: FC<IProps> = ({ withEvent, onClose, title, date, submit, onDele
           {withEvent ? 'Изменить событие' : 'Создать событие'}
         </button>
         {withEvent &&
-          <button type="button" className="form__button_type_delete" onClick={handleDeleteEvent}>Удалить событие</button>
+          <button type="button" className="form__button form__button_type_delete" onClick={handleDeleteEvent}>Удалить событие</button>
         }
       </form>
     </Modal>

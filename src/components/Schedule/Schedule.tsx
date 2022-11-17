@@ -222,9 +222,13 @@ const Schedule = () => {
   return (
 
     <section className="schedule">
-      <nav className="schedule__navigation">
+      <div className="topbar">
         <Link className="schedule__navigation-link" to="/">&#8635; На главную страницу</Link>
-      </nav>
+        <div className="topbar__authorization">
+          <p className="topbar__authorization-name">Никнейм</p>
+          <button className="topbar__authorization-button" type="button">Выйти</button>
+        </div>
+      </div>
       <h1 className="schedule__header">Расписание рейдов</h1>
       <CSSTransition
         in={!isScroll}

@@ -33,19 +33,24 @@
 .form__button {
   width: 100%;
   border: none;
-  background: #3f2f6a;
+  background: #fffbd2;
+  box-shadow: 0px 0px 6px 1px #464646;
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
-  color: #fff;
+  color: #000;
+  font-weight: 500;
 }
 
 .form__button:disabled {
-  background: #3f2f6a82;
+  background: #fffbd263;
+  box-shadow: none;
   cursor: auto;
+  color: #585555e0;
 }
 
 .form__button_type_delete {
   margin-top: 20px;
   background: #ab2727;
+  box-shadow: 0px 2px 6px 1px #000000;
 }
