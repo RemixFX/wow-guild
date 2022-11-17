@@ -1,0 +1,43 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  width: 98%;
+  margin: 6px 6px 0 6px;
+}
+
+.topbar__authorization {
+  display: flex;
+  align-items: center;
+}
+
+.topbar__authorization-name {
+  margin: 0;
+}
+
+.topbar__authorization-button {
+  min-width: 80px;
+  background: #91ddfff7;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: inset 0px 0px 3px 1px #011f53;
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.topbar__authorization-button_type_schedule {
+  background: #BF953F;
+  border: 1px solid #c1c1c1;
+  box-shadow: none;
+}
+
+.topbar__authorization-button:hover {
+  box-shadow: 0px 0px 3px 1px white;
+}
+
+.schedule__navigation-link {
+  margin: 5px 0 0 5px;
+  color: #fff;
+  text-decoration: none;
+  visibility: hidden;
+}

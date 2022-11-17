@@ -1,14 +1,13 @@
-import React, { WheelEvent, useState, useEffect, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
+import React, { WheelEvent, useState, useMemo } from "react";
 import { CSSTransition } from 'react-transition-group';
 import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchEvents } from "../../store/reducers/ActionCreators";
 import { scheduleSlice } from "../../store/reducers/scheduleSlice";
 import { dbApi } from "../../utils/Api";
 import EventForm from "../EventForm/EventForm";
 import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
+import Topbar from "../Topbar/Topbar";
 
 const Schedule = () => {
 
@@ -222,13 +221,7 @@ const Schedule = () => {
   return (
 
     <section className="schedule">
-      <div className="topbar">
-        <Link className="schedule__navigation-link" to="/">&#8635; На главную страницу</Link>
-        <div className="topbar__authorization">
-          <p className="topbar__authorization-name">Никнейм</p>
-          <button className="topbar__authorization-button" type="button">Выйти</button>
-        </div>
-      </div>
+      <Topbar/>
       <h1 className="schedule__header">Расписание рейдов</h1>
       <CSSTransition
         in={!isScroll}
