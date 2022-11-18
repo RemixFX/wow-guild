@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from '../Header/Header'
 import Main from '../Main/Main'
 import { dbApi } from '../../utils/Api'
@@ -10,12 +10,30 @@ import Schedule from "../Schedule/Schedule";
 import { Calendar } from "../Brackets/Brackets";
 import { fetchEvents } from "../../store/reducers/ActionCreators";
 import { useAppDispatch } from "../../store/hooks";
+import Form from "../Form/Form";
+import { IAccount } from "../../models/aсcountModel";
 
 function App() {
   const [guildMessages, setGuildMessages] = React.useState([]);
   const [serverMessages, setServerMessages] = React.useState([]);
+  const [showingFormWithSignin, setShowingFormWithSignin] = useState<boolean>(false)
   const SAMPLE_META = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   const dispatch = useAppDispatch();
+
+
+
+  const handleOpenModalWithSignin  = () => {
+    setShowingFormWithSignin(true)
+  }
+
+  const onCloseModal = () => {
+    setShowingFormWithSignin(false)
+  }
+
+  const onLogin = (value: IAccount) => {
+    console.log(value)
+  }
+
 
   // Функция для запроса сообщений сервера
   const getServerMessages = () => {
@@ -32,7 +50,8 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route element={<Layout />}>
+        <Route element={<Layout
+        handleOpenModalWithSignin={handleOpenModalWithSignin}/>}>
           <Route path="/info" element={<Info />} />
           <Route path="/invite" element={<Invite />} />
           <Route path="/" element={<Main
@@ -41,7 +60,8 @@ function App() {
           } />
 
         </Route>
-        <Route path="/schedule" element={<Schedule/>} />
+        <Route path="/schedule" element={<Schedule
+         handleOpenModalWithSignin={handleOpenModalWithSignin}/>} />
         <Route path="qq" element={<Calendar
         month={10}
         year={2021}
@@ -96,6 +116,11 @@ function App() {
           }
         ]}/>} />
       </Routes>
+      {showingFormWithSignin && <Form
+      onClose={onCloseModal}
+      title={'deded'}
+      submit={onLogin}
+    />}
     </div>
   )
 }

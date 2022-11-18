@@ -1,4 +1,4 @@
-import React, { WheelEvent, useState, useMemo } from "react";
+import React, { WheelEvent, useState, useMemo, FC } from "react";
 import { CSSTransition } from 'react-transition-group';
 import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -9,7 +9,11 @@ import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
 import Topbar from "../Topbar/Topbar";
 
-const Schedule = () => {
+interface IProps {
+  handleOpenModalWithSignin: () => void
+}
+
+const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
 
   interface IArrAllDays {
     date: Date;
@@ -221,7 +225,7 @@ const Schedule = () => {
   return (
 
     <section className="schedule">
-      <Topbar/>
+      <Topbar handleOpenModalWithSignin={handleOpenModalWithSignin}/>
       <h1 className="schedule__header">Расписание рейдов</h1>
       <CSSTransition
         in={!isScroll}

@@ -38,7 +38,6 @@
   border: transparent;
   border-radius: 7px;
   background-color: #91ddfff7;
-  z-index: 2;
   position: relative;
   transition: all 0.3s ease-in-out;
   box-shadow: inset -2px 0px 3px 0px #8e8e8ef7;
