@@ -5,14 +5,13 @@ import Modal from "../Modal/Modal";
 
 interface IProps {
   withEvent: IEvents | null;
-  onClose: () => void;
   date: Date | null;
   title: string;
   submit: (event: IEvents) => void;
   onDelete: (id: number) => void;
 }
 
-const EventForm: FC<IProps> = ({ withEvent, onClose, title, date, submit, onDelete }) => {
+const EventForm: FC<IProps> = ({ withEvent, date, title, submit, onDelete }) => {
 
   const keyRef: RefObject<HTMLInputElement> = useRef(null);
   const [showInput, setShowInput] = useState(false);
@@ -53,11 +52,10 @@ const EventForm: FC<IProps> = ({ withEvent, onClose, title, date, submit, onDele
   const selectInput = useInput(withEvent ? withEvent.name : '', { minLength: 2, isEmpty: true })
 
   return (
-
-    <Modal onClose={() => onClose()} title={title}>
-      <form className="form" onSubmit={(evt) => submitForm(evt)}>
-        <label className="form__label" >Название события
-          <select className="form__select" value={showInput ? '' : selectInput.value} onChange={(e) => handleSelectEvent(e)}>
+    <Modal title={title}>
+      <form className="event-form" onSubmit={(evt) => submitForm(evt)}>
+        <label className="event-form__label" >Название события
+          <select className="event-form__select" value={showInput ? '' : selectInput.value} onChange={(e) => handleSelectEvent(e)}>
             <option value="" hidden>Выбрать...</option>
             <optgroup label="25ки">
               <option value='ИК 25'>ИК 25</option>
@@ -79,38 +77,39 @@ const EventForm: FC<IProps> = ({ withEvent, onClose, title, date, submit, onDele
           </select>
 
           {showInput &&
-            <><input ref={keyRef} className="form__input" type="text" placeholder="Описание своего события"
+            <><input ref={keyRef} className="event-form__input" type="text" placeholder="Описание своего события"
               onChange={e => selectInput.onChange(e)} onBlur={selectInput.onBlur} />
-              <span className="form__error">
+              <span className="event-form__error">
                 {selectInput.isDirty && selectInput.error}
               </span></>
           }
         </label>
 
-        <label className="form__label">РЛ
-          <input className="form__input" type="text" value={raidleaderInput.value}
+        <label className="event-form__label">РЛ
+          <input className="event-form__input" type="text" value={raidleaderInput.value}
             onBlur={raidleaderInput.onBlur} onChange={e => raidleaderInput.onChange(e)} />
-          <span className="form__error">
+          <span className="event-form__error">
             {raidleaderInput.isDirty && raidleaderInput.error}
           </span>
         </label>
 
-        <label className="form__label">Время
-          <input className="form__input" type="text" value={timeInput.value}
+        <label className="event-form__label">Время
+          <input className="event-form__input" type="text" value={timeInput.value}
             onBlur={timeInput.onBlur} onChange={e => timeInput.onChange(e)} />
-          <span className="form__error">
+          <span className="event-form__error">
             {timeInput.isDirty && timeInput.error}
           </span>
         </label>
         <button disabled={!selectInput.inputValid || !raidleaderInput.inputValid || !timeInput.inputValid}
-          type="submit" className="form__button">
+          type="submit" className="event-form__button">
           {withEvent ? 'Изменить событие' : 'Создать событие'}
         </button>
         {withEvent &&
-          <button type="button" className="form__button form__button_type_delete" onClick={handleDeleteEvent}>Удалить событие</button>
+          <button type="button" className="event-form__button event-form__button_type_delete"
+          onClick={handleDeleteEvent}>Удалить событие</button>
         }
       </form>
-    </Modal>
+      </Modal>
   )
 }
 

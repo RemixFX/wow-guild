@@ -1,30 +1,78 @@
-.overlay {
+/* .overlay {
   background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+} */
+
+@keyframes backdrop-fade {
+  from {
+    background: transparent;
+  }
+
+  to {
+    background: rgba(0, 0, 0, 0.7);
+  }
 }
 
 .modal {
-  background: linear-gradient(90deg, rgba(191,149,63,1) 9%, rgba(232,226,170,1) 29%, rgba(242,209,75,1) 50%, rgba(235,229,166,1) 72%, rgba(170,119,28,1) 93%);
-  position: absolute;
+  background: linear-gradient(90deg, rgb(63 85 191) 9%,
+      rgb(97 152 253) 29%, rgb(75 121 242) 50%, rgb(120 149 255) 72%,
+      rgb(28 54 170) 93%);
   width: 50%;
   text-align: center;
-  left: 25%;
-  top: 5%;
-  border: 5px inset #503b9f5c;
-  border-radius: 10px;
+  border: none;
+  padding: 0;
   border-radius: 5px;
 }
 
+.modal_style_gold {
+  background: linear-gradient(90deg, rgba(191, 149, 63, 1) 9%,
+      rgba(232, 226, 170, 1) 29%, rgba(242, 209, 75, 1) 50%,
+      rgba(235, 229, 166, 1) 72%, rgba(170, 119, 28, 1) 93%);
+}
+
+.modal[open]::backdrop {
+  animation: backdrop-fade 1.5s ease forwards;
+}
+
+.modal__wrapper {
+  border: 5px inset #503b9f5c;
+  border-radius: 5px;
+  position: relative;
+}
+
 .modal__header {
+  background: linear-gradient(0deg, rgb(47 101 255) 18%,
+      rgb(28 65 170) 53%, rgb(77 120 239) 82%);
   margin: 0;
-  background: linear-gradient(0deg, rgb(191 149 63) 18%, rgb(170 119 28) 53%, rgb(193 158 77) 82%);
   padding: 12px;
   border-radius: 5px;
   box-shadow: 0px 1px 6px 2px #000;
+}
+
+.modal__header_style_gold {
+  background: linear-gradient(0deg, rgb(191 149 63) 18%,
+      rgb(170 119 28) 53%, rgb(193 158 77) 82%);
+}
+
+.modal__close-button {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  padding: 12px;
+  background: transparent;
+  box-shadow: 0px 0px 3px 1px #f9f9f9;
+  border: none;
+  border-radius: 5px;
+  width: 50px;
+  cursor: pointer;
+}
+
+.modal__close-button:hover {
+  box-shadow: 0px 0px 3px 3px #fffacd;
 }
 
 .modal__inner {

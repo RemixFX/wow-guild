@@ -35,3 +35,4 @@ export const fetchEvents = () => async (dispatch: AppDispatch) => {
     dispatch(scheduleSlice.actions.eventsFetchingError())
   }
 }
+

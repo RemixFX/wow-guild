@@ -1,4 +1,4 @@
-.form__label {
+.event-form__label {
   font-weight: bold;
   text-align: left;
   font-size: 0.8em;
@@ -7,7 +7,7 @@
 }
 
 
-.form__select, .form__input {
+.event-form__select, .event-form__input {
   width: calc(100% - 16px);
   padding: 5px;
   margin: 6px 0 9px 0;
@@ -16,17 +16,17 @@
   background: #f9f9f9;
 }
 
-.form__select {
+.event-form__select {
   width: 100%;
 }
 
-.form__error {
+.event-form__error {
   margin: 0px 6px 6px 6px;
   min-height: 14.7px;
   color: #ff0000;
 }
 
-.form__button {
+.event-form__button {
   width: 100%;
   border: none;
   background: #fffbd2;
@@ -38,14 +38,14 @@
   font-weight: 500;
 }
 
-.form__button:disabled {
+.event-form__button:disabled {
   background: #fffbd263;
   box-shadow: none;
   cursor: auto;
   color: #585555e0;
 }
 
-.form__button_type_delete {
+.event-form__button_type_delete {
   margin-top: 20px;
   background: #ab2727;
   box-shadow: 0px 2px 6px 1px #000000;

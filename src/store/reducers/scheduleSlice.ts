@@ -6,12 +6,18 @@ export interface ScheduleState {
   events: IEvents[];
   loading: boolean;
   error: boolean;
+  openEventForm: boolean;
+  selectedDate: Date | null;
+  selectedEvent: IEvents | null;
 }
 
 const initialState: ScheduleState = {
   events: [],
   loading: false,
   error: false,
+  openEventForm: false,
+  selectedDate: null,
+  selectedEvent: null
 }
 
 export const scheduleSlice = createSlice({
@@ -32,6 +38,19 @@ export const scheduleSlice = createSlice({
       state.events = []
       state.loading = false
       state.error = true
+    },
+    isOpenEventForm: state => {
+      state.openEventForm = true;
+    },
+    iscloseEventForm: state => {
+      state.openEventForm = false;
+    },
+    isSelectedDate: (state, action: PayloadAction<Date | null>) => {
+      state.selectedDate = action.payload
+    },
+    isSelectedEvent: (state, action: PayloadAction<IEvents | null>) => {
+      state.selectedEvent = action.payload
     }
+
   }
 })

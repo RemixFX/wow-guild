@@ -1,4 +1,5 @@
-import React, { WheelEvent, useState, useMemo, FC } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { WheelEvent, useState, useMemo, useEffect } from "react";
 import { CSSTransition } from 'react-transition-group';
 import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -9,11 +10,7 @@ import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
 import Topbar from "../Topbar/Topbar";
 
-interface IProps {
-  handleOpenModalWithSignin: () => void
-}
-
-const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
+const Schedule = () => {
 
   interface IArrAllDays {
     date: Date;
@@ -31,7 +28,7 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
   const nextMonthDays = new Date(nowYear, nowMonth + 2, 0).getDate()
   const dispatch = useAppDispatch();
   const { loggedIn } = useAppSelector(state => state.admin)
-  const { events, loading, error } = useAppSelector(state => state.schedule)
+  const { events, loading, error, openEventForm } = useAppSelector(state => state.schedule)
 
   // Создание массива со всеми датами на предыдущий, текущий и следующий месяц
   let arrAllDays: IArrAllDays[] = useMemo(() => {
@@ -84,9 +81,16 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
   const [isScrollUp, setIsScrollUp] = useState(false)
   const [isScrollDown, setIsScrollDown] = useState(false)
   const [isScroll, setIsScroll] = useState(false)
-  const [showingEventForm, setShowingEventForm] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<IEvents | null>(null)
+
+  // Очистка переменных для формы
+  useEffect(() => {
+    if (!openEventForm) {
+      setSelectedDate(null)
+      setSelectedEvent(null)
+    }
+  }, [openEventForm])
 
   //Обновление отображаемого массива в зависимости от скролла
   const hundleMouseScroll = (e: WheelEvent) => {
@@ -162,18 +166,18 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
 
 
   // Открытие формы для создания события
-  const handleOpenModal = (date: Date | null) => {
+  const handleOpenModal = (date: Date) => {
     if (loggedIn && date! >= nowDateWithoutTime) {
       setSelectedDate(date)
-      setShowingEventForm(true)
+      dispatch(scheduleSlice.actions.isOpenEventForm())
     } else return
 
   }
 
   // Открытие формы для изменения события
   const handleOpenModalWithEvent = (event: IEvents) => {
-    setSelectedEvent({...event, date: new Date(event.date)})
-    setShowingEventForm(true)
+    setSelectedEvent({ ...event, date: new Date(event.date) })
+    dispatch(scheduleSlice.actions.isOpenEventForm())
   }
 
   //Создание события
@@ -181,10 +185,9 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
     dbApi.postEvent(event)
       .then((res: IEvents) => {
         dispatch(scheduleSlice.actions.eventsFetchingSuccess([...events, res]))
-        setSelectedDate(null)
       })
       .catch((e) => console.log(e))
-    setShowingEventForm(false)
+    dispatch(scheduleSlice.actions.iscloseEventForm())
   }
 
   // Изменение события
@@ -195,10 +198,9 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
           return updatedEvent.id === event.id ? res : updatedEvent
         })
         dispatch(scheduleSlice.actions.eventsFetchingSuccess(udpatedEvents))
-        setSelectedEvent(null)
       })
       .catch((e) => console.log(e));
-    setShowingEventForm(false)
+    dispatch(scheduleSlice.actions.iscloseEventForm())
   }
 
   // Удаление события
@@ -209,23 +211,25 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
           return deletedEvent.id !== id
         })
         dispatch(scheduleSlice.actions.eventsFetchingSuccess(udpatedEvents))
-        setSelectedEvent(null)
       })
       .catch((e) => console.log(e));
-    setShowingEventForm(false)
+    dispatch(scheduleSlice.actions.iscloseEventForm())
   }
 
-  // Закрытие формы
-  const onCloseModal = () => {
-    setShowingEventForm(false)
-    setSelectedDate(null)
-    setSelectedEvent(null)
+  // Получение заголовка для формы
+  const createTitle = () => {
+    if (selectedDate) {
+      return `Создать событие на ${selectedDate.getDate() + ' ' + arrMonthName[selectedDate.getMonth()]}`
+    }
+    else if (selectedEvent) {
+      return `Изменить событие на ${selectedEvent.date.getDate() + ' ' + arrMonthName[selectedEvent.date.getMonth()]}`
+    } else
+      return 'ded'
   }
 
   return (
-
     <section className="schedule">
-      <Topbar handleOpenModalWithSignin={handleOpenModalWithSignin}/>
+      <Topbar />
       <h1 className="schedule__header">Расписание рейдов</h1>
       <CSSTransition
         in={!isScroll}
@@ -239,8 +243,8 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
             <article className='card' key={index}>
               <p className="card__date">{`${nowDateWithoutTime.getTime() === element.date.getTime() ? 'Cегодня,' : ''}
              ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}
-              {error && <span className="card__event-error">Не удалось загрузить события</span>}
-             </p>
+                {error && <span className="card__event-error">Не удалось загрузить события</span>}
+              </p>
               <div className="card__layout-element">
 
                 {element.eventsOfDay.map((event) =>
@@ -248,17 +252,15 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
                     <div className="card__element-top">
                       <span className="card__element-title">{event.name}</span>
                       {loggedIn && <button className="card__change-event-button"
-                        onClick={() => { handleOpenModalWithEvent(event)}}></button>}
+                        onClick={() => { handleOpenModalWithEvent(event) }}></button>}
                     </div>
                     <span className="card__element-owner">{event.raidleader}</span>
                     <span className="card__element-time">{event.time}</span>
                   </div>)}
-                  {loading ? <Preloader /> :
+                {loading ? <Preloader /> :
                   element.eventsOfDay.length < 4 &&
-                  <div className={`card__element ${(loggedIn && element.date >= nowDateWithoutTime) && 'card__element_admin'}`}
-                    onClick={() => {
-                      handleOpenModal(element.date)
-                    }} >
+                  <div className={`card__element ${(loggedIn && element.date >= nowDateWithoutTime)
+                    && 'card__element_admin'}`} onClick={() => handleOpenModal(element.date)} >
                     <div className="card__element-top">
                       <span className="card__element-title"></span>
                     </div>
@@ -271,19 +273,15 @@ const Schedule:FC<IProps> = ({handleOpenModalWithSignin}) => {
           )}
         </div>
       </CSSTransition>
-      {showingEventForm &&
+      {(selectedEvent || selectedDate) &&
         <EventForm
           date={selectedDate}
           withEvent={selectedEvent}
-          submit={selectedEvent ? changeEvent : createEvent}
+          submit={selectedDate ? createEvent : changeEvent}
           onDelete={deleteEvent}
-          title={selectedDate ? `Создать событие на ${selectedDate.getDate() + ' ' + arrMonthName[selectedDate.getMonth()]}`
-            : selectedEvent ? `Изменить событие на ${selectedEvent.date.getDate() + ' ' + arrMonthName[selectedEvent.date.getMonth()]}`
-              : ''}
-          onClose={onCloseModal}
-        />
-      }
-      <Footer/>
+          title={createTitle()}
+        />}
+      <Footer />
     </section>
   )
 }

@@ -25,13 +25,17 @@
 .form__button {
   width: 100%;
   border: none;
-  background: #fffbd2;
   box-shadow: 0px 0px 6px 1px #464646;
   padding: 10px;
+  background: #91ddfff7;
   cursor: pointer;
   border-radius: 5px;
   color: #000;
   font-weight: 500;
+}
+
+.form__button_style_gold {
+  background: #fffbd2;
 }
 
 .form__button:disabled {

@@ -1,16 +1,12 @@
-import { FC } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 
-interface IProps {
-  handleOpenModalWithSignin: () => void
-}
 
-const Layout:FC<IProps> = ({handleOpenModalWithSignin}) => {
+const Layout = () => {
   return(
     <section className="layout">
-      <Header handleOpenModalWithSignin={handleOpenModalWithSignin}/>
+      <Header />
       <Outlet/>
       <Footer/>
     </section>

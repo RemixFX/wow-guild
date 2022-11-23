@@ -1,17 +1,13 @@
-import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import Topbar from '../Topbar/Topbar';
 const logo_sirus = require('../../images/logo_sirus1.png');
 const guild_logo = require('../../images/guild_name2.png');
 
-interface IProps {
-  handleOpenModalWithSignin: () => void
-}
 
-const Header:FC<IProps> = ({handleOpenModalWithSignin}) => {
+const Header = () => {
   return (
     <header className="header">
-      <Topbar handleOpenModalWithSignin={handleOpenModalWithSignin}/>
+      <Topbar />
       <div className='header__container'>
         <ul className='header__left-titles'>
           <li className='header__title'>
