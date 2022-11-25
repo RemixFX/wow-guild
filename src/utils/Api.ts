@@ -1,3 +1,4 @@
+import { IAccount } from "../models/aсcountModel";
 import { IEvents } from "../models/eventsModel";
 
 class Api {
@@ -44,6 +45,7 @@ class Api {
     return fetch(`${this._url}/events`, {
       method: 'POST',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         date: event.date.toDateString(),
         name: event.name,
@@ -58,6 +60,7 @@ class Api {
     return fetch(`${this._url}/events/${event.id}`, {
       method: 'PUT',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         date: event.date.toDateString(),
         name: event.name,
@@ -71,9 +74,53 @@ class Api {
   deleteEvent(id: number) {
     return fetch(`${this._url}/events/${id}`, {
       method: 'DELETE',
+      headers: this._headers,
+      credentials: 'include',
+    })
+      .then(this._checkResponse);
+  }
+
+  createUser(user: IAccount) {
+    return fetch(`${this._url}/signup`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: user.name,
+        password: user.password
+      })
+    })
+      .then(this._checkResponse);
+  }
+
+  login(user: IAccount) {
+    return fetch(`${this._url}/signin`, {
+      method: 'POST',
+      headers: this._headers,
+      credentials: 'include',
+      body: JSON.stringify({
+        name: user.name,
+        password: user.password
+      })
+    })
+      .then(this._checkResponse);
+  }
+
+  getUserData() {
+    return fetch(`${this._url}/me`, {
+      method: 'GET',
+      credentials: 'include',
       headers: this._headers
     })
       .then(this._checkResponse);
+  }
+
+  logout = () => {
+    return fetch(`${this._url}/signout`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: this._headers
+    })
+    .then(this._checkResponse);
   }
 }
 

@@ -17,26 +17,35 @@ import { adminSlice } from "../../store/reducers/adminSlice";
 function App() {
   const [guildMessages, setGuildMessages] = React.useState([]);
   const [serverMessages, setServerMessages] = React.useState([]);
-  const [showingFormWithSignin, setShowingFormWithSignin] = useState<boolean>(false)
   const SAMPLE_META = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   const dispatch = useAppDispatch();
   const { openLoginForm, openRegisterForm } = useAppSelector(state => state.admin)
 
+  // Запрос данных при загрузке сайта
+  useEffect(() => {
+    dbApi.getUserData().then((res)=> {
+      dispatch(adminSlice.actions.isLoggedIn(res.name))
+    })
+    .catch((err => console.log(err)))
+  }, [])
 
 
-  const handleOpenModalWithSignin = () => {
-    setShowingFormWithSignin(true)
-  }
-
-  const onCloseModal = () => {
-    setShowingFormWithSignin(false)
-  }
-
-  const onLogin = (value: IAccount) => {
-    console.log(value)
+  // Регистрация нового аккаунта
+  const register = (value: IAccount) => {
+    dbApi.createUser(value).then(res => console.log(res)).catch((err => console.log(err)))
     dispatch(adminSlice.actions.isCloseForm());
   }
 
+  // Вход в аккаунт
+  const login = (value: IAccount) => {
+    dbApi.login(value)
+    .then(res => {
+      console.log(res)
+      dispatch(adminSlice.actions.isLoggedIn(res.name))
+    })
+    .catch((err => console.log(err)))
+    dispatch(adminSlice.actions.isCloseForm());
+  }
 
   // Функция для запроса сообщений сервера
   const getServerMessages = () => {
@@ -121,7 +130,7 @@ function App() {
         /* onClose={onCloseModal} */
         title={'Войти в аккаунт'}
         titleButton={'Войти'}
-        submit={onLogin}>
+        submit={login}>
           <p style={{marginBottom: "0", fontSize: "0.8rem", fontStyle: "italic"}}>
             Войти в аккаунт могут только учётные записи администратора.
             Что бы создать такой аккаунт, нужно зайти с учётной записи администратора.
@@ -129,7 +138,7 @@ function App() {
         </Form>}
       {openRegisterForm && <Form
         title={'Создать новый аккаунт для офицеров'}
-        submit={onLogin}
+        submit={register}
         titleButton={'Создать'}>
         <p style={{marginBottom: "0", fontSize: "0.8rem", fontStyle: "italic"}}>
         Созданный аккаунт будет обладать всеми правами администратора.

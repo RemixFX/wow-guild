@@ -3,6 +3,7 @@ import { IAccount } from "../../models/aсcountModel";
 
 interface AdminState {
   loggedIn: boolean;
+  currentUser: string;
   openLoginForm: boolean;
   openRegisterForm: boolean;
   loading: boolean,
@@ -11,13 +12,14 @@ interface AdminState {
 }
 
 const initialState: AdminState = {
-  loggedIn: true,
+  loggedIn: false,
+  currentUser: '',
   openLoginForm: false,
   openRegisterForm: false,
   loading: false,
   error: false,
   valueForm: {
-    login: '',
+    name: '',
     password: ''
   }
 }
@@ -56,13 +58,15 @@ export const adminSlice = createSlice({
       state.loggedIn = false
       state.loading = false
       state.error = true
-      state.valueForm = {login: '', password: ''}
+      state.valueForm = {name: '', password: ''}
     },
-    isLoggedIn: state => {
+    isLoggedIn: (state, action: PayloadAction<string>) => {
       state.loggedIn = true
+      state.currentUser = action.payload
     },
-    isNotLoggedIn: state => {
+    isNotLoggedIn: state=> {
       state.loggedIn = false
+      state.currentUser = ''
     }
   }
 })

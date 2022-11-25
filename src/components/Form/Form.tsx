@@ -20,7 +20,7 @@ const Form: FC<IProps> = ({ children, title, titleButton, submit }) => {
   const submitForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     submit({
-      login: loginInput.value,
+      name: loginInput.value,
       password: passwordInput.value
     });
   }
