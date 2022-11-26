@@ -1,19 +1,21 @@
-const Preloader = () => {
+import { FC } from "react"
+
+const Preloader:FC<{addClass: string}> = ({addClass}) => {
 
   return (
-    <div className="lds-spinner">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div className={`lds-spinner ${addClass}`}>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
+      <div className="lds-spinner__element"></div>
     </div>
   )
 }

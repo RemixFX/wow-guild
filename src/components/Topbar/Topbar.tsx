@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { fetchLogout } from "../../store/reducers/ActionCreators";
 import { adminSlice } from "../../store/reducers/adminSlice";
-import { dbApi } from "../../utils/Api";
 
 const Topbar = () => {
 
@@ -12,10 +12,7 @@ const Topbar = () => {
   //Вход или Выход из аккаунта
   const handleButtonClick = () => {
     if (loggedIn) {
-      dispatch(adminSlice.actions.isNotLoggedIn())
-      dbApi.logout()
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
+      dispatch(fetchLogout())
     } else
     dispatch(adminSlice.actions.isOpenLoginForm())
   }

@@ -3,12 +3,22 @@
   position: relative;
   height: 77px;
 }
-.lds-spinner div {
+
+.lds-spinner_style_l {
+  position: absolute;
+  left: calc(50% - 46px);
+}
+
+.lds-spinner__element {
   transform-origin: 40px 32px;
   animation: lds-spinner 1.2s linear infinite;
   margin-top: 5px;
   margin-left: 5px;
 }
+.lds-spinner_style_l .lds-spinner__element {
+  transform-origin: 39px 27px;
+}
+
 .lds-spinner div:after {
   content: " ";
   display: block;

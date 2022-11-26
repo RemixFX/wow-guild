@@ -7,8 +7,8 @@ interface AdminState {
   openLoginForm: boolean;
   openRegisterForm: boolean;
   loading: boolean,
-  error: boolean,
-  valueForm: IAccount;
+  error: any,
+  infoMessage: string;
 }
 
 const initialState: AdminState = {
@@ -18,10 +18,7 @@ const initialState: AdminState = {
   openRegisterForm: false,
   loading: false,
   error: false,
-  valueForm: {
-    name: '',
-    password: ''
-  }
+  infoMessage: ''
 }
 
 export const adminSlice = createSlice({
@@ -47,18 +44,38 @@ export const adminSlice = createSlice({
     isFetchingForm: state => {
       state.loading = true
       state.error = false
+      state.infoMessage = ''
     },
-    isSucessFetchingForm: (state, action: PayloadAction<IAccount>) => {
+    isSucessFetchingLoginForm: (state, action: PayloadAction<string>) => {
       state.loggedIn = true
       state.loading = false
+      state.openLoginForm = false
+      state.openRegisterForm = false
       state.error = false
-      state.valueForm = action.payload
+      state.currentUser = action.payload
+      state.infoMessage = 'Успешный вход'
     },
-    isErrorFetchingForm: state => {
+    isSucessFetchingRegisterForm: (state, action: PayloadAction<string>) => {
+      state.loggedIn = true
+      state.loading = false
+      state.openLoginForm = false
+      state.openRegisterForm = false
+      state.error = false
+      state.infoMessage = action.payload
+    },
+    isSucessFetchingLogout: (state, action: PayloadAction<string>) => {
       state.loggedIn = false
       state.loading = false
-      state.error = true
-      state.valueForm = {name: '', password: ''}
+      state.openLoginForm = false
+      state.openRegisterForm = false
+      state.error = false
+      state.currentUser = ''
+      state.infoMessage = action.payload
+    },
+    isErrorFetchingForm: (state, action: PayloadAction<any>) => {
+      state.loggedIn = false
+      state.loading = false
+      state.error = action.payload
     },
     isLoggedIn: (state, action: PayloadAction<string>) => {
       state.loggedIn = true

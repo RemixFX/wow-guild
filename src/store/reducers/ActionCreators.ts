@@ -1,7 +1,9 @@
+import { IAccount } from "../../models/aсcountModel"
 import { IEvents } from "../../models/eventsModel"
 import { IPlayer } from "../../models/playerModel"
 import { dbApi, sirusApi } from "../../utils/Api"
 import { AppDispatch } from "../store"
+import { adminSlice } from "./adminSlice"
 import { OnlineComponentSlice } from "./onlineComponentSlice"
 import { playerSlice } from "./playerSlice"
 import { scheduleSlice } from "./scheduleSlice"
@@ -36,3 +38,44 @@ export const fetchEvents = () => async (dispatch: AppDispatch) => {
   }
 }
 
+export const fetchLogin = (value: IAccount) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(adminSlice.actions.isFetchingForm())
+    const response = await dbApi.login(value)
+
+    setTimeout(() => {
+      dispatch(adminSlice.actions.isSucessFetchingLoginForm(response.name))
+    }, 1000)
+
+  } catch (error: unknown) {
+    dispatch(adminSlice.actions.isErrorFetchingForm(error))
+  }
+}
+
+export const fetchRegister = (value: IAccount) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(adminSlice.actions.isFetchingForm())
+    const response = await dbApi.createUser(value)
+
+    setTimeout(() => {
+      dispatch(adminSlice.actions.isSucessFetchingRegisterForm(response.message))
+    }, 1000)
+
+  } catch (error: unknown) {
+    dispatch(adminSlice.actions.isErrorFetchingForm(error))
+  }
+}
+
+export const fetchLogout = () => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(adminSlice.actions.isFetchingForm())
+    const response = await dbApi.logout()
+
+    setTimeout(() => {
+      dispatch(adminSlice.actions.isSucessFetchingLogout(response.message))
+    }, 1000)
+
+  } catch (error: unknown) {
+    dispatch(adminSlice.actions.isErrorFetchingForm(error))
+  }
+}

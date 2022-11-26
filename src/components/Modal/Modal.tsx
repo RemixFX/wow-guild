@@ -35,7 +35,7 @@ const Modal: FC<{ children: ReactNode, title: string }> = ({ children, title }) 
         <h3 className={`modal__header ${location.pathname === '/schedule' &&
           'modal__header_style_gold'}`}>{title}</h3>
         <button type="button" className="modal__close-button"
-          onClick={() => modal.current?.close()}>&#215;</button>
+          onClick={() => modal.current?.close()}> &#215;</button>
         <div className="modal__inner">
           {children}
         </div>

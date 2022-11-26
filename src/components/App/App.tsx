@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import Header from '../Header/Header'
+import { useEffect, useState } from "react";
 import Main from '../Main/Main'
 import { dbApi } from '../../utils/Api'
 import { Route, Routes } from "react-router-dom";
@@ -8,43 +7,38 @@ import Layout from "../Layout/Layout";
 import Invite from "../Invite/Invite";
 import Schedule from "../Schedule/Schedule";
 import { Calendar } from "../Brackets/Brackets";
-import { fetchEvents } from "../../store/reducers/ActionCreators";
+import { fetchEvents, fetchLogin, fetchRegister } from "../../store/reducers/ActionCreators";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Form from "../Form/Form";
 import { IAccount } from "../../models/aсcountModel";
 import { adminSlice } from "../../store/reducers/adminSlice";
+import InfoSlider from "../InfoSlider/infoSlider";
 
 function App() {
-  const [guildMessages, setGuildMessages] = React.useState([]);
-  const [serverMessages, setServerMessages] = React.useState([]);
+  const [guildMessages, setGuildMessages] = useState([]);
+  const [serverMessages, setServerMessages] = useState([]);
   const SAMPLE_META = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   const dispatch = useAppDispatch();
-  const { openLoginForm, openRegisterForm } = useAppSelector(state => state.admin)
+  const { error, loading, infoMessage, openLoginForm, openRegisterForm } = useAppSelector(state => state.admin)
 
   // Запрос данных при загрузке сайта
   useEffect(() => {
-    dbApi.getUserData().then((res)=> {
+
+    dbApi.getUserData().then((res) => {
       dispatch(adminSlice.actions.isLoggedIn(res.name))
     })
-    .catch((err => console.log(err)))
+      .catch((err => console.log(err)))
   }, [])
 
 
   // Регистрация нового аккаунта
   const register = (value: IAccount) => {
-    dbApi.createUser(value).then(res => console.log(res)).catch((err => console.log(err)))
-    dispatch(adminSlice.actions.isCloseForm());
+    dispatch(fetchRegister(value))
   }
 
   // Вход в аккаунт
   const login = (value: IAccount) => {
-    dbApi.login(value)
-    .then(res => {
-      console.log(res)
-      dispatch(adminSlice.actions.isLoggedIn(res.name))
-    })
-    .catch((err => console.log(err)))
-    dispatch(adminSlice.actions.isCloseForm());
+    dispatch(fetchLogin(value))
   }
 
   // Функция для запроса сообщений сервера
@@ -127,23 +121,28 @@ function App() {
           ]} />} />
       </Routes>
       {openLoginForm && <Form
-        /* onClose={onCloseModal} */
         title={'Войти в аккаунт'}
         titleButton={'Войти'}
+        error={error.message}
+        loading={loading}
         submit={login}>
-          <p style={{marginBottom: "0", fontSize: "0.8rem", fontStyle: "italic"}}>
-            Войти в аккаунт могут только учётные записи администратора.
-            Что бы создать такой аккаунт, нужно зайти с учётной записи администратора.
-          </p>
-        </Form>}
+        <p style={{ marginTop: "0", fontSize: "0.8rem", fontStyle: "italic" }}>
+          Войти в аккаунт могут только учётные записи администратора.
+          Что бы создать такой аккаунт, нужно зайти с учётной записи администратора.
+        </p>
+      </Form>}
       {openRegisterForm && <Form
         title={'Создать новый аккаунт для офицеров'}
         submit={register}
+        error={error.message}
+        loading={loading}
         titleButton={'Создать'}>
-        <p style={{marginBottom: "0", fontSize: "0.8rem", fontStyle: "italic"}}>
-        Созданный аккаунт будет обладать всеми правами администратора.
-      </p>
+        <p style={{ marginBottom: "0", fontSize: "0.8rem", fontStyle: "italic" }}>
+          Созданный аккаунт будет обладать всеми правами администратора.
+        </p>
       </Form>}
+      {(infoMessage) && <InfoSlider infoMessage={infoMessage} />}
+
     </div>
   )
 }

@@ -257,7 +257,7 @@ const Schedule = () => {
                     <span className="card__element-owner">{event.raidleader}</span>
                     <span className="card__element-time">{event.time}</span>
                   </div>)}
-                {loading ? <Preloader /> :
+                {loading ? <Preloader addClass={''}/> :
                   element.eventsOfDay.length < 4 &&
                   <div className={`card__element ${(loggedIn && element.date >= nowDateWithoutTime)
                     && 'card__element_admin'}`} onClick={() => handleOpenModal(element.date)} >
