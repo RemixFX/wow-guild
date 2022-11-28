@@ -7,7 +7,7 @@ import Layout from "../Layout/Layout";
 import Invite from "../Invite/Invite";
 import Schedule from "../Schedule/Schedule";
 import { Calendar } from "../Brackets/Brackets";
-import { fetchEvents, fetchLogin, fetchRegister } from "../../store/reducers/ActionCreators";
+import { fetchAuthorization, fetchEvents, fetchLogin, fetchRegister } from "../../store/reducers/ActionCreators";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Form from "../Form/Form";
 import { IAccount } from "../../models/aсcountModel";
@@ -23,11 +23,7 @@ function App() {
 
   // Запрос данных при загрузке сайта
   useEffect(() => {
-
-    dbApi.getUserData().then((res) => {
-      dispatch(adminSlice.actions.isLoggedIn(res.name))
-    })
-      .catch((err => console.log(err)))
+    dispatch(fetchAuthorization())
   }, [])
 
 

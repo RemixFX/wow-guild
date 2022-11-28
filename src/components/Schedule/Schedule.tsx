@@ -3,8 +3,8 @@ import { WheelEvent, useState, useMemo, useEffect } from "react";
 import { CSSTransition } from 'react-transition-group';
 import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { fetchChangeEvents, fetchCreateEvents, fetchDeleteEvents } from "../../store/reducers/ActionCreators";
 import { scheduleSlice } from "../../store/reducers/scheduleSlice";
-import { dbApi } from "../../utils/Api";
 import EventForm from "../EventForm/EventForm";
 import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
@@ -28,7 +28,7 @@ const Schedule = () => {
   const nextMonthDays = new Date(nowYear, nowMonth + 2, 0).getDate()
   const dispatch = useAppDispatch();
   const { loggedIn } = useAppSelector(state => state.admin)
-  const { events, loading, error, openEventForm } = useAppSelector(state => state.schedule)
+  const { events, loading, loadingEvent, error, errorEvent, openEventForm } = useAppSelector(state => state.schedule)
 
   // Создание массива со всеми датами на предыдущий, текущий и следующий месяц
   let arrAllDays: IArrAllDays[] = useMemo(() => {
@@ -171,7 +171,6 @@ const Schedule = () => {
       setSelectedDate(date)
       dispatch(scheduleSlice.actions.isOpenEventForm())
     } else return
-
   }
 
   // Открытие формы для изменения события
@@ -182,17 +181,13 @@ const Schedule = () => {
 
   //Создание события
   const createEvent = (event: IEvents) => {
-    dbApi.postEvent(event)
-      .then((res: IEvents) => {
-        dispatch(scheduleSlice.actions.eventsFetchingSuccess([...events, res]))
-      })
-      .catch((e) => console.log(e))
-    dispatch(scheduleSlice.actions.iscloseEventForm())
+    dispatch(fetchCreateEvents(event))
   }
 
   // Изменение события
   const changeEvent = (event: IEvents) => {
-    dbApi.changeEvent(event)
+    dispatch(fetchChangeEvents(event))
+    /* dbApi.changeEvent(event)
       .then((res) => {
         const udpatedEvents = events.map(updatedEvent => {
           return updatedEvent.id === event.id ? res : updatedEvent
@@ -200,20 +195,12 @@ const Schedule = () => {
         dispatch(scheduleSlice.actions.eventsFetchingSuccess(udpatedEvents))
       })
       .catch((e) => console.log(e));
-    dispatch(scheduleSlice.actions.iscloseEventForm())
+    dispatch(scheduleSlice.actions.iscloseEventForm()) */
   }
 
   // Удаление события
   const deleteEvent = (id: number) => {
-    dbApi.deleteEvent(id)
-      .then(() => {
-        const udpatedEvents = events.filter(deletedEvent => {
-          return deletedEvent.id !== id
-        })
-        dispatch(scheduleSlice.actions.eventsFetchingSuccess(udpatedEvents))
-      })
-      .catch((e) => console.log(e));
-    dispatch(scheduleSlice.actions.iscloseEventForm())
+    dispatch(fetchDeleteEvents(id))
   }
 
   // Получение заголовка для формы
@@ -224,7 +211,7 @@ const Schedule = () => {
     else if (selectedEvent) {
       return `Изменить событие на ${selectedEvent.date.getDate() + ' ' + arrMonthName[selectedEvent.date.getMonth()]}`
     } else
-      return 'ded'
+      return ''
   }
 
   return (
@@ -257,7 +244,7 @@ const Schedule = () => {
                     <span className="card__element-owner">{event.raidleader}</span>
                     <span className="card__element-time">{event.time}</span>
                   </div>)}
-                {loading ? <Preloader addClass={''}/> :
+                {loading ? <Preloader addClass={''} /> :
                   element.eventsOfDay.length < 4 &&
                   <div className={`card__element ${(loggedIn && element.date >= nowDateWithoutTime)
                     && 'card__element_admin'}`} onClick={() => handleOpenModal(element.date)} >
@@ -277,6 +264,8 @@ const Schedule = () => {
         <EventForm
           date={selectedDate}
           withEvent={selectedEvent}
+          error={errorEvent.message}
+          loading={loadingEvent}
           submit={selectedDate ? createEvent : changeEvent}
           onDelete={deleteEvent}
           title={createTitle()}

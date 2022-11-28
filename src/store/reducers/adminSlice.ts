@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IAccount } from "../../models/aсcountModel";
 
 interface AdminState {
   loggedIn: boolean;
@@ -32,12 +31,6 @@ export const adminSlice = createSlice({
     },
     isOpenRegisterForm: state => {
       state.openRegisterForm = true
-      state.loading = false
-      state.error = false
-    },
-    isCloseForm: state => {
-      state.openLoginForm = false
-      state.openRegisterForm = false
       state.loading = false
       state.error = false
     },
@@ -77,13 +70,9 @@ export const adminSlice = createSlice({
       state.loading = false
       state.error = action.payload
     },
-    isLoggedIn: (state, action: PayloadAction<string>) => {
-      state.loggedIn = true
-      state.currentUser = action.payload
-    },
-    isNotLoggedIn: state=> {
-      state.loggedIn = false
-      state.currentUser = ''
+    isCloseForm: state => {
+      state.openLoginForm = false
+      state.openRegisterForm = false
     }
   }
 })

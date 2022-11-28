@@ -38,6 +38,48 @@ export const fetchEvents = () => async (dispatch: AppDispatch) => {
   }
 }
 
+export const fetchCreateEvents = (event: IEvents) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(scheduleSlice.actions.eventFetching());
+    const response = await dbApi.postEvent(event);
+
+    setTimeout(() => {
+      dispatch(scheduleSlice.actions.createEventFetchingSuccess(response))
+    }, 1000)
+
+  } catch (error: unknown) {
+    dispatch(scheduleSlice.actions.eventFetchingError(error))
+  }
+}
+
+export const fetchChangeEvents = (event: IEvents) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(scheduleSlice.actions.eventFetching());
+    const response = await dbApi.changeEvent(event);
+
+    setTimeout(() => {
+      dispatch(scheduleSlice.actions.changeEventFetchingSuccess(response))
+    }, 1000)
+
+  } catch (error: unknown) {
+    dispatch(scheduleSlice.actions.eventFetchingError(error))
+  }
+}
+
+export const fetchDeleteEvents = (id: number) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(scheduleSlice.actions.eventFetching());
+    const response = await dbApi.deleteEvent(id);
+
+    setTimeout(() => {
+      dispatch(scheduleSlice.actions.deleteEventFetchingSuccess(response.id))
+    }, 1000)
+
+  } catch (error: unknown) {
+    dispatch(scheduleSlice.actions.eventFetchingError(error))
+  }
+}
+
 export const fetchLogin = (value: IAccount) => async (dispatch: AppDispatch) => {
   try {
     dispatch(adminSlice.actions.isFetchingForm())
@@ -77,5 +119,15 @@ export const fetchLogout = () => async (dispatch: AppDispatch) => {
 
   } catch (error: unknown) {
     dispatch(adminSlice.actions.isErrorFetchingForm(error))
+  }
+}
+
+export const fetchAuthorization = () => async (dispatch: AppDispatch) => {
+  try {
+    const response = await dbApi.getUserData()
+    dispatch(adminSlice.actions.isSucessFetchingLoginForm(response.name))
+
+  } catch (error: unknown) {
+    console.log(error)
   }
 }

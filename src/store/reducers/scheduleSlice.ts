@@ -5,16 +5,21 @@ import { IEvents } from "../../models/eventsModel";
 export interface ScheduleState {
   events: IEvents[];
   loading: boolean;
+  loadingEvent: boolean;
   error: boolean;
+  errorEvent : any;
   openEventForm: boolean;
   selectedDate: Date | null;
   selectedEvent: IEvents | null;
+
 }
 
 const initialState: ScheduleState = {
   events: [],
   loading: false,
+  loadingEvent: false,
   error: false,
+  errorEvent: false,
   openEventForm: false,
   selectedDate: null,
   selectedEvent: null
@@ -39,18 +44,42 @@ export const scheduleSlice = createSlice({
       state.loading = false
       state.error = true
     },
+    eventFetching: state => {
+      state.loadingEvent = true
+      state.error = false
+    },
+    createEventFetchingSuccess: (state, action: PayloadAction<IEvents>) => {
+      state.events = [...state.events, action.payload]
+      state.loadingEvent = false
+      state.error = false
+      state.errorEvent = false
+      state.openEventForm = false;
+    },
+    changeEventFetchingSuccess: (state, action: PayloadAction<IEvents>) => {
+      state.events = state.events.map(updatedEvent => {
+        return updatedEvent.id === action.payload.id ? action.payload : updatedEvent
+      })
+      state.loadingEvent = false
+      state.error = false
+      state.errorEvent = false
+      state.openEventForm = false;
+    },
+    deleteEventFetchingSuccess: (state, action: PayloadAction<number>) => {
+      state.events = state.events.filter(deletedEvent => deletedEvent.id !== action.payload)
+      state.loadingEvent = false
+      state.error = false
+      state.errorEvent = false
+      state.openEventForm = false;
+    },
+    eventFetchingError: (state, action: PayloadAction<any>) => {
+      state.loadingEvent = false
+      state.errorEvent = action.payload
+    },
     isOpenEventForm: state => {
       state.openEventForm = true;
     },
     iscloseEventForm: state => {
       state.openEventForm = false;
-    },
-    isSelectedDate: (state, action: PayloadAction<Date | null>) => {
-      state.selectedDate = action.payload
-    },
-    isSelectedEvent: (state, action: PayloadAction<IEvents | null>) => {
-      state.selectedEvent = action.payload
     }
-
   }
 })

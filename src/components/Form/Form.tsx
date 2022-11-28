@@ -53,10 +53,10 @@ const Form: FC<IProps> = ({ children, title, error, loading, titleButton, submit
           {titleButton}
         </button>
       </form>
-      <p className="form__error-response">
+      <div className="form__error-response">
         {loading && <Preloader addClass={'lds-spinner_style_l'} />}
         {error && '-- ' + error + ' --'}
-      </p>
+      </div>
     </Modal>
   )
 }

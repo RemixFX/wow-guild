@@ -2,16 +2,19 @@ import { ChangeEvent, FC, FormEvent, RefObject, useEffect, useRef, useState } fr
 import { IEvents } from "../../models/eventsModel";
 import { useInput } from "../../utils/Validations";
 import Modal from "../Modal/Modal";
+import Preloader from "../Preloader/Preloader";
 
 interface IProps {
   withEvent: IEvents | null;
   date: Date | null;
   title: string;
+  error: string;
+  loading: boolean;
   submit: (event: IEvents) => void;
   onDelete: (id: number) => void;
 }
 
-const EventForm: FC<IProps> = ({ withEvent, date, title, submit, onDelete }) => {
+const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit, onDelete }) => {
 
   const keyRef: RefObject<HTMLInputElement> = useRef(null);
   const [showInput, setShowInput] = useState(false);
@@ -109,6 +112,10 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, submit, onDelete }) => 
           onClick={handleDeleteEvent}>Удалить событие</button>
         }
       </form>
+      <div className="event-form__error-response">
+        {loading && <Preloader addClass={'lds-spinner_style_l'} />}
+        {error && '-- ' + error + ' --'}
+      </div>
       </Modal>
   )
 }
