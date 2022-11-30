@@ -17,9 +17,21 @@ const Topbar = () => {
     dispatch(adminSlice.actions.isOpenLoginForm())
   }
 
+  const changeStyle = () => {
+    switch (location.pathname) {
+      case '/schedule':
+       return true
+      case '/constructor':
+        return true
+      default:
+        return false
+    }
+  }
+
+
   return(
     <div className="topbar">
-    <Link className="schedule__navigation-link" to="/" style={location.pathname === '/schedule' ?
+    <Link className="schedule__navigation-link" to="/" style={changeStyle() ?
   {visibility: 'visible'} : {}}>&#8635; На главную страницу</Link>
     <div className="topbar__authorization">
       <p className="topbar__authorization-name">{currentUser}</p>

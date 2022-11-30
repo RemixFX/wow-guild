@@ -10,7 +10,6 @@ import { scheduleSlice } from "./scheduleSlice"
 
 export const fetchPlayers = () => async (dispatch: AppDispatch) => {
   try {
-
     dispatch(playerSlice.actions.playersFetching())
     const response = await sirusApi.getUsers()
     const players: IPlayer[] = response.members;
@@ -22,6 +21,7 @@ export const fetchPlayers = () => async (dispatch: AppDispatch) => {
     setTimeout(() => dispatch(OnlineComponentSlice.actions.hideOnline()), 700)
   }
 }
+
 
 export const fetchEvents = () => async (dispatch: AppDispatch) => {
   try {

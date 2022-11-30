@@ -5,6 +5,7 @@ import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchChangeEvents, fetchCreateEvents, fetchDeleteEvents } from "../../store/reducers/ActionCreators";
 import { scheduleSlice } from "../../store/reducers/scheduleSlice";
+import { cardStyle } from "../../utils/config";
 import EventForm from "../EventForm/EventForm";
 import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
@@ -115,54 +116,7 @@ const Schedule = () => {
     }
   }
 
-  // Стиль событий в зависимости от названия события
-  const cardStyle = (event: IEvents) => {
-    let background;
-    switch (event.name) {
-      case 'ИК 25':
-        background = { backgroundColor: '#3973e9' }
-        break;
-      case 'Логово Груула':
-        background = { backgroundColor: '#7e5032db' }
-        break;
-      case 'Логово Магдеридона':
-        background = { backgroundColor: '#678933' }
-        break;
-      case 'Ульдуар 25':
-        background = { backgroundColor: '#8f4040' }
-        break;
-      case 'ИВК 25':
-        background = { backgroundColor: '#003091', color: '#fbe0ae' }
-        break;
-      case 'героик Логово Груула':
-        background = { backgroundColor: '#58331b', color: '#fbe0ae' }
-        break;
-      case 'героик Логово Магдеридона':
-        background = { backgroundColor: '#3e5c0f', color: '#fbe0ae' }
-        break;
-      case 'Каражан об':
-        background = { backgroundColor: '#8567a3cc' }
-        break;
-      case 'Каражан гер':
-        background = { backgroundColor: '#47315c', color: '#fbe0ae' }
-        break;
-      case 'ИК 10 об':
-        background = { backgroundColor: '#6a9ef5' }
-        break;
-      case 'ИВК 10 гер':
-        background = { backgroundColor: '#3a5178', color: '#fbe0ae' }
-        break;
-      case 'Ульдуар 10':
-        background = { backgroundColor: '#ad4343' }
-        break;
-      default:
-        background = {
-          background: 'linear-gradient(0deg, #000, #0b1587 53%, #000 100%)',
-          color: '#fbe0ae'
-        }
-    }
-    return background
-  }
+
 
 
   // Открытие формы для создания события

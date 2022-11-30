@@ -27,11 +27,11 @@ const Header = () => {
         <ul className='header__right-titles'>
           <li className='header__title'>
             <NavLink to='info' className={({ isActive }) =>
-              isActive ? "active" : "header__link"}>Составы 10ок</NavLink>
+              isActive ? "active" : "header__link"}>Составы 10 и 25</NavLink>
           </li>
           <li className='header__title'>
-            <NavLink to='info' className={({ isActive }) =>
-              isActive ? "active" : "header__link"}>Составы 25ок</NavLink>
+            <NavLink to='constructor' className={({ isActive }) =>
+              isActive ? "active" : "header__link"}>Конструктор составов</NavLink>
           </li>
           <li className='header__title'>
             <NavLink to='schedule' className={({ isActive }) =>

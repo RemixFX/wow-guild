@@ -12,6 +12,8 @@
 
 .topbar__authorization-name {
   margin: 0;
+  font-weight: 500;
+  font-size: 1.1rem;
 }
 
 .topbar__authorization-button {

@@ -47,8 +47,29 @@ export const playerSlice = createSlice({
       state.error = true
       state.textOnline = 'Сервер не отвечает'
       state.noOnline = false
+    },
+    playersSortbyName: state => {
+      state.players = state.players.sort((a, b) => {
+        if (a.name > b.name) {
+          return 1
+        }
+        if (a.name < b.name) {
+          return -1
+        }
+        return 0
+      })
+    },
+    playersSortbyClass: state => {
+      state.players = state.players.sort((a, b) => {
+        if (a.class_name > b.class_name) {
+          return 1
+        }
+        if (a.class_name < b.class_name) {
+          return -1
+        }
+        return 0
+      })
     }
-
   }
 })
 

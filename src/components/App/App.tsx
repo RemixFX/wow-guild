@@ -6,13 +6,13 @@ import Info from "../Info/Info";
 import Layout from "../Layout/Layout";
 import Invite from "../Invite/Invite";
 import Schedule from "../Schedule/Schedule";
-import { Calendar } from "../Brackets/Brackets";
+import Brackets from "../Brackets/Brackets";
 import { fetchAuthorization, fetchEvents, fetchLogin, fetchRegister } from "../../store/reducers/ActionCreators";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Form from "../Form/Form";
 import { IAccount } from "../../models/aсcountModel";
-import { adminSlice } from "../../store/reducers/adminSlice";
 import InfoSlider from "../InfoSlider/infoSlider";
+import Constructor from "../Constructor/Constructor";
 
 function App() {
   const [guildMessages, setGuildMessages] = useState([]);
@@ -62,59 +62,7 @@ function App() {
 
         </Route>
         <Route path="/schedule" element={<Schedule />} />
-        <Route path="qq" element={<Calendar
-          month={10}
-          year={2021}
-          preloadedEvents={[
-            {
-              id: 1,
-              name: "Holiday",
-              dateFrom: "2021-09-29T12:00",
-              dateTo: "2021-10-03T08:45",
-              meta: SAMPLE_META,
-              type: "Holiday"
-            },
-            {
-              id: 2,
-              name: "Meeting",
-              dateFrom: "2021-10-01T09:45",
-              dateTo: "2021-10-04T22:00",
-              meta: SAMPLE_META,
-              type: "Standard"
-            },
-            {
-              id: 3,
-              name: "Away",
-              dateFrom: "2021-10-01T01:00",
-              dateTo: "2021-10-01T23:59",
-              meta: SAMPLE_META,
-              type: "Busy"
-            },
-            {
-              id: 4,
-              name: "Inspection",
-              dateFrom: "2021-10-19T07:30",
-              dateTo: "2021-10-21T23:59",
-              meta: SAMPLE_META,
-              type: "Standard"
-            },
-            {
-              id: 5,
-              name: "Holiday - Greece",
-              dateFrom: "2021-10-14T08:00",
-              dateTo: "2021-10-16T23:59",
-              meta: SAMPLE_META,
-              type: "Holiday"
-            },
-            {
-              id: 6,
-              name: "Holiday - Spain",
-              dateFrom: "2021-10-29T08:00",
-              dateTo: "2021-10-31T23:59",
-              meta: SAMPLE_META,
-              type: "Holiday"
-            }
-          ]} />} />
+        <Route path="/constructor" element={<Constructor />} />
       </Routes>
       {openLoginForm && <Form
         title={'Войти в аккаунт'}

@@ -1,4 +1,5 @@
 export interface IPlayer {
+  race_name: string;
   guid: number;
   class_name: string;
   equipment_lvl: {
