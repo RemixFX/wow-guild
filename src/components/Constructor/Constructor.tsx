@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { IPlayer } from "../../models/playerModel";
+import { MouseEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
@@ -9,12 +8,18 @@ import Topbar from "../Topbar/Topbar"
 
 const Constructor = () => {
 
-  const { players } = useAppSelector(state => state.player)
+  const {
+    players,
+    markSortbyClass,
+    markSortbyIlvl,
+    markSortbyName,
+    markSortbyRace
+  } = useAppSelector(state => state.player)
   const [checked, setChecked] = useState(true);
   const dispatch = useAppDispatch();
 
   // Запрос списка игроков если они ещё не были получены
-  useEffect(() =>  {
+  useEffect(() => {
     players.length === 0 && dispatch(fetchPlayers())
   }, [])
 
@@ -22,10 +27,26 @@ const Constructor = () => {
     setChecked(!checked)
   }
 
-
-  const sortHandler = () => {
-    dispatch(playerSlice.actions.playersSortbyClass())
+  // Сортировка таблицы игроков
+  const sortHandler = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.currentTarget.childNodes[0].textContent === 'Имя') {
+      dispatch(playerSlice.actions.playersSortbyName())
+      return
+    }
+    if (e.currentTarget.childNodes[0].textContent === 'Класс') {
+      dispatch(playerSlice.actions.playersSortbyClass())
+      return
+    }
+    if (e.currentTarget.childNodes[0].textContent === 'Раса') {
+      dispatch(playerSlice.actions.playersSortbyRace())
+      return
+    }
+    if (e.currentTarget.childNodes[0].textContent === 'Ilvl') {
+      dispatch(playerSlice.actions.playersSortbyIlvl())
+      return
+    }
   }
+
 
   return (
 
@@ -33,7 +54,7 @@ const Constructor = () => {
       <Topbar />
       <h1 className="constructor__header">Создать состав</h1>
       <div className="button-selection">
-      <label className="constructor__switch">
+        <label className="constructor__switch">
           <input type="checkbox" className="constructor__checkbox"
             checked={checked} onChange={handleChangeCheckbox} />
           <span className="constructor__slider_name_left"> Для 10ки</span>
@@ -64,17 +85,21 @@ const Constructor = () => {
         <div className="constructor__table">
           <div className="constructor__table-drag-button" style={{ gridRowEnd: `${players.length + 2}` }}></div>
           <div className="constructor__table-row-header">
-            <div className="constructor__table-column-header">
-              <span className="constructor__table-column-tittle">Имя</span>
+            <div className="constructor__table-column-header" onClick={e => sortHandler(e)}>
+              <span className="constructor__table-column-title">Имя</span>
+              {markSortbyName && <span className="constructor__table-column-marker"></span>}
             </div>
-            <div className="constructor__table-column-header">
-              <span className="constructor__table-column-header">Класс</span>
+            <div className="constructor__table-column-header"onClick={e => sortHandler(e)}>
+              <span className="constructor__table-column-title">Класс</span>
+              {markSortbyClass && <span className="constructor__table-column-marker"></span>}
             </div>
-            <div className="constructor__table-column-header">
-              <span className="constructor__table-column-header">Раса</span>
+            <div className="constructor__table-column-header"onClick={e => sortHandler(e)}>
+              <span className="constructor__table-column-title">Раса</span>
+              {markSortbyRace && <span className="constructor__table-column-marker"></span>}
             </div>
-            <div className="constructor__table-column-header">
-              <span className="constructor__table-column-header">Ilvl</span>
+            <div className="constructor__table-column-header"onClick={e => sortHandler(e)}>
+              <span className="constructor__table-column-title">Ilvl</span>
+              {markSortbyIlvl && <span className="constructor__table-column-marker"></span>}
             </div>
           </div>
           {players.map((player) =>
@@ -89,7 +114,7 @@ const Constructor = () => {
         </div>
       </div>
       <footer className="constructor__footer">
-        <button type="button" className="button selection-10" onClick={sortHandler}>Отправить</button>
+        <button type="button" className="button selection-10">Отправить</button>
         <button type="button" className="button selection-25">Сохранить</button>
       </footer>
     </section>

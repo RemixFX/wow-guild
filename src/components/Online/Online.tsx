@@ -1,15 +1,25 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { OnlineComponentSlice } from '../../store/reducers/onlineComponentSlice';
+import { playerSlice } from '../../store/reducers/playerSlice';
 import PreloaderOnline from '../PreloaderOnline/PreloaderOnline';
 import Sheet from "../Sheet/Sheet";
 
 const Online = () => {
 
   const dispatch = useAppDispatch();
-  const { players, loading, error, onlinePlayers, textOnline, noOnline } = useAppSelector(state => state.player)
+  const { players,
+    loading,
+    error,
+    onlinePlayers,
+    textOnline,
+    noOnline,
+    markSortbyClass,
+    markSortbyIlvl,
+    markSortbyName,
+    markSortbyRank } = useAppSelector(state => state.player)
   const { isShowOnline } = useAppSelector(state => state.online)
   const [showAllPlayers, setShowAllPlayers] = useState(false)
   const [isEndAnimation, setEndAnimation] = useState(true)
@@ -44,6 +54,26 @@ const Online = () => {
     setShowAllPlayers(!showAllPlayers)
   }
 
+  // Сортировка таблицы игроков
+  const sortHandler = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.currentTarget.childNodes[0].textContent === 'Имя') {
+      dispatch(playerSlice.actions.playersSortbyName())
+      return
+    }
+    if (e.currentTarget.childNodes[0].textContent === 'Класс') {
+      dispatch(playerSlice.actions.playersSortbyClass())
+      return
+    }
+    if (e.currentTarget.childNodes[0].textContent === 'Звание') {
+      dispatch(playerSlice.actions.playersSortbyRank())
+      return
+    }
+    if (e.currentTarget.childNodes[0].textContent === 'Ilvl') {
+      dispatch(playerSlice.actions.playersSortbyIlvl())
+      return
+    }
+  }
+
   return (
     <CSSTransition
       onExited={handleAnimationEnd}
@@ -71,11 +101,25 @@ const Online = () => {
             </div>)}
           {((isEndAnimation && !error && !loading && !noOnline) || (noOnline && showAllPlayers)) &&
             (<div className="online__table">
-              <span className="online__table-cell-header">Звание</span>
-              <span className="online__table-cell-header">Имя</span>
-              <span className="online__table-cell-header">Класс</span>
-              <span className="online__table-cell-header">Ilvl</span>
-              <span className="online__table-cell-header">Lvl</span>
+              <div className='online__table-header' onClick={e => sortHandler(e)}>
+                <span className="online__table-header-title">Звание</span>
+                {markSortbyRank && <span className="online__table-column-marker"></span>}
+              </div>
+              <div className='online__table-header' onClick={e => sortHandler(e)}>
+                <span className="online__table-title">Имя</span>
+                {markSortbyName && <span className="online__table-column-marker"></span>}
+              </div>
+              <div className='online__table-header' onClick={e => sortHandler(e)}>
+                <span className="online__table-title">Класс</span>
+                {markSortbyClass && <span className="online__table-column-marker"></span>}
+              </div>
+              <div className='online__table-header' onClick={e => sortHandler(e)}>
+                <span className="online__table-title">Ilvl</span>
+                {markSortbyIlvl && <span className="online__table-column-marker"></span>}
+              </div>
+              <div className='online__table-header' style={{cursor: 'default'}}>
+                <span className="online__table-title">Lvl</span>
+              </div>
               {showAllPlayers || (showAllPlayers && noOnline) ?
                 players.map((player) =>
                   (<Sheet player={player} key={player.guid} />))
