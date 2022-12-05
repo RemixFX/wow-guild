@@ -1,4 +1,4 @@
-import { IBracket10 } from "../models/bracketsModel";
+import { IGroup } from "../models/bracketsModel";
 import { IEvents } from "../models/eventsModel";
 import { IPlayer } from "../models/playerModel";
 
@@ -53,7 +53,7 @@ const cardStyle = (event: IEvents) => {
 }
 
 // Цвет шрифта в зависимости от названия класса
-const classColor = (player: IPlayer | IBracket10) => {
+const classColor = (player: IPlayer | IGroup) => {
   let color;
   switch (player.class_name) {
     case 'Воин':
@@ -91,88 +91,98 @@ const classColor = (player: IPlayer | IBracket10) => {
   }
   return color
 }
-
-const bracket10 = [
+const raid10 = [
   {
-    guid: 0,
-    role: 'Танк',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
+    id: "1",
+    title: "I группа"
   },
   {
-    guid: 0,
-    role: 'Хиллер',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
-  },
-  {
-    guid: 0,
-    role: 'Хиллер',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
-  },
-  {
-    guid: 0,
-    role: 'РДД',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
-  },
-  {
-    guid: 0,
-    role: 'РДД',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
-  },
-  {
-    guid: 0,
-    role: 'РДД',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
-  },
-  {
-    guid: 0,
-    role: 'РДД',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
-  },
-  {
-    guid: 0,
-    role: 'МДД',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
-  },
-  {
-    guid: 0,
-    role: 'МДД',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
-  },
-  {
-    guid: 0,
-    role: 'МДД',
-    name: '',
-    class_name: '',
-    race: '',
-    ilvl: 1
+    id: "2",
+    title: "II группа"
   }
 ]
 
-export { cardStyle, classColor, bracket10 }
+const bracket10 = [
+  {
+    id: 1,
+    role: 'Танк',
+    name: 'qs',
+    class_name: '',
+    race: '',
+    ilvl: 22
+  },
+  {
+    id: 2,
+    role: 'Хиллер',
+    name: 'ddwwdddddw',
+    class_name: 'Паладин',
+    race: 'Орк',
+    ilvl: 266
+  },
+  {
+    id: 3,
+    role: 'Хиллер',
+    name: 'de',
+    class_name: '',
+    race: '',
+    ilvl: 1
+  },
+  {
+    id: 4,
+    role: 'РДД',
+    name: 'gt',
+    class_name: '',
+    race: '',
+    ilvl: 3
+  },
+  {
+    id: 5,
+    role: 'РДД',
+    name: 'eer',
+    class_name: '',
+    race: '',
+    ilvl: 4
+  },
+  {
+    id: 6,
+    role: 'Танк',
+    name: 'bt',
+    class_name: '',
+    race: '',
+    ilvl: 4
+  },
+  {
+    id: 7,
+    role: 'Хиллер',
+    name: 'qw',
+    class_name: '',
+    race: '',
+    ilvl: 2
+  },
+  {
+    id: 8,
+    role: 'Хиллер',
+    name: 'vv',
+    class_name: '',
+    race: '',
+    ilvl: 4
+  },
+  {
+    id: 9,
+    role: 'РДД',
+    name: 'dd',
+    class_name: '',
+    race: '',
+    ilvl: 1
+  },
+  {
+    id: 10,
+    role: 'РДД',
+    name: 'rr',
+    class_name: '',
+    race: '',
+    ilvl: 3
+  }
+]
+
+export { cardStyle, classColor, raid10, bracket10 }

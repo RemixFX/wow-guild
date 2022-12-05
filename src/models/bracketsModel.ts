@@ -1,8 +1,8 @@
-export interface IBracket10 {
-  guid: number,
+export interface IGroup {
+  id: number,
   role: string,
   name: string,
   class_name: string,
   race: string,
-  ilvl?: number
+  ilvl?: number | null
 }
