@@ -102,87 +102,98 @@ const raid10 = [
   }
 ]
 
-const bracket10 = [
+const bracket10: IGroup[] = [
   {
-    id: 1,
+    id: '1',
     role: 'Танк',
-    name: 'qs',
+    name: '',
     class_name: '',
     race: '',
-    ilvl: 22
+    ilvl: null
   },
   {
-    id: 2,
+    id: '2',
     role: 'Хиллер',
-    name: 'ddwwdddddw',
-    class_name: 'Паладин',
-    race: 'Орк',
-    ilvl: 266
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
   },
   {
-    id: 3,
+    id: '3',
     role: 'Хиллер',
-    name: 'de',
+    name: '',
     class_name: '',
     race: '',
-    ilvl: 1
+    ilvl: null
   },
   {
-    id: 4,
+    id: '4',
+    role: '',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '5',
     role: 'РДД',
-    name: 'gt',
+    name: '',
     class_name: '',
     race: '',
-    ilvl: 3
+    ilvl: null
   },
   {
-    id: 5,
-    role: 'РДД',
-    name: 'eer',
-    class_name: '',
-    race: '',
-    ilvl: 4
-  },
-  {
-    id: 6,
+    id: '6',
     role: 'Танк',
-    name: 'bt',
+    name: '',
     class_name: '',
     race: '',
-    ilvl: 4
+    ilvl: null
   },
   {
-    id: 7,
+    id: '7',
     role: 'Хиллер',
-    name: 'qw',
+    name: '',
     class_name: '',
     race: '',
-    ilvl: 2
+    ilvl: null
   },
   {
-    id: 8,
+    id: '8',
     role: 'Хиллер',
-    name: 'vv',
+    name: '',
     class_name: '',
     race: '',
-    ilvl: 4
+    ilvl: null
   },
   {
-    id: 9,
+    id: '9',
     role: 'РДД',
-    name: 'dd',
+    name: '',
     class_name: '',
     race: '',
-    ilvl: 1
+    ilvl: null
   },
   {
-    id: 10,
+    id: '10',
     role: 'РДД',
-    name: 'rr',
+    name: '',
     class_name: '',
     race: '',
-    ilvl: 3
+    ilvl: null
   }
 ]
+
+const taskStatus = {
+  requested: {
+    name: "Requested",
+    items: []
+  },
+  toDo: {
+    name: "To do",
+    items: []
+  }
+};
 
 export { cardStyle, classColor, raid10, bracket10 }
