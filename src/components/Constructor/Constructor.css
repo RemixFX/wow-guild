@@ -77,10 +77,6 @@
   padding: 2px 0;
 }
 
-.brackets-group__header_type_next {
-  grid-row: 7;
-}
-
 .brackets-group__rows {
   display: grid;
   grid-template-columns: 15% 26% 26% 26% 7%;

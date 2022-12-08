@@ -1,11 +1,11 @@
-import { MouseEvent, DragEvent, useEffect, useState, Ref } from "react";
+import { MouseEvent, DragEvent, useEffect, useState, Ref, ChangeEvent } from "react";
 import { IGroup } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { bracket10, classColor, raid10 } from "../../utils/config"
+import { DragDropContext, Draggable, DraggableStateSnapshot, Droppable, DropResult } from 'react-beautiful-dnd';
+import { classColor, raid10 } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
 
 
@@ -21,39 +21,8 @@ const Constructor = () => {
   const [checked, setChecked] = useState(true)
   const dispatch = useAppDispatch()
   const [columnSource, setColumnSource] = useState<string>('')
-  const [bracketPlayers, setBracketPlayers] = useState(bracket10)
-
-  function handleOnDragEnd(result: DropResult) {
-    if (!result.destination) return;
-    console.log(result)
-    const { source, destination } = result
-    const items = Array.from(bracketPlayers);
-    const sourceColumn = players[source.index]
-    //const destColumn = items[destination.index]
-    const isUniqueNames = items.map((i) => i.name).some((n) => n === sourceColumn.name)
-    if (isUniqueNames) return;
-
-    if (source.droppableId !== destination.droppableId) {
-      const parsePlayer = {
-        id: String(sourceColumn.guid),
-        role: '',
-        name: sourceColumn.name,
-        class_name: sourceColumn.class_name,
-        race: sourceColumn.race_name,
-        ilvl: sourceColumn.equipment_lvl.avgItemLevel
-      }
-      items.splice(destination.index, 1, parsePlayer)
-
-      //items.push(parsePlayer)
-
-    } else {
-      const [reorderedItem] = items.splice(result.source.index, 1);
-      items.splice(result.destination.index, 0, reorderedItem);
-    }
-
-    setBracketPlayers(items);
-    setColumnSource('')
-  }
+  const [isNotUniqueName, setIsNotUniqueName] = useState<boolean>(false)
+  const [bracketPlayers, setBracketPlayers] = useState(raid10)
 
   // Запрос списка игроков если они ещё не были получены
   useEffect(() => {
@@ -84,19 +53,132 @@ const Constructor = () => {
     }
   }
 
-  const handleOnDragStart = (event: any) => {
-    setColumnSource(event.source.droppableId)
+  // Добавление игрока в брекет с помощью копки
+  const handleAddPlayer = (player: IPlayer) => {
+    const parsedPlayer = {
+      id: String(player.guid),
+      name: player.name,
+      class_name: player.class_name,
+      race: player.race_name,
+      ilvl: player.equipment_lvl.avgItemLevel
+    }
+
   }
 
-  function getStyle(style: any, snapshot: any) {
-    if (!snapshot.isDraggingOver || columnSource === 'brackets') return style
-      else {
-       return {
-      ...style,
-      transform: `translate(0)`,
-      boxShadow: `0px 0px 4px 2px #a0c6f9`
-    };
+  // Проврека на уникальность ника при перетаскивании
+  const handleOnDragStart = (result: DropResult) => {
+    setColumnSource(result.source.droppableId)
+    if (result.source.droppableId !== 'players') return
+    const inn = Object.keys(bracketPlayers)
+    let items: IGroup[] = [];
+    for (let i = 0; i < inn.length; i++) {
+      items.push(...bracketPlayers[inn[i]].players)
     }
+    const sourceIndex = players[result.source.index]
+    const isUniqueNames = items.map((i) => i.name).some((n) => n === sourceIndex.name)
+    isUniqueNames ? setIsNotUniqueName(true) : setIsNotUniqueName(false)
+  }
+
+  // Обработка действий, когда игрок попадает в список перетаскиванием
+  const handleOnDragEnd = (result: DropResult) => {
+    if (!result.destination) return
+    if (isNotUniqueName) return
+    const { source, destination } = result
+    const destList= bracketPlayers[destination.droppableId]; //куда тащим, (айди,массив)
+    const destItems = [...destList.players]; // новый массив куда тащим
+
+    if (source.droppableId === 'players') {
+      const sourceIndex = players[result.source.index]
+      const parsedPlayer = {
+        id: String(sourceIndex.guid),
+        role: destList.players[destination.index].role,
+        name: sourceIndex.name,
+        class_name: sourceIndex.class_name,
+        race: sourceIndex.race_name,
+        ilvl: sourceIndex.equipment_lvl.avgItemLevel
+      }
+      destItems.splice(destination.index, 1, parsedPlayer); // вставляем этот элемент в новый массив на позицию дест с удалением
+      setBracketPlayers({
+        ...bracketPlayers,
+        [destination.droppableId]: {
+          ...destList,
+          players: destItems
+        }
+      })
+      setIsNotUniqueName(false)
+      setColumnSource('')
+    }
+    else if (source.droppableId !== destination.droppableId) {
+      const sourceList = bracketPlayers[source.droppableId]; //откуда тащим (айди, массив)
+      const sourceItems = [...sourceList.players]; // новый масив откуда тащим
+      const [removed] = sourceItems.splice(source.index, 1); //удаляем элемент из массива откуда тащим и получаем этот жлемент
+      destItems.splice(destination.index, 0, removed); // вставляем этот элемент в новый массив на позицию дест
+      setBracketPlayers({
+        ...bracketPlayers,
+        [source.droppableId]: {
+          ...sourceList,
+          players: sourceItems
+        },
+        [destination.droppableId]: {
+          ...destList,
+          players: destItems
+        }
+      })
+      setIsNotUniqueName(false)
+      setColumnSource('')
+    } else {
+      (console.log('ласт блок'))
+      const column = bracketPlayers[source.droppableId];
+      const copiedItems = [...column.players];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      setBracketPlayers({
+        ...bracketPlayers,
+        [source.droppableId]: {
+          ...column,
+          players: copiedItems
+        }
+      });
+      setIsNotUniqueName(false)
+      setColumnSource('')
+    }
+  }
+
+  // Изменение стиля курсора, если перетаскиваемый игрок уже есть в списке брекета
+  const getCursorStyle = (style: any, snapshot: DraggableStateSnapshot) => {
+    if (isNotUniqueName && snapshot.isDragging) {
+      return {
+        cursor: 'no-drop',
+        ...style,
+        ...{ pointerEvents: 'auto' }
+      }
+    } else return style
+  }
+
+  // Изменение стандартного стиля при перетаскивании из списка игроков в брекет
+  function getStyle(style: any, snapshot: any) {
+    if (!snapshot.isDraggingOver || columnSource !== 'players') return style
+    else {
+      return {
+        ...style,
+        transform: `translateY(0)`,
+        boxShadow: !isNotUniqueName && `0px 0px 4px 2px #a0c6f9`
+      };
+    }
+  }
+
+  // Переключение роли
+  const handleSelectRole = (e: ChangeEvent<HTMLSelectElement>, group: string, player: IGroup) => {
+    const newArr = bracketPlayers[group].players.map((p) => {
+      if (p.id === player.id) {
+        return { ...p, role: e.target.value }
+      }
+      return p
+    })
+
+    setBracketPlayers(
+      { ...bracketPlayers, [group]: { ...bracketPlayers[group], players: newArr } }
+    )
   }
 
   return (
@@ -126,51 +208,50 @@ const Constructor = () => {
               <span className="constructor__brackets-title">Раса</span>
               <span className="constructor__brackets-title">Ilvl</span>
             </div>
-            <Droppable droppableId="brackets">
-              {(provided, snapshot) => (
-                <div className="brackets-group"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                >
-                  <h2 className="brackets-group__header">I группа</h2>
-                  <h2 className="brackets-group__header brackets-group__header_type_next">II группа</h2>
-                  {bracketPlayers.map((bplayer, index) =>
-                    <Draggable key={bplayer.id} draggableId={bplayer.id} index={index} disableInteractiveElementBlocking={true}>
-                      {(provided) => (
-                        <ul className="brackets-group__rows"
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getStyle(provided.draggableProps.style, snapshot )}
-
-                        >
-                          <li className="brackets-group__cell brackets-group__cell_type_select" >
-                            <select className="select-role">
-                              <option value="Танк">Танк</option>
-                              <option value="Лекарь">Лекарь</option>
-                              <option value="РДД">РДД</option>
-                              <option value="МДД">МДД</option>
-                            </select>
-                          </li>
-                          <li className="brackets-group__cell" >{bplayer.name}</li>
-                          <li className="brackets-group__cell" style={classColor(bplayer)}>{bplayer.class_name}</li>
-                          <li className="brackets-group__cell">{bplayer.race}</li>
-                          <li className="brackets-group__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
-                        </ul>
-
+            {Object.entries(bracketPlayers).map(([groupId, group]) =>
+              <div className="brackets-group" key={groupId}>
+                <h2 className="brackets-group__header">{group.title}</h2>
+                <Droppable droppableId={groupId}>
+                  {(provided, snapshot) => (
+                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                      {group.players.map((bplayer, index) =>
+                        <Draggable key={bplayer.id} draggableId={bplayer.id} index={index}>
+                          {(provided) => (
+                            <ul className="brackets-group__rows"
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getStyle(provided.draggableProps.style, snapshot)}
+                            >
+                              <li className="brackets-group__cell brackets-group__cell_type_select" >
+                                <select className="select-role" value={bplayer.role}
+                                  onChange={(e) => handleSelectRole(e, groupId, bplayer)}>
+                                  <option value="Танк">Танк</option>
+                                  <option value="Лекарь">Лекарь</option>
+                                  <option value="РДД">РДД</option>
+                                  <option value="МДД">МДД</option>
+                                </select>
+                              </li>
+                              <li className="brackets-group__cell" >{bplayer.name}</li>
+                              <li className="brackets-group__cell" style={classColor(bplayer)}>
+                                {bplayer.class_name}
+                              </li>
+                              <li className="brackets-group__cell">{bplayer.race}</li>
+                              <li className="brackets-group__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
+                            </ul>
+                          )}
+                        </Draggable>
                       )}
-                    </Draggable>
+                      {provided.placeholder}
+                    </div>
                   )}
-                  {provided.placeholder}
-
-                </div>
-              )}
-            </Droppable>
-
+                </Droppable>
+              </div>
+            )}
 
           </div>
           <Droppable droppableId="players" isDropDisabled={true}>
-            {(provided, snapshot) => (
+            {(provided) => (
 
               <div className="constructor__table" {...provided.droppableProps} ref={provided.innerRef}>
                 <div className="constructor__table-drag-button" style={{ gridRowEnd: `${players.length + 2}` }}></div>
@@ -196,11 +277,13 @@ const Constructor = () => {
                   <Draggable key={player.name} draggableId={player.name} index={index}>
                     {(provided, snapshot) => (
                       <ul className="table__row item"
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getCursorStyle(provided.draggableProps.style, snapshot)}
                       >
-                        <button type="button" className="table__add-button"></button>
+                        <button type="button" className="table__add-button"
+                        onClick={() => handleAddPlayer(player)}></button>
                         <li className="table__cell" >{player.name}</li>
                         <li className="table__cell" style={classColor(player)}>{player.class_name}</li>
                         <li className="table__cell">{player.race_name}</li>

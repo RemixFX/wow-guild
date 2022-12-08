@@ -91,18 +91,8 @@ const classColor = (player: IPlayer | IGroup) => {
   }
   return color
 }
-const raid10 = [
-  {
-    id: "1",
-    title: "I группа"
-  },
-  {
-    id: "2",
-    title: "II группа"
-  }
-]
 
-const bracket10: IGroup[] = [
+const group1: IGroup[] = [
   {
     id: '1',
     role: 'Танк',
@@ -113,7 +103,7 @@ const bracket10: IGroup[] = [
   },
   {
     id: '2',
-    role: 'Хиллер',
+    role: 'Лекарь',
     name: '',
     class_name: '',
     race: '',
@@ -121,7 +111,7 @@ const bracket10: IGroup[] = [
   },
   {
     id: '3',
-    role: 'Хиллер',
+    role: 'Лекарь',
     name: '',
     class_name: '',
     race: '',
@@ -129,7 +119,7 @@ const bracket10: IGroup[] = [
   },
   {
     id: '4',
-    role: '',
+    role: 'РДД',
     name: '',
     class_name: '',
     race: '',
@@ -142,10 +132,13 @@ const bracket10: IGroup[] = [
     class_name: '',
     race: '',
     ilvl: null
-  },
+  }
+]
+
+const group2: IGroup[] = [
   {
     id: '6',
-    role: 'Танк',
+    role: 'РДД',
     name: '',
     class_name: '',
     race: '',
@@ -153,7 +146,7 @@ const bracket10: IGroup[] = [
   },
   {
     id: '7',
-    role: 'Хиллер',
+    role: 'РДД',
     name: '',
     class_name: '',
     race: '',
@@ -161,7 +154,7 @@ const bracket10: IGroup[] = [
   },
   {
     id: '8',
-    role: 'Хиллер',
+    role: 'МДД',
     name: '',
     class_name: '',
     race: '',
@@ -169,7 +162,7 @@ const bracket10: IGroup[] = [
   },
   {
     id: '9',
-    role: 'РДД',
+    role: 'МДД',
     name: '',
     class_name: '',
     race: '',
@@ -177,7 +170,7 @@ const bracket10: IGroup[] = [
   },
   {
     id: '10',
-    role: 'РДД',
+    role: 'МДД',
     name: '',
     class_name: '',
     race: '',
@@ -185,15 +178,20 @@ const bracket10: IGroup[] = [
   }
 ]
 
-const taskStatus = {
-  requested: {
-    name: "Requested",
-    items: []
-  },
-  toDo: {
-    name: "To do",
-    items: []
-  }
-};
+interface GroupData extends Record<string, string | IGroup[]> {
+  title: string;
+  players: IGroup[];
+}
 
-export { cardStyle, classColor, raid10, bracket10 }
+const raid10: Record<string, GroupData> = {
+  group1: {
+    title: "I группа",
+    players: group1
+  },
+  group2: {
+    title: "II группа",
+    players: group2
+  }
+}
+
+export { cardStyle, classColor, raid10, }
