@@ -29,6 +29,7 @@ const Constructor = () => {
     players.length === 0 && dispatch(fetchPlayers())
   }, [])
 
+  // Переключение списков брекета: на 10 или 25 игроков
   function handleChangeCheckbox() {
     setChecked(!checked)
   }
@@ -53,16 +54,39 @@ const Constructor = () => {
     }
   }
 
-  // Добавление игрока в брекет с помощью копки
+  // Добавление игрока в брекет с помощью кнопки
   const handleAddPlayer = (player: IPlayer) => {
+    const inn = Object.keys(bracketPlayers)
+    const findFreePlayerIndex = () => {
+      for (let i = 0; i < inn.length; i++) {
+        const index = bracketPlayers[inn[i]].players.findIndex(p => !p.name)
+        if (index >= 0) return { index, group: inn[i] }
+      }
+    }
+    const playerIndex = (findFreePlayerIndex())
+    if (!playerIndex) return
+
     const parsedPlayer = {
       id: String(player.guid),
+      role: bracketPlayers[playerIndex.group].players[playerIndex.index].role,
       name: player.name,
       class_name: player.class_name,
       race: player.race_name,
       ilvl: player.equipment_lvl.avgItemLevel
     }
+    const newGroup = bracketPlayers[playerIndex.group].players.map((bplayer, index) => {
+      if (index === playerIndex.index) {
+        return parsedPlayer
+      }
+      return bplayer
+    })
 
+    setBracketPlayers({
+      ...bracketPlayers,
+      [playerIndex.group]: {
+        ...bracketPlayers[playerIndex.group], players: newGroup
+      }
+    })
   }
 
   // Проврека на уникальность ника при перетаскивании
@@ -84,8 +108,8 @@ const Constructor = () => {
     if (!result.destination) return
     if (isNotUniqueName) return
     const { source, destination } = result
-    const destList= bracketPlayers[destination.droppableId]; //куда тащим, (айди,массив)
-    const destItems = [...destList.players]; // новый массив куда тащим
+    const destList = bracketPlayers[destination.droppableId];
+    const destItems = [...destList.players];
 
     if (source.droppableId === 'players') {
       const sourceIndex = players[result.source.index]
@@ -97,7 +121,7 @@ const Constructor = () => {
         race: sourceIndex.race_name,
         ilvl: sourceIndex.equipment_lvl.avgItemLevel
       }
-      destItems.splice(destination.index, 1, parsedPlayer); // вставляем этот элемент в новый массив на позицию дест с удалением
+      destItems.splice(destination.index, 1, parsedPlayer);
       setBracketPlayers({
         ...bracketPlayers,
         [destination.droppableId]: {
@@ -109,10 +133,10 @@ const Constructor = () => {
       setColumnSource('')
     }
     else if (source.droppableId !== destination.droppableId) {
-      const sourceList = bracketPlayers[source.droppableId]; //откуда тащим (айди, массив)
-      const sourceItems = [...sourceList.players]; // новый масив откуда тащим
-      const [removed] = sourceItems.splice(source.index, 1); //удаляем элемент из массива откуда тащим и получаем этот жлемент
-      destItems.splice(destination.index, 0, removed); // вставляем этот элемент в новый массив на позицию дест
+      const sourceList = bracketPlayers[source.droppableId];
+      const sourceItems = [...sourceList.players];
+      const [removed] = sourceItems.splice(source.index, 1);
+      destItems.splice(destination.index, 0, removed);
       setBracketPlayers({
         ...bracketPlayers,
         [source.droppableId]: {
@@ -283,7 +307,7 @@ const Constructor = () => {
                         style={getCursorStyle(provided.draggableProps.style, snapshot)}
                       >
                         <button type="button" className="table__add-button"
-                        onClick={() => handleAddPlayer(player)}></button>
+                          onClick={() => handleAddPlayer(player)}></button>
                         <li className="table__cell" >{player.name}</li>
                         <li className="table__cell" style={classColor(player)}>{player.class_name}</li>
                         <li className="table__cell">{player.race_name}</li>
