@@ -57,11 +57,11 @@ const Online = () => {
   // Сортировка таблицы игроков
   const sortHandler = (e: MouseEvent<HTMLDivElement>) => {
     if (e.currentTarget.childNodes[0].textContent === 'Имя') {
-      dispatch(playerSlice.actions.playersSortbyName())
+      dispatch(playerSlice.actions.playersSortbyName('players'))
       return
     }
     if (e.currentTarget.childNodes[0].textContent === 'Класс') {
-      dispatch(playerSlice.actions.playersSortbyClass())
+      dispatch(playerSlice.actions.playersSortbyClass('players'))
       return
     }
     if (e.currentTarget.childNodes[0].textContent === 'Звание') {
@@ -69,7 +69,7 @@ const Online = () => {
       return
     }
     if (e.currentTarget.childNodes[0].textContent === 'Ilvl') {
-      dispatch(playerSlice.actions.playersSortbyIlvl())
+      dispatch(playerSlice.actions.playersSortbyIlvl('players'))
       return
     }
   }

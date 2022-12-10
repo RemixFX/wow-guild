@@ -1,10 +1,10 @@
-import { MouseEvent, DragEvent, useEffect, useState, Ref, ChangeEvent } from "react";
+import { MouseEvent, useEffect, useState, ChangeEvent } from "react";
 import { IGroup } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
-import { DragDropContext, Draggable, DraggableStateSnapshot, Droppable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { classColor, raid10 } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
 
@@ -12,7 +12,7 @@ import Topbar from "../Topbar/Topbar"
 const Constructor = () => {
 
   const {
-    players,
+    constructorPlayers,
     markSortbyClass,
     markSortbyIlvl,
     markSortbyName,
@@ -21,12 +21,11 @@ const Constructor = () => {
   const [checked, setChecked] = useState(true)
   const dispatch = useAppDispatch()
   const [columnSource, setColumnSource] = useState<string>('')
-  const [isNotUniqueName, setIsNotUniqueName] = useState<boolean>(false)
   const [bracketPlayers, setBracketPlayers] = useState(raid10)
 
   // Запрос списка игроков если они ещё не были получены
   useEffect(() => {
-    players.length === 0 && dispatch(fetchPlayers())
+    constructorPlayers.length === 0 && dispatch(fetchPlayers())
   }, [])
 
   // Переключение списков брекета: на 10 или 25 игроков
@@ -37,19 +36,19 @@ const Constructor = () => {
   // Сортировка таблицы игроков
   const sortHandler = (e: MouseEvent<HTMLDivElement>) => {
     if (e.currentTarget.childNodes[0].textContent === 'Имя') {
-      dispatch(playerSlice.actions.playersSortbyName())
+      dispatch(playerSlice.actions.playersSortbyName('constructor_players'))
       return
     }
     if (e.currentTarget.childNodes[0].textContent === 'Класс') {
-      dispatch(playerSlice.actions.playersSortbyClass())
+      dispatch(playerSlice.actions.playersSortbyClass('constructor_players'))
       return
     }
     if (e.currentTarget.childNodes[0].textContent === 'Раса') {
-      dispatch(playerSlice.actions.playersSortbyRace())
+      dispatch(playerSlice.actions.playersSortbyRace('constructor_players'))
       return
     }
     if (e.currentTarget.childNodes[0].textContent === 'Ilvl') {
-      dispatch(playerSlice.actions.playersSortbyIlvl())
+      dispatch(playerSlice.actions.playersSortbyIlvl('constructor_players'))
       return
     }
   }
@@ -80,7 +79,8 @@ const Constructor = () => {
       }
       return bplayer
     })
-
+    const newBracketList = constructorPlayers.filter(p => p.guid !== player.guid)
+    dispatch(playerSlice.actions.playersChange(newBracketList))
     setBracketPlayers({
       ...bracketPlayers,
       [playerIndex.group]: {
@@ -89,30 +89,20 @@ const Constructor = () => {
     })
   }
 
-  // Проврека на уникальность ника при перетаскивании
+  // сохранение названия списка, откуда идёт перетаскивание
   const handleOnDragStart = (result: DropResult) => {
     setColumnSource(result.source.droppableId)
-    if (result.source.droppableId !== 'players') return
-    const inn = Object.keys(bracketPlayers)
-    let items: IGroup[] = [];
-    for (let i = 0; i < inn.length; i++) {
-      items.push(...bracketPlayers[inn[i]].players)
-    }
-    const sourceIndex = players[result.source.index]
-    const isUniqueNames = items.map((i) => i.name).some((n) => n === sourceIndex.name)
-    isUniqueNames ? setIsNotUniqueName(true) : setIsNotUniqueName(false)
   }
 
   // Обработка действий, когда игрок попадает в список перетаскиванием
   const handleOnDragEnd = (result: DropResult) => {
     if (!result.destination) return
-    if (isNotUniqueName) return
     const { source, destination } = result
     const destList = bracketPlayers[destination.droppableId];
     const destItems = [...destList.players];
 
     if (source.droppableId === 'players') {
-      const sourceIndex = players[result.source.index]
+      const sourceIndex = constructorPlayers[source.index]
       const parsedPlayer = {
         id: String(sourceIndex.guid),
         role: destList.players[destination.index].role,
@@ -121,6 +111,8 @@ const Constructor = () => {
         race: sourceIndex.race_name,
         ilvl: sourceIndex.equipment_lvl.avgItemLevel
       }
+      const sourceItems = [...constructorPlayers]
+      sourceItems.splice(source.index, 1)
       destItems.splice(destination.index, 1, parsedPlayer);
       setBracketPlayers({
         ...bracketPlayers,
@@ -129,7 +121,7 @@ const Constructor = () => {
           players: destItems
         }
       })
-      setIsNotUniqueName(false)
+      dispatch(playerSlice.actions.playersChange(sourceItems))
       setColumnSource('')
     }
     else if (source.droppableId !== destination.droppableId) {
@@ -148,7 +140,6 @@ const Constructor = () => {
           players: destItems
         }
       })
-      setIsNotUniqueName(false)
       setColumnSource('')
     } else {
       (console.log('ласт блок'))
@@ -163,20 +154,8 @@ const Constructor = () => {
           players: copiedItems
         }
       });
-      setIsNotUniqueName(false)
       setColumnSource('')
     }
-  }
-
-  // Изменение стиля курсора, если перетаскиваемый игрок уже есть в списке брекета
-  const getCursorStyle = (style: any, snapshot: DraggableStateSnapshot) => {
-    if (isNotUniqueName && snapshot.isDragging) {
-      return {
-        cursor: 'no-drop',
-        ...style,
-        ...{ pointerEvents: 'auto' }
-      }
-    } else return style
   }
 
   // Изменение стандартного стиля при перетаскивании из списка игроков в брекет
@@ -186,7 +165,7 @@ const Constructor = () => {
       return {
         ...style,
         transform: `translateY(0)`,
-        boxShadow: !isNotUniqueName && `0px 0px 4px 2px #a0c6f9`
+        boxShadow: `0px 0px 4px 2px #a0c6f9`
       };
     }
   }
@@ -278,7 +257,7 @@ const Constructor = () => {
             {(provided) => (
 
               <div className="constructor__table" {...provided.droppableProps} ref={provided.innerRef}>
-                <div className="constructor__table-drag-button" style={{ gridRowEnd: `${players.length + 2}` }}></div>
+                <div className="constructor__table-drag-button" style={{ gridRowEnd: `${constructorPlayers.length + 2}` }}></div>
                 <div className="constructor__table-row-header">
                   <div className="constructor__table-column-header" onClick={e => sortHandler(e)}>
                     <span className="constructor__table-column-title">Имя</span>
@@ -297,14 +276,13 @@ const Constructor = () => {
                     {markSortbyIlvl && <span className="constructor__table-column-marker"></span>}
                   </div>
                 </div>
-                {players.map((player, index) =>
+                {constructorPlayers.map((player, index) =>
                   <Draggable key={player.name} draggableId={player.name} index={index}>
                     {(provided, snapshot) => (
                       <ul className="table__row item"
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        style={getCursorStyle(provided.draggableProps.style, snapshot)}
                       >
                         <button type="button" className="table__add-button"
                           onClick={() => handleAddPlayer(player)}></button>
@@ -331,7 +309,3 @@ const Constructor = () => {
 }
 
 export default Constructor
-
-
-
-

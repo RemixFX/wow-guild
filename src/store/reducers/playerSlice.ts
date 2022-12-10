@@ -4,6 +4,7 @@ import { IPlayer } from "../../models/playerModel";
 export interface PlayerState {
   players: IPlayer[];
   onlinePlayers: IPlayer[];
+  constructorPlayers: IPlayer[];
   loading: boolean;
   error: boolean;
   textOnline: string;
@@ -18,6 +19,7 @@ export interface PlayerState {
 const initialState: PlayerState = {
   players: [],
   onlinePlayers: [],
+  constructorPlayers: [],
   loading: false,
   error: false,
   textOnline: 'Список игроков',
@@ -61,14 +63,17 @@ export const playerSlice = createSlice({
     playersFetching: state => {
       state.players = []
       state.onlinePlayers = []
+      state.constructorPlayers = []
       state.loading = true
       state.error = false
       state.textOnline = ''
       state.noOnline = false
     },
     playersFetchingSuccess: (state, action: PayloadAction<IPlayer[]>) => {
+
       state.players = action.payload
       state.onlinePlayers = action.payload.filter((p)=> p.online === 1)
+      state.constructorPlayers = action.payload
       state.loading = false
       state.error = false
       state.textOnline = state.onlinePlayers.length === 0 ? 'Нет никого онлайн'
@@ -78,13 +83,19 @@ export const playerSlice = createSlice({
     playersFetchingError: state => {
       state.players = []
       state.onlinePlayers = []
+      state.constructorPlayers = []
       state.loading = false
       state.error = true
       state.textOnline = 'Сервер не отвечает'
       state.noOnline = false
     },
+    playersChange: (state, action: PayloadAction<IPlayer[]>) => {
+      state.constructorPlayers = action.payload
+      state.loading = false
+      state.error = false
+    },
     playersSortbyRank: state => {
-      state.players = sortByRank(state.players)
+      state.players =  sortByRank(state.players)
       state.onlinePlayers = sortByRank(state.onlinePlayers)
       state.markSortbyRank = true
       state.markSortbyIlvl = false
@@ -92,36 +103,40 @@ export const playerSlice = createSlice({
       state.markSortbyClass = false
       state.markSortbyRace = false
     },
-    playersSortbyIlvl: state => {
-      state.players = sortByIlvl(state.players)
+    playersSortbyIlvl: (state, action: PayloadAction<string>) => {
+      state.players = action.payload === 'players' ? sortByIlvl(state.players) : state.players
       state.onlinePlayers = sortByIlvl(state.onlinePlayers)
+      state.constructorPlayers = action.payload === 'constructor_players' ? sortByIlvl(state.constructorPlayers) : state.constructorPlayers
       state.markSortbyRank = false
       state.markSortbyIlvl = true
       state.markSortbyName = false
       state.markSortbyClass = false
       state.markSortbyRace = false
     },
-    playersSortbyName: state => {
-      state.players = sortByName(state.players)
+    playersSortbyName: (state, action: PayloadAction<string>) => {
+      state.players = action.payload === 'players' ? sortByName(state.players) : state.players
       state.onlinePlayers = sortByName(state.onlinePlayers)
+      state.constructorPlayers = action.payload === 'constructor_players' ? sortByName(state.constructorPlayers) : state.constructorPlayers
       state.markSortbyRank = false
       state.markSortbyIlvl = false
       state.markSortbyName = true
       state.markSortbyClass = false
       state.markSortbyRace = false
     },
-    playersSortbyClass: state => {
-      state.players = sortByClass(state.players)
+    playersSortbyClass: (state, action: PayloadAction<string>) => {
+      state.players = action.payload === 'players' ? sortByClass(state.players) : state.players
       state.onlinePlayers = sortByClass(state.onlinePlayers)
+      state.constructorPlayers = action.payload === 'constructor_players' ? sortByClass(state.constructorPlayers) : state.constructorPlayers
       state.markSortbyRank = false
       state.markSortbyIlvl = false
       state.markSortbyName = false
       state.markSortbyClass = true
       state.markSortbyRace = false
     },
-    playersSortbyRace: state => {
-      state.players = sortByRace(state.players)
+    playersSortbyRace: (state, action: PayloadAction<string>) => {
+      state.players = action.payload === 'players' ? sortByRace(state.players) : state.players
       state.onlinePlayers = sortByRace(state.onlinePlayers)
+      state.constructorPlayers = action.payload === 'constructor_players' ? sortByRace(state.constructorPlayers) : state.constructorPlayers
       state.markSortbyRank = false
       state.markSortbyIlvl = false
       state.markSortbyName = false
