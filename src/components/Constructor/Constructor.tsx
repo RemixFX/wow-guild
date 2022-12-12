@@ -12,6 +12,7 @@ import Topbar from "../Topbar/Topbar"
 const Constructor = () => {
 
   const {
+    players,
     constructorPlayers,
     markSortbyClass,
     markSortbyIlvl,
@@ -89,6 +90,35 @@ const Constructor = () => {
     })
   }
 
+  //Удаление игрока из списка брекета
+  const handleDeletePlayer = (player: IGroup, groupId: string) => {
+    const playerIndex = bracketPlayers[groupId].players.findIndex(p => p.name === player.name)
+    const placeHolder =
+    {id: String(Math.floor(Math.random() * 10000)), role: 'РДД', name: '', class_name: '', race: '', ilvl: null}
+    const newGroup = [...bracketPlayers[groupId].players]
+    newGroup.splice(playerIndex, 1, placeHolder)
+
+    const pushPlayer = () => {
+      const removedPlayer = players.find((p) => p.name === player.name)
+      if (removedPlayer) {
+      dispatch(playerSlice.actions.playersChange([...constructorPlayers, removedPlayer]))
+      markSortbyClass ? dispatch(playerSlice.actions.playersSortbyClass('constructor_players')) :
+      markSortbyIlvl ? dispatch(playerSlice.actions.playersSortbyIlvl('constructor_players')) :
+      markSortbyName ? dispatch(playerSlice.actions.playersSortbyName('constructor_players')) :
+      markSortbyRace ? dispatch(playerSlice.actions.playersSortbyRace('constructor_players')) :
+      dispatch(playerSlice.actions.playersSortbyRank())
+      } else return
+    }
+
+    setBracketPlayers({
+      ...bracketPlayers,
+      [groupId]: {
+        ...bracketPlayers[groupId], players: newGroup
+      }
+    })
+    pushPlayer()
+  }
+
   // сохранение названия списка, откуда идёт перетаскивание
   const handleOnDragStart = (result: DropResult) => {
     setColumnSource(result.source.droppableId)
@@ -102,6 +132,7 @@ const Constructor = () => {
     const destItems = [...destList.players];
 
     if (source.droppableId === 'players') {
+      if (destination.index >= destList.players.length) return
       const sourceIndex = constructorPlayers[source.index]
       const parsedPlayer = {
         id: String(sourceIndex.guid),
@@ -142,7 +173,6 @@ const Constructor = () => {
       })
       setColumnSource('')
     } else {
-      (console.log('ласт блок'))
       const column = bracketPlayers[source.droppableId];
       const copiedItems = [...column.players];
       const [removed] = copiedItems.splice(source.index, 1);
@@ -185,7 +215,6 @@ const Constructor = () => {
   }
 
   return (
-
     <section className="constructor">
       <Topbar />
       <h1 className="constructor__header">Создать состав</h1>
@@ -199,11 +228,9 @@ const Constructor = () => {
         </label>
       </div>
       <div className="constructor__layout">
-        <DragDropContext
-          onDragStart={handleOnDragStart}
-          onDragEnd={handleOnDragEnd}
-        >
+        <DragDropContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
           <div className="constructor__brackets">
+            <div className="constructor__brackets-delete-button"></div>
             <div className="constructor__brackets-header">
               <span className="constructor__brackets-title">Роль</span>
               <span className="constructor__brackets-title">Имя</span>
@@ -241,11 +268,15 @@ const Constructor = () => {
                               </li>
                               <li className="brackets-group__cell">{bplayer.race}</li>
                               <li className="brackets-group__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
+                              <button type="button" className="brackets__delete-button"
+                              onClick={() => handleDeletePlayer(bplayer, groupId)}
+                              disabled={bplayer.name === ''}>
+                              </button>
                             </ul>
                           )}
                         </Draggable>
                       )}
-                      {provided.placeholder}
+                      {columnSource !== 'players' && provided.placeholder}
                     </div>
                   )}
                 </Droppable>
@@ -255,7 +286,6 @@ const Constructor = () => {
           </div>
           <Droppable droppableId="players" isDropDisabled={true}>
             {(provided) => (
-
               <div className="constructor__table" {...provided.droppableProps} ref={provided.innerRef}>
                 <div className="constructor__table-drag-button" style={{ gridRowEnd: `${constructorPlayers.length + 2}` }}></div>
                 <div className="constructor__table-row-header">

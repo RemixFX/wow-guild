@@ -97,6 +97,7 @@ export const playerSlice = createSlice({
     playersSortbyRank: state => {
       state.players =  sortByRank(state.players)
       state.onlinePlayers = sortByRank(state.onlinePlayers)
+      state.constructorPlayers = sortByRank(state.constructorPlayers)
       state.markSortbyRank = true
       state.markSortbyIlvl = false
       state.markSortbyName = false

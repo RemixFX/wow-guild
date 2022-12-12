@@ -37,22 +37,30 @@
 }
 
 .constructor__brackets {
-  border: solid 3px #d1defb42;
+  border-left: solid 3px #d1defb42;
   display: grid;
-  grid-template-columns: 16% 24% 26% 26% 8%;
-  width: 45%;
+  grid-template-columns: 15% 22% 24% 24% 8% 7%;
+  width: 49%;
   overflow-x: auto;
   max-height: 72vh;
 }
 
+.constructor__brackets-delete-button {
+  grid-column: 6;
+  grid-row-start: 1;
+  grid-row-end: 10;
+  border-left: solid 3px #d1defb42;
+}
+
 .constructor__brackets-header {
   display: grid;
-  grid-column: 1 / 7;
+  grid-column: 1 / 6;
   position: sticky;
   top: 0;
-  grid-template-columns: inherit;
+  grid-template-columns: 16% 24% 26% 26% 8%;
   padding: 4px;
   background: #0d2c41;
+  border-top: solid 3px #d1defb42;
 }
 
 .constructor__brackets-title {
@@ -68,6 +76,10 @@
   display: grid;
   grid-column: 1 / 6;
   row-gap: 3px;
+}
+
+.brackets-group:last-of-type {
+  border-bottom: solid 3px #d1defb42;
 }
 
 .brackets-group__header {
@@ -87,6 +99,31 @@
   border: 3px solid transparent;
   cursor: grab;
   position: relative;
+}
+
+.brackets-group__rows:hover {
+  border: 3px ridge #a7e6ff;
+}
+
+.brackets__delete-button {
+  position: absolute;
+  top: 0%;
+  right: -7%;
+  height: 100%;
+  width: 6%;
+  background-color: #0000008c;
+  background-image: url(../../images/delete_player.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: 1px solid #f1f1f173;
+  cursor: grab;
+  opacity: 0;
+  transition: all ease-in-out 300ms;
+}
+
+.brackets-group__rows:hover .brackets__delete-button{
+  opacity: 1;
 }
 
 .brackets-group__cell {
@@ -126,8 +163,8 @@
 
 .constructor__table-drag-button {
   grid-column: 1;
-    grid-row-start: 1;
-    border-right: solid 3px #d1defb42;
+  grid-row-start: 1;
+  border-right: solid 3px #d1defb42;
 }
 
 .constructor__table-row-header {
@@ -148,6 +185,7 @@
   font-size: 1.2rem;
   font-weight: 500;
   padding: 6px 0;
+  margin: 0px 1px;
   cursor: pointer;
   border-radius: 5px;
   box-shadow: 0px 0px 3px 2px #97979769;
