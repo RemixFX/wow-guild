@@ -30,19 +30,24 @@
 }
 
 .constructor__layout {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 55vh 17vh;
   margin-top: 15px;
 }
 
 .constructor__brackets {
   border-left: solid 3px #d1defb42;
   display: grid;
+  grid-row: 1/2;
   grid-template-columns: 15% 22% 24% 24% 8% 7%;
-  width: 49%;
+  margin-left: 3%;
   overflow-x: auto;
-  max-height: 72vh;
+  direction: ltr;
+}
+
+.constructor__brackets::-webkit-scrollbar {
+  width: 0;
 }
 
 .constructor__brackets-delete-button {
@@ -154,10 +159,10 @@
 .constructor__table {
   border-right: solid 3px #d1defb42;
   display: grid;
+  grid-row: 1/3;
   grid-template-columns: 6% 28% 28% 29% 9%;
-  width: 46%;
+  margin-right: 3%;
   overflow-x: auto;
-  max-height: 72vh;
   row-gap: 3px;
 }
 
@@ -261,16 +266,6 @@
   color: #eebc1deb;
   font-size: 1.1rem;
   padding: 5px;
-}
-
-.constructor__footer {
-  display: flex;
-  height: 44px;
-  justify-content: space-around;
-  position: fixed;
-  width: 100%;
-  top: 92%;
-  right: 0;
 }
 
 .constructor__table::-webkit-scrollbar {
@@ -379,6 +374,65 @@
 
 .constructor__checkbox:not(:checked) ~ .constructor__slider_name_left::after {
   animation: left-border 500ms ease forwards
+}
+
+.constructor__footer {
+  display: flex;
+  height: 44px;
+  justify-content: space-around;
+  position: fixed;
+  width: 100%;
+  top: 92%;
+  right: 0;
+}
+
+.constructor__buffs {
+  border: solid 3px #d1defb42;
+  border-top: none;
+  width: 89.8%;
+  margin-left: 3%;
+  padding-top: 36px;
+  min-height: 10%;
+}
+
+.tab-switch__button {
+  color: #dcb121;
+  width: 50%;
+  font-weight: 500;
+  border: 1px solid #8d761d;
+  border-radius: 27px 27px 0px 5px;
+  background: #0d2c41;
+  cursor: pointer;
+  transition: all 200ms linear;
+}
+
+.tab-switch__button.active {
+  background: #0d2c41;
+  box-shadow: inset 0px 0px 8px 6px #4e9bdd;
+}
+
+.tab-switch__button:active {
+  transform: translateY(3px);
+}
+
+.list-buffs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
+  column-gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 10px 5px 0 5px;
+  color: #ff0002;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.list-buffs__name {
+  font-size: 1.0rem;
+  font-style: normal;
+  padding-bottom: 10px;
+  color: #646464;
+  font-weight: 500;
 }
 
 

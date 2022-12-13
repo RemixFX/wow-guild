@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { classColor, raid10 } from "../../utils/config"
+import { classColor, raid10, raidBuffs } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
 
 
@@ -23,6 +23,8 @@ const Constructor = () => {
   const dispatch = useAppDispatch()
   const [columnSource, setColumnSource] = useState<string>('')
   const [bracketPlayers, setBracketPlayers] = useState(raid10)
+  const [isactiveGroupButton, setIsActiveGroupButton] = useState('');
+  const [isactiveRaidButton, setIsActiveRaidButton] = useState('active');
 
   // Запрос списка игроков если они ещё не были получены
   useEffect(() => {
@@ -282,7 +284,6 @@ const Constructor = () => {
                 </Droppable>
               </div>
             )}
-
           </div>
           <Droppable droppableId="players" isDropDisabled={true}>
             {(provided) => (
@@ -329,6 +330,28 @@ const Constructor = () => {
             )}
           </Droppable>
         </DragDropContext>
+        <div className="constructor__buffs">
+          <div className="tab-switch">
+            <button type="button"className={`tab-switch__button ${isactiveGroupButton}`}
+            onClick={() => {
+              setIsActiveRaidButton('')
+              setIsActiveGroupButton('active')
+            }}
+            >Синергия рас</button>
+            <button type="button"className={`tab-switch__button ${isactiveRaidButton}`}
+                        onClick={() => {
+                          setIsActiveGroupButton('')
+                          setIsActiveRaidButton('active')
+                        }}
+            >Рейдовые баффы</button>
+          </div>
+          <ul className="list-buffs">*в разработке
+            {raidBuffs.map((data) =>
+            <li className="list-buffs__name">{data.buff}</li>
+          )}
+          </ul>
+
+        </div>
       </div>
       <footer className="constructor__footer">
         <button type="button" className="button selection-10">Отправить</button>

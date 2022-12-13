@@ -191,7 +191,67 @@ const raid10: Record<string, GroupData> = {
   group2: {
     title: "II группа",
     players: group2
+  },
+  group3: {
+    title: "II группа",
+    players: group2
   }
 }
 
-export { cardStyle, classColor, raid10, }
+const raidBuffs = [
+  {
+    buff: '5% крит',
+  },
+  {
+    buff: '3% РДД хаст'
+  },
+  {
+    buff: '3% меткость'
+  },
+  {
+    buff: '20% МДД хаст'
+  },
+  {
+    buff: '5% МДД крит'
+  },
+  {
+    buff: '3% доп физ урон'
+  },
+  {
+    buff: '5% РДД крит'
+  },
+  {
+    buff: '10% силы атаки'
+  }
+]
+
+const groupRaceBuffs = [
+  {
+    buff: '5% крит',
+  },
+  {
+    buff: '3% РДД хаст'
+  },
+  {
+    buff: '3% меткость'
+  },
+  {
+    buff: '20% МДД хаст'
+  },
+  {
+    buff: '5% МДД крит'
+  },
+  {
+    buff: '3% доп физ урон'
+  },
+  {
+    buff: '5% РДД крит'
+  },
+  {
+    buff: '10% силы атаки'
+  }
+]
+
+
+
+export { cardStyle, classColor, raid10, raidBuffs}
