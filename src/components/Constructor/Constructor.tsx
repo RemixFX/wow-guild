@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { classColor, raid10, raidBuffs } from "../../utils/config"
+import { classColor, groupRaceBuffs, raid10, raidBuffs } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
 
 
@@ -96,19 +96,19 @@ const Constructor = () => {
   const handleDeletePlayer = (player: IGroup, groupId: string) => {
     const playerIndex = bracketPlayers[groupId].players.findIndex(p => p.name === player.name)
     const placeHolder =
-    {id: String(Math.floor(Math.random() * 10000)), role: 'РДД', name: '', class_name: '', race: '', ilvl: null}
+      { id: String(Math.floor(Math.random() * 10000)), role: 'РДД', name: '', class_name: '', race: '', ilvl: null }
     const newGroup = [...bracketPlayers[groupId].players]
     newGroup.splice(playerIndex, 1, placeHolder)
 
     const pushPlayer = () => {
       const removedPlayer = players.find((p) => p.name === player.name)
       if (removedPlayer) {
-      dispatch(playerSlice.actions.playersChange([...constructorPlayers, removedPlayer]))
-      markSortbyClass ? dispatch(playerSlice.actions.playersSortbyClass('constructor_players')) :
-      markSortbyIlvl ? dispatch(playerSlice.actions.playersSortbyIlvl('constructor_players')) :
-      markSortbyName ? dispatch(playerSlice.actions.playersSortbyName('constructor_players')) :
-      markSortbyRace ? dispatch(playerSlice.actions.playersSortbyRace('constructor_players')) :
-      dispatch(playerSlice.actions.playersSortbyRank())
+        dispatch(playerSlice.actions.playersChange([...constructorPlayers, removedPlayer]))
+        markSortbyClass ? dispatch(playerSlice.actions.playersSortbyClass('constructor_players')) :
+          markSortbyIlvl ? dispatch(playerSlice.actions.playersSortbyIlvl('constructor_players')) :
+            markSortbyName ? dispatch(playerSlice.actions.playersSortbyName('constructor_players')) :
+              markSortbyRace ? dispatch(playerSlice.actions.playersSortbyRace('constructor_players')) :
+                dispatch(playerSlice.actions.playersSortbyRank())
       } else return
     }
 
@@ -216,6 +216,18 @@ const Constructor = () => {
     )
   }
 
+  const getNameGroupBuff = (playersGroup: IGroup[]) => {
+  let namesBuff: string[] = []
+  groupRaceBuffs.forEach((item) => {
+     return playersGroup.forEach((p) => {
+        if (item.sourseBuff === p.race) {
+          namesBuff = [...namesBuff, item.buff]
+        }
+      })
+    })
+    return namesBuff.join(', ')
+  }
+
   return (
     <section className="constructor">
       <Topbar />
@@ -271,8 +283,8 @@ const Constructor = () => {
                               <li className="brackets-group__cell">{bplayer.race}</li>
                               <li className="brackets-group__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
                               <button type="button" className="brackets__delete-button"
-                              onClick={() => handleDeletePlayer(bplayer, groupId)}
-                              disabled={bplayer.name === ''}>
+                                onClick={() => handleDeletePlayer(bplayer, groupId)}
+                                disabled={bplayer.name === ''}>
                               </button>
                             </ul>
                           )}
@@ -332,25 +344,37 @@ const Constructor = () => {
         </DragDropContext>
         <div className="constructor__buffs">
           <div className="tab-switch">
-            <button type="button"className={`tab-switch__button ${isactiveGroupButton}`}
-            onClick={() => {
-              setIsActiveRaidButton('')
-              setIsActiveGroupButton('active')
-            }}
+            <button type="button" className={`tab-switch__button ${isactiveGroupButton}`}
+              onClick={() => {
+                setIsActiveRaidButton('')
+                setIsActiveGroupButton('active')
+              }}
             >Синергия рас</button>
-            <button type="button"className={`tab-switch__button ${isactiveRaidButton}`}
-                        onClick={() => {
-                          setIsActiveGroupButton('')
-                          setIsActiveRaidButton('active')
-                        }}
+            <button type="button" className={`tab-switch__button ${isactiveRaidButton}`}
+              onClick={() => {
+                setIsActiveGroupButton('')
+                setIsActiveRaidButton('active')
+                getNameGroupBuff(bracketPlayers['group1'].players)
+              }}
             >Рейдовые баффы</button>
           </div>
-          <ul className="list-buffs">*в разработке
-            {raidBuffs.map((data) =>
-            <li className="list-buffs__name">{data.buff}</li>
-          )}
-          </ul>
-
+          {isactiveGroupButton === 'active' &&
+          <div className="flex-container">
+            {Object.values(bracketPlayers).map((group) =>
+              <div className="group-buffs" key={group.title}>
+                <h3 className="group-buffs__number">{group.title}</h3>
+                <p className="group-buffs__name">{getNameGroupBuff(group.players)}</p>
+              </div>
+            )}
+            </div>
+          }
+          {isactiveRaidButton === 'active' &&
+            <ul className="raid-buffs">*в разработке
+              {raidBuffs.map((data) =>
+                <li className="raid-buffs__name" key={data.buff}>{data.buff}</li>
+              )}
+            </ul>
+          }
         </div>
       </div>
       <footer className="constructor__footer">

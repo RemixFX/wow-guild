@@ -195,6 +195,14 @@ const raid10: Record<string, GroupData> = {
   group3: {
     title: "II группа",
     players: group2
+  },
+  group4: {
+    title: "II группа",
+    players: group2
+  },
+  group5: {
+    title: "II группа",
+    players: group2
   }
 }
 
@@ -227,31 +235,67 @@ const raidBuffs = [
 
 const groupRaceBuffs = [
   {
-    buff: '5% крит',
+    buff: '+1% криту',
+    sourseBuff: 'Эльф крови'
   },
   {
-    buff: '3% РДД хаст'
+    buff: '+5ед/5% к осн. ресурсу',
+    sourseBuff: 'Ночнорожденный'
   },
   {
-    buff: '3% меткость'
+    buff: '+5ед/5% к осн. ресурсу',
+    sourseBuff: 'Эльф Бездны'
   },
   {
-    buff: '20% МДД хаст'
+    buff: '+2% множитель крита',
+    sourseBuff: 'Эредар'
   },
   {
-    buff: '5% МДД крит'
+    buff: '+2% множитель крита',
+    sourseBuff: 'Дворф Черного Железа'
   },
   {
-    buff: '3% доп физ урон'
+    buff: '+1% силы атаки и силы заклинаний',
+    sourseBuff: 'Зандалар'
   },
   {
-    buff: '5% РДД крит'
+    buff: '+1% силы атаки и силы заклинаний',
+    sourseBuff: 'Озаренный дреней'
   },
   {
-    buff: '10% силы атаки'
+    buff: '+2% силы',
+    sourseBuff: 'Орк'
+  },
+  {
+    buff: '1% снижение физ. урона',
+    sourseBuff: 'Таурен'
+  },
+  {
+    buff: '+2% духа',
+    sourseBuff: 'Тролль'
+  },
+  {
+    buff: '+1% к скорости атаки и заклинаний',
+    sourseBuff: 'Дворф'
+  },
+  {
+    buff: '+1% меткости',
+    sourseBuff: 'Гном'
+  },
+  {
+    buff: '+2% выносливости',
+    sourseBuff: 'Дреней'
+  },
+  {
+    buff: '+2% ловкости',
+    sourseBuff: 'Ворген'
+  },
+  {
+    buff: '+2% интелекта',
+    sourseBuff: 'Высший эльф'
   }
 ]
 
 
 
-export { cardStyle, classColor, raid10, raidBuffs}
+export { cardStyle, classColor, raid10, raidBuffs, groupRaceBuffs}

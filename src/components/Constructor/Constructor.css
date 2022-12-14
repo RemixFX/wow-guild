@@ -415,7 +415,34 @@
   transform: translateY(3px);
 }
 
-.list-buffs {
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 22.4px);
+  justify-content: space-evenly;
+}
+
+.group-buffs {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 15% 85%;
+}
+
+.group-buffs__number {
+  margin: 0;
+  padding: 1px;
+  font-size: 1.0rem;
+  text-align: center;
+  color: #dcb121;
+}
+
+.group-buffs__name {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #9dff84;
+}
+
+.raid-buffs {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
   column-gap: 10px;
@@ -427,7 +454,7 @@
   font-style: italic;
 }
 
-.list-buffs__name {
+.raid-buffs__name {
   font-size: 1.0rem;
   font-style: normal;
   padding-bottom: 10px;
