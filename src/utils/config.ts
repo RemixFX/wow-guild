@@ -2,6 +2,8 @@ import { IGroup } from "../models/bracketsModel";
 import { IEvents } from "../models/eventsModel";
 import { IPlayer } from "../models/playerModel";
 
+// ID гильдии
+const GUILD_ID = 5
 
 // Стиль событий в зависимости от названия события
 const cardStyle = (event: IEvents) => {
@@ -191,18 +193,6 @@ const raid10: Record<string, GroupData> = {
   group2: {
     title: "II группа",
     players: group2
-  },
-  group3: {
-    title: "II группа",
-    players: group2
-  },
-  group4: {
-    title: "II группа",
-    players: group2
-  },
-  group5: {
-    title: "II группа",
-    players: group2
   }
 }
 
@@ -298,4 +288,4 @@ const groupRaceBuffs = [
 
 
 
-export { cardStyle, classColor, raid10, raidBuffs, groupRaceBuffs}
+export {GUILD_ID, cardStyle, classColor, raid10, raidBuffs, groupRaceBuffs}

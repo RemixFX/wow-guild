@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { OnlineComponentSlice } from '../../store/reducers/onlineComponentSlice';
 import { playerSlice } from '../../store/reducers/playerSlice';
+import { GUILD_ID } from '../../utils/config';
 import PreloaderOnline from '../PreloaderOnline/PreloaderOnline';
 import Sheet from "../Sheet/Sheet";
 
@@ -26,7 +27,7 @@ const Online = () => {
 
   // Первичный запрос игроков с сервера для модуля "Онлайн"
   useEffect(() => {
-    dispatch(fetchPlayers())
+    dispatch(fetchPlayers(GUILD_ID))
   }, [])
 
   // Кнопка открытия/закрытия модуля "Онлайн"
@@ -45,7 +46,7 @@ const Online = () => {
   const handleAnimationEnd = () => {
     setEndAnimation(true)
     if (error || noOnline) {
-      dispatch(fetchPlayers())
+      dispatch(fetchPlayers(GUILD_ID))
     }
   }
 

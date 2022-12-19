@@ -1,12 +1,15 @@
-import { MouseEvent, useEffect, useState, ChangeEvent } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEvent, FocusEvent, useRef } from "react";
 import { IGroup } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { fetchPlayers } from "../../store/reducers/ActionCreators";
+import { useAppDispatch, useAppSelector, useDebounce } from "../../store/hooks"
+import { fetchGuild, fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { classColor, groupRaceBuffs, raid10, raidBuffs } from "../../utils/config"
+import { classColor, groupRaceBuffs, GUILD_ID, raid10, raidBuffs } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
+import { searchSlice } from "../../store/reducers/searchSlice";
+import { ISearchGuild } from "../../models/searchGuild";
 
 
 const Constructor = () => {
@@ -19,21 +22,68 @@ const Constructor = () => {
     markSortbyName,
     markSortbyRace
   } = useAppSelector(state => state.player)
+  const {searchValue, searchLoading, searchError, searchMessage} = useAppSelector(state => state.search)
   const [checked, setChecked] = useState(true)
   const dispatch = useAppDispatch()
   const [columnSource, setColumnSource] = useState<string>('')
   const [bracketPlayers, setBracketPlayers] = useState(raid10)
-  const [isactiveGroupButton, setIsActiveGroupButton] = useState('');
-  const [isactiveRaidButton, setIsActiveRaidButton] = useState('active');
+  const [isactiveGroupButton, setIsActiveGroupButton] = useState('active');
+  const [isactiveRaidButton, setIsActiveRaidButton] = useState('');
+  const [inputSearchValue, setInputSearchValue] = useState('');
+  const deferredValue = useDeferredValue(inputSearchValue);
+  const debouncedValue = useDebounce<string>(deferredValue, 1000)
+  const refButton = useRef(null)
 
   // Запрос списка игроков если они ещё не были получены
   useEffect(() => {
-    constructorPlayers.length === 0 && dispatch(fetchPlayers())
+    constructorPlayers.length === 0 && dispatch(fetchPlayers(GUILD_ID))
   }, [])
 
   // Переключение списков брекета: на 10 или 25 игроков
   function handleChangeCheckbox() {
     setChecked(!checked)
+  }
+
+  // Использование отложенного запроса результатов поиска
+  useEffect(() => {
+    if (debouncedValue) {
+      dispatch(fetchGuild(debouncedValue))
+    } else {
+      dispatch(searchSlice.actions.guildFetchingSuccess([]));
+    }
+  }, [debouncedValue])
+
+  // Очистка инпута при изменении фокуса
+  const handleInputFocusOut = (e: FocusEvent<HTMLInputElement, Element> | undefined) => {
+    if (e?.relatedTarget === refButton.current) return
+    else {
+      dispatch(searchSlice.actions.guildFetchingSuccess([]))
+      setInputSearchValue('')
+    }
+  }
+
+  // Запрос игроков другой гильдии при выборе из списка
+  const handleClickSearchValue = (value: ISearchGuild) => {
+    dispatch(fetchPlayers(value.entry))
+    handleInputFocusOut(undefined)
+  }
+
+  // Запрос игроков другой гильдии при нажатии кнопки
+  const handleSubmitSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (searchValue.length === 1) {
+      dispatch(fetchPlayers(searchValue[0].entry))
+      handleInputFocusOut(undefined)
+      return
+    }
+    if (searchValue.length > 1) {
+      dispatch(searchSlice.actions.guildSearchMessageResult())
+      return
+    }
+    if (searchValue.length === 0) {
+      dispatch(searchSlice.actions.guildSearchMessageEmpty())
+      return
+    }
   }
 
   // Сортировка таблицы игроков
@@ -216,10 +266,11 @@ const Constructor = () => {
     )
   }
 
+  //Получение списка групповых бафов
   const getNameGroupBuff = (playersGroup: IGroup[]) => {
-  let namesBuff: string[] = []
-  groupRaceBuffs.forEach((item) => {
-     return playersGroup.forEach((p) => {
+    let namesBuff: string[] = []
+    groupRaceBuffs.forEach((item) => {
+      return playersGroup.forEach((p) => {
         if (item.sourseBuff === p.race) {
           namesBuff = [...namesBuff, item.buff]
         }
@@ -232,7 +283,7 @@ const Constructor = () => {
     <section className="constructor">
       <Topbar />
       <h1 className="constructor__header">Создать состав</h1>
-      <div className="button-selection">
+      <div className="constructor__navigation-options" >
         <label className="constructor__switch">
           <input type="checkbox" className="constructor__checkbox"
             checked={checked} onChange={handleChangeCheckbox} />
@@ -240,6 +291,33 @@ const Constructor = () => {
           <span className="constructor__slider"></span>
           <span className="constructor__slider_name_right">Для 25ки</span>
         </label>
+        <form className="guild-selection__form" onSubmit={e => handleSubmitSearch(e)} >
+        <label className="constructor__switch_direction_right">
+          <input type="checkbox" className="constructor__checkbox"
+            checked={checked} onChange={handleChangeCheckbox} />
+          <span className="right-slider"></span>
+          <div className="right-slider__names">
+            <span className="right-slider__name">Найти игрока</span>
+            <span className="right-slider__name">Сменить гильдию</span>
+          </div>
+        </label>
+          <input type="search" className="guild-selection__input" onBlur={(e) => handleInputFocusOut(e)}
+            value={inputSearchValue} onChange={e => setInputSearchValue(e.target.value)}
+             />
+          <ul className="guild-selection__placeholder">
+            {searchLoading && <li>Загрузка...</li>}
+            {searchError && <li style={{color: "#ab0000", padding: '5px'}}>Сервер не доступен</li>}
+            {searchMessage && <li style={{color: "#ab0000", padding: '5px', fontSize: '0.9rem'}}>
+              {searchMessage}</li>}
+            {searchValue.length > 0 &&
+              searchValue.map((value, index: number) => (
+                <li className="guild-selection__placeholder-item"
+                  key={`${value.name}-${index}`} onClick={() => handleClickSearchValue(value)}>
+                    {value.name}</li>
+              ))}
+          </ul>
+          <button className="guild-selection__button" ref={refButton}></button>
+        </form>
       </div>
       <div className="constructor__layout">
         <DragDropContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
@@ -349,7 +427,7 @@ const Constructor = () => {
                 setIsActiveRaidButton('')
                 setIsActiveGroupButton('active')
               }}
-            >Синергия рас</button>
+            >Групповые бафы рас</button>
             <button type="button" className={`tab-switch__button ${isactiveRaidButton}`}
               onClick={() => {
                 setIsActiveGroupButton('')
@@ -359,13 +437,13 @@ const Constructor = () => {
             >Рейдовые баффы</button>
           </div>
           {isactiveGroupButton === 'active' &&
-          <div className="flex-container">
-            {Object.values(bracketPlayers).map((group) =>
-              <div className="group-buffs" key={group.title}>
-                <h3 className="group-buffs__number">{group.title}</h3>
-                <p className="group-buffs__name">{getNameGroupBuff(group.players)}</p>
-              </div>
-            )}
+            <div className="flex-container">
+              {Object.values(bracketPlayers).map((group) =>
+                <div className="group-buffs" key={group.title}>
+                  <h3 className="group-buffs__number">{group.title}</h3>
+                  <p className="group-buffs__name">{getNameGroupBuff(group.players)}</p>
+                </div>
+              )}
             </div>
           }
           {isactiveRaidButton === 'active' &&

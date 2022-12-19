@@ -16,10 +16,10 @@ class Api {
     return res.json().then((message) => Promise.reject(message))
   }
 
-  getUsers() {
-    return fetch(`${this._url}/guilds/57/5`, {
+  getUsers(id: number) {
+    return fetch(`${this._url}/guilds/57/${id}`, {
       method: 'GET',
-//      credentials: 'include',
+      //      credentials: 'include',
       headers: this._headers
     })
       .then(this._checkResponse);
@@ -120,7 +120,15 @@ class Api {
       credentials: 'include',
       headers: this._headers
     })
-    .then(this._checkResponse);
+      .then(this._checkResponse);
+  }
+
+  searchPlaceholder = (word: string) => {
+    return fetch(`${this._url}/search?search=${word}&realm_id=57`, {
+      method: 'GET',
+      headers: this._headers
+    })
+      .then(this._checkResponse);
   }
 }
 
@@ -138,8 +146,13 @@ const sirusApi = new Api({
 
 const dbApi = new Api({
   url: "http://localhost:3001",
-   //url: "https://wow-guild.herokuapp.com",
+  //url: "https://wow-guild.herokuapp.com",
   headers: headers
 });
 
-export {sirusApi, dbApi};
+const mockApi = new Api({
+  url: "https://api.publicapis.org",
+  headers: headers
+});
+
+export { sirusApi, dbApi, mockApi};

@@ -1,17 +1,19 @@
 import { IAccount } from "../../models/aсcountModel"
 import { IEvents } from "../../models/eventsModel"
 import { IPlayer } from "../../models/playerModel"
+import { ISearchGuild } from "../../models/searchGuild"
 import { dbApi, sirusApi } from "../../utils/Api"
 import { AppDispatch } from "../store"
 import { adminSlice } from "./adminSlice"
 import { OnlineComponentSlice } from "./onlineComponentSlice"
 import { playerSlice } from "./playerSlice"
 import { scheduleSlice } from "./scheduleSlice"
+import { searchSlice } from "./searchSlice"
 
-export const fetchPlayers = () => async (dispatch: AppDispatch) => {
+export const fetchPlayers = (id: number) => async (dispatch: AppDispatch) => {
   try {
     dispatch(playerSlice.actions.playersFetching())
-    const response = await sirusApi.getUsers()
+    const response = await sirusApi.getUsers(id)
     const players: IPlayer[] = response.members;
     dispatch(playerSlice.actions.playersFetchingSuccess(players))
       dispatch(playerSlice.actions.playersSortbyRank())
@@ -20,7 +22,6 @@ export const fetchPlayers = () => async (dispatch: AppDispatch) => {
     setTimeout(() => dispatch(OnlineComponentSlice.actions.hideOnline()), 700)
   }
 }
-
 
 export const fetchEvents = () => async (dispatch: AppDispatch) => {
   try {
@@ -128,5 +129,22 @@ export const fetchAuthorization = () => async (dispatch: AppDispatch) => {
 
   } catch (error: unknown) {
     console.log(error)
+  }
+}
+
+export const fetchGuild = (searchWord: string) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(searchSlice.actions.guildFetching())
+    const response = await sirusApi.searchPlaceholder(searchWord.split(' ')[0])
+    let guilds: ISearchGuild[] = []
+    response.forEach((data: any) => {
+      if (data.type === "guild") {
+        guilds = data.items
+      }
+      else guilds = []
+    })
+    dispatch(searchSlice.actions.guildFetchingSuccess(guilds))
+  } catch (error: any) {
+    dispatch(searchSlice.actions.guildFetchingError())
   }
 }

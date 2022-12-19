@@ -17,7 +17,6 @@ import Constructor from "../Constructor/Constructor";
 function App() {
   const [guildMessages, setGuildMessages] = useState([]);
   const [serverMessages, setServerMessages] = useState([]);
-  const SAMPLE_META = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   const dispatch = useAppDispatch();
   const { error, loading, infoMessage, openLoginForm, openRegisterForm } = useAppSelector(state => state.admin)
 
