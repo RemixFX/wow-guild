@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
+import { IPlayer } from "../models/playerModel";
 import { AppDispatch, RootState } from "./store";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -20,25 +21,11 @@ export function useDebounce<T>(value: T, delay?: number): T {
   return debouncedValue
 }
 
+export function useSearchPlayer (array: IPlayer[], value: string): IPlayer[] {
+  let result: IPlayer[] = []
+  if (value === '') return []
+   result = array.filter(p => p.name.toLowerCase().startsWith(value.toLowerCase()))
+  return result
 
-/* export const useDebounce = (callee: Function, timeoutMs: number) => {
-  return function perform(this: any, ...args: any[]) {
 
-    let previousCall = this.lastCall
-    this.lastCall = Date.now()
-
-    if (previousCall && this.lastCall - previousCall <= timeoutMs) {
-      clearTimeout(this.lastCallTimer)
-    }
-    this.lastCallTimer = setTimeout(() => callee(...args), timeoutMs)
-  }
-} */
-
-/* export default function useDebouncedFunction(func: Function, delay: number) {
-  const ref: MutableRefObject<NodeJS.Timeout | string | number | undefined> = useRef(null);
-
-  return (...args) => {
-    clearTimeout(ref.current);
-    ref.current = setTimeout(() => func(...args), delay);
-  };
-} */
+}

@@ -1,9 +1,12 @@
-import { IGroup } from "../models/bracketsModel";
+import { IGroup, IGroupData } from "../models/bracketsModel";
 import { IEvents } from "../models/eventsModel";
 import { IPlayer } from "../models/playerModel";
 
 // ID гильдии
 const GUILD_ID = 5
+
+// ID игрового мира гильдии
+const GUILD_REALM_ID = '57'
 
 // Стиль событий в зависимости от названия события
 const cardStyle = (event: IEvents) => {
@@ -180,12 +183,7 @@ const group2: IGroup[] = [
   }
 ]
 
-interface GroupData extends Record<string, string | IGroup[]> {
-  title: string;
-  players: IGroup[];
-}
-
-const raid10: Record<string, GroupData> = {
+const raid10: Record<string, IGroupData> = {
   group1: {
     title: "I группа",
     players: group1
@@ -288,4 +286,4 @@ const groupRaceBuffs = [
 
 
 
-export {GUILD_ID, cardStyle, classColor, raid10, raidBuffs, groupRaceBuffs}
+export {GUILD_ID, GUILD_REALM_ID, cardStyle, classColor, raid10, raidBuffs, groupRaceBuffs}

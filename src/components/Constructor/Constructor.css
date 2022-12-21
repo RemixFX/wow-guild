@@ -12,22 +12,31 @@
 }
 
 .constructor__navigation-options {
+  grid-column: 1/3;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.brackets-options {
   display: flex;
-  justify-content: space-between;
-  height: 44px;
-  margin-left: 10%;
+  grid-column: 1/2;
 }
 
 .guild-selection__form {
-  display: flex;
-  align-self: flex-end;
-  height: 30px;
-  margin-right: 3%;
+  display: grid;
+  height: 100%;
+  width: 100%;
   position: relative;
+  grid-template-columns: 5.5% 34.5% 15% 35% 10%;
+  align-items: end;
+  z-index: 4;
 }
 
 .guild-selection__input {
-  width: 232px;
+  grid-column: 4/5;
+  position: relative;
+  height: 68%;
   background: #0d2c4194;
   box-shadow: inset 0px 0px 4px 2px #00101a;
   border-right: 2px solid #456a8b;
@@ -37,9 +46,9 @@
 
 .guild-selection__placeholder {
   position: absolute;
-  width: 232px;
-  top: 30px;
-  left: 0;
+  width: 35%;
+  top: 100%;
+  left: 55%;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -62,8 +71,11 @@
 }
 
 .guild-selection__button {
-  margin-left: 8px;
-  width: 33px;
+  grid-column: 5/6;
+  margin-right: 19px;
+  width: 61%;
+  height: 68%;
+  justify-self: flex-end;
   background-color: #0d2c41;
   background-image: url(../../images/arrow-right.svg);
   background-position: center;
@@ -93,14 +105,14 @@
 .constructor__layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 55vh 17vh;
+  grid-template-rows: 6vh 55vh 17vh;
   margin-top: 15px;
 }
 
 .constructor__brackets {
   border-left: solid 3px #d1defb42;
   display: grid;
-  grid-row: 1/2;
+  grid-row: 2/3;
   grid-template-columns: 15% 22% 24% 24% 8% 7%;
   margin-left: 3%;
   overflow-x: auto;
@@ -217,7 +229,7 @@
 .constructor__table {
   display: grid;
   place-content: start;
-  grid-row: 1/3;
+  grid-row: 2/4;
   grid-template-columns: 6% 28% 28% 29% 9%;
   margin-right: 3%;
   overflow-x: auto;
@@ -339,12 +351,14 @@
   background: linear-gradient(180deg, #265b87, #091a29);
 }
 
-.constructor__switch {
+.left-slider {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   width: 100px;
+  height: 90%;
+  margin-left: 20%;
 }
 
 .constructor__checkbox {
@@ -353,7 +367,7 @@
   height: 0;
 }
 
-.constructor__slider {
+.left-slider__switch {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -368,7 +382,7 @@
 
 }
 
-.constructor__slider:before {
+.left-slider__switch:before {
   position: absolute;
   content: "";
   height: 95%;
@@ -381,14 +395,14 @@
   box-shadow: inset 4px 5px 17px 11px #0d2c41;
 }
 
-.constructor__slider_name_right {
+.left-slider_name_right {
   padding-left: 115%;
   white-space: nowrap;
   font-size: 1.1rem;
   font-weight: 500;
 }
 
-.constructor__slider_name_right::after {
+.left-slider_name_right::after {
   position: absolute;
   content: "";
   border-bottom: 2px solid #ffdf78eb;
@@ -397,13 +411,13 @@
   left: 106%;
 }
 
-.constructor__slider_name_left {
+.left-slider_name_left {
   white-space: nowrap;
   font-size: 1.1rem;
   font-weight: 500;
 }
 
-.constructor__slider_name_left::after {
+.left-slider_name_left::after {
   position: absolute;
   content: "";
   border-bottom: 2px solid #ffdf78eb;
@@ -420,61 +434,88 @@
   100% { width: 84%; }
 }
 
-.constructor__checkbox:checked ~ .constructor__slider_name_right::after {
+.left-slider__checkbox:checked ~ .left-slider_name_right::after {
   animation: right-border 500ms ease forwards
 }
 
-.constructor__checkbox:checked ~ .constructor__slider:before {
+.left-slider__checkbox:checked ~ .left-slider__switch:before {
   transform: translateX(54px);
 }
 
-.constructor__checkbox:checked ~ .constructor__slider {
+.left-slider__checkbox:checked ~ .left-slider__switch {
   background: #eebc1deb;
 }
 
-.constructor__checkbox:not(:checked) ~ .constructor__slider_name_left::after {
+.left-slider__checkbox:not(:checked) ~ .left-slider_name_left::after {
   animation: left-border 500ms ease forwards
 }
 
-.constructor__switch_direction_right {
-  position: relative;
+.right-slider {
+  grid-column: 2/3;
   display: flex;
-  margin-right: 15px;
-  height: 44px;
-  width: 209px;
+  grid-row: 1/2;
   flex-direction: column;
+  height: 100%;
 }
 
-.right-slider {
+.right-slider__switch {
   cursor: pointer;
-  width: 100%;
-  height: 30px;
+  max-width: 191px;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
   border: 2px solid #9b9b9bd6;
   box-shadow: inset 0px 0px 4px 3px #1b1f22;
-  background: #4e9bdd;
+  background: #eebc1deb;
   transition: 400ms;
 }
 
-.right-slider::before {
+.right-slider__switch::before {
   position: absolute;
-    content: "";
-    height: 22px;
-    width: 22%;
-    left: 2px;
-    border-radius: 11px;
-    background-color: #ffffff;
-    border: 1px solid #000000;
-    transition: 400ms;
-    box-shadow: inset 11px 0px 15px 5px #0d2c41;
+  content: "";
+  height: 91%;
+  width: 22%;
+  left: 2px;
+  border-radius: 11px;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  transition: 400ms;
+  box-shadow: inset 11px 0px 15px 5px #0d2c41;
 }
 
 .right-slider__names {
   display: flex;
+  margin-bottom: 2px;
 }
 
 .right-slider__name {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 500;
+  padding-right: 10px;
+}
+
+.right-slider__checkbox:checked ~ .right-slider__switch:before {
+  transform: translateX(142px);
+}
+
+.right-slider__checkbox:checked ~ .right-slider__switch {
+  background: #4e9bdd;
+}
+
+.constructor__select-realm {
+  grid-column: 3/4;
+  color: #eebc1deb;
+  background: transparent;
+  border: 1px solid #456786;
+  height: 66%;
+  width: 100%;
+  box-shadow: 0px 0px 3px 2px #00101a;
+  justify-self: end;
+  margin-right: 10%;
+}
+
+.constructor__select-realm > option {
+  background-color: #13364c;
 }
 
 .constructor__footer {
@@ -491,6 +532,7 @@
   border: solid 3px #d1defb42;
   border-top: none;
   width: 89.8%;
+  grid-row: 3/4;
   margin-left: 3%;
   min-height: 10%;
 }
@@ -562,6 +604,13 @@
   font-weight: 500;
 }
 
+.background-modal {
+  background-color: #0000003d;
+  position: absolute;
+  min-height: 100vh;
+  width: 100%;
+  z-index: 3;
+}
 
 
 

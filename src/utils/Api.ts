@@ -16,8 +16,8 @@ class Api {
     return res.json().then((message) => Promise.reject(message))
   }
 
-  getUsers(id: number) {
-    return fetch(`${this._url}/guilds/57/${id}`, {
+  getUsers(id: number, realmId: string) {
+    return fetch(`${this._url}/guilds/${realmId}/${id}`, {
       method: 'GET',
       //      credentials: 'include',
       headers: this._headers
@@ -123,8 +123,8 @@ class Api {
       .then(this._checkResponse);
   }
 
-  searchPlaceholder = (word: string) => {
-    return fetch(`${this._url}/search?search=${word}&realm_id=57`, {
+  searchPlaceholder = (word: string, realmId: string) => {
+    return fetch(`${this._url}/search?search=${word}&realm_id=${realmId}`, {
       method: 'GET',
       headers: this._headers
     })

@@ -10,10 +10,10 @@ import { playerSlice } from "./playerSlice"
 import { scheduleSlice } from "./scheduleSlice"
 import { searchSlice } from "./searchSlice"
 
-export const fetchPlayers = (id: number) => async (dispatch: AppDispatch) => {
+export const fetchPlayers = (id: number, realmId: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(playerSlice.actions.playersFetching())
-    const response = await sirusApi.getUsers(id)
+    const response = await sirusApi.getUsers(id, realmId)
     const players: IPlayer[] = response.members;
     dispatch(playerSlice.actions.playersFetchingSuccess(players))
       dispatch(playerSlice.actions.playersSortbyRank())
@@ -132,10 +132,10 @@ export const fetchAuthorization = () => async (dispatch: AppDispatch) => {
   }
 }
 
-export const fetchGuild = (searchWord: string) => async (dispatch: AppDispatch) => {
+export const fetchGuild = (searchWord: string, realmId: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(searchSlice.actions.guildFetching())
-    const response = await sirusApi.searchPlaceholder(searchWord.split(' ')[0])
+    const response = await sirusApi.searchPlaceholder(searchWord.split(' ')[0], realmId)
     let guilds: ISearchGuild[] = []
     response.forEach((data: any) => {
       if (data.type === "guild") {

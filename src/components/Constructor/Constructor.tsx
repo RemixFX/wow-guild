@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEvent, FocusEvent, useRef } from "react";
+import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEvent, RefObject } from "react";
 import { IGroup } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
-import { useAppDispatch, useAppSelector, useDebounce } from "../../store/hooks"
+import { useAppDispatch, useAppSelector, useDebounce, useSearchPlayer } from "../../store/hooks"
 import { fetchGuild, fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { classColor, groupRaceBuffs, GUILD_ID, raid10, raidBuffs } from "../../utils/config"
+import { classColor, groupRaceBuffs, GUILD_ID, GUILD_REALM_ID, raid10, raidBuffs } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
 import { searchSlice } from "../../store/reducers/searchSlice";
 import { ISearchGuild } from "../../models/searchGuild";
-
+import { useRef } from "react";
 
 const Constructor = () => {
 
@@ -22,58 +22,94 @@ const Constructor = () => {
     markSortbyName,
     markSortbyRace
   } = useAppSelector(state => state.player)
-  const {searchValue, searchLoading, searchError, searchMessage} = useAppSelector(state => state.search)
-  const [checked, setChecked] = useState(true)
+  const { searchValue, searchLoading, searchError, searchMessage } = useAppSelector(state => state.search)
+  const [checkedBracket, setCheckedBracket] = useState(false)
+  const [checkedSearch, setCheckedSearch] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [realmId, setRealmId] = useState<string>('57')
   const dispatch = useAppDispatch()
   const [columnSource, setColumnSource] = useState<string>('')
   const [bracketPlayers, setBracketPlayers] = useState(raid10)
   const [isactiveGroupButton, setIsActiveGroupButton] = useState('active');
   const [isactiveRaidButton, setIsActiveRaidButton] = useState('');
-  const [inputSearchValue, setInputSearchValue] = useState('');
-  const deferredValue = useDeferredValue(inputSearchValue);
-  const debouncedValue = useDebounce<string>(deferredValue, 1000)
-  const refButton = useRef(null)
+  const [inputSearchGuildValue, setInputSearchGuildValue] = useState('');
+  const [inputSearchPlayerValue, setInputSearchPlayerValue] = useState('');
+  const deferredSearchGuildValue = useDeferredValue(inputSearchGuildValue)
+  const deferredSearchPlayerValue = useDeferredValue(inputSearchPlayerValue);
+  const debouncedValue = useDebounce<string>(deferredSearchGuildValue, 1000)
+  const foundPlayerValue = useSearchPlayer(constructorPlayers, deferredSearchPlayerValue)
+  const currentPlayers: IPlayer[] = deferredSearchPlayerValue === "" ?
+  constructorPlayers : foundPlayerValue;
 
   // Запрос списка игроков если они ещё не были получены
   useEffect(() => {
-    constructorPlayers.length === 0 && dispatch(fetchPlayers(GUILD_ID))
+    constructorPlayers.length === 0 && dispatch(fetchPlayers(GUILD_ID, GUILD_REALM_ID))
   }, [])
 
   // Переключение списков брекета: на 10 или 25 игроков
-  function handleChangeCheckbox() {
-    setChecked(!checked)
+  const handleChangeBracketCheckbox = () => {
+    setCheckedBracket(!checkedBracket)
+  }
+
+  // Переключение поиска гильдии или игрока в списке
+  const handleChangeSearchCheckbox = () => {
+    setCheckedSearch(!checkedSearch)
+    setInputSearchPlayerValue('')
+    setInputSearchGuildValue('')
+    setShowModal(false)
+  }
+
+  // Выбор игрового мира при поиске гильдии
+  const handleSelectTypeSearch = (e: ChangeEvent<HTMLSelectElement>) => {
+    setRealmId(e.target.value)
+    setInputSearchGuildValue('')
+  }
+
+  // Изменение значения инпута
+  const handleChangeInputValue = (value: string) => {
+    if (checkedSearch) {
+      setInputSearchGuildValue(value)
+      setInputSearchPlayerValue('')
+    } else {
+      setInputSearchPlayerValue(value)
+      setInputSearchGuildValue('')
+    }
   }
 
   // Использование отложенного запроса результатов поиска
   useEffect(() => {
     if (debouncedValue) {
-      dispatch(fetchGuild(debouncedValue))
+      dispatch(fetchGuild(debouncedValue, realmId))
     } else {
       dispatch(searchSlice.actions.guildFetchingSuccess([]));
     }
   }, [debouncedValue])
 
-  // Очистка инпута при изменении фокуса
-  const handleInputFocusOut = (e: FocusEvent<HTMLInputElement, Element> | undefined) => {
-    if (e?.relatedTarget === refButton.current) return
-    else {
-      dispatch(searchSlice.actions.guildFetchingSuccess([]))
-      setInputSearchValue('')
-    }
+  // Очистка инпута при нажатии на область
+  const handleCloseModal = () => {
+    dispatch(searchSlice.actions.guildFetchingSuccess([]))
+    setInputSearchGuildValue('')
+    setShowModal(false)
   }
 
   // Запрос игроков другой гильдии при выборе из списка
   const handleClickSearchValue = (value: ISearchGuild) => {
-    dispatch(fetchPlayers(value.entry))
-    handleInputFocusOut(undefined)
+    dispatch(fetchPlayers(value.entry, realmId))
+    setBracketPlayers(raid10)
+    dispatch(searchSlice.actions.guildFetchingSuccess([]))
+    setInputSearchGuildValue('')
+    setShowModal(false)
   }
 
   // Запрос игроков другой гильдии при нажатии кнопки
   const handleSubmitSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (searchValue.length === 1) {
-      dispatch(fetchPlayers(searchValue[0].entry))
-      handleInputFocusOut(undefined)
+      dispatch(fetchPlayers(searchValue[0].entry, realmId))
+      setBracketPlayers(raid10)
+      dispatch(searchSlice.actions.guildFetchingSuccess([]))
+      setInputSearchGuildValue('')
+      setShowModal(false)
       return
     }
     if (searchValue.length > 1) {
@@ -185,25 +221,26 @@ const Constructor = () => {
 
     if (source.droppableId === 'players') {
       if (destination.index >= destList.players.length) return
-      const sourceIndex = constructorPlayers[source.index]
+      const sourcePlayer = currentPlayers[source.index] // current
       const parsedPlayer = {
-        id: String(sourceIndex.guid),
+        id: String(sourcePlayer.guid),
         role: destList.players[destination.index].role,
-        name: sourceIndex.name,
-        class_name: sourceIndex.class_name,
-        race: sourceIndex.race_name,
-        ilvl: sourceIndex.equipment_lvl.avgItemLevel
+        name: sourcePlayer.name,
+        class_name: sourcePlayer.class_name,
+        race: sourcePlayer.race_name,
+        ilvl: sourcePlayer.equipment_lvl.avgItemLevel
       }
-      const sourceItems = [...constructorPlayers]
-      sourceItems.splice(source.index, 1)
-      destItems.splice(destination.index, 1, parsedPlayer);
+      let sourceItems = [...constructorPlayers] // ОК
+      sourceItems = sourceItems.filter(p => p !== sourcePlayer)
+      console.log(sourcePlayer, sourceItems)
+      destItems.splice(destination.index, 1, parsedPlayer); //ОК
       setBracketPlayers({
         ...bracketPlayers,
         [destination.droppableId]: {
           ...destList,
           players: destItems
         }
-      })
+      }) // ОК
       dispatch(playerSlice.actions.playersChange(sourceItems))
       setColumnSource('')
     }
@@ -283,43 +320,54 @@ const Constructor = () => {
     <section className="constructor">
       <Topbar />
       <h1 className="constructor__header">Создать состав</h1>
-      <div className="constructor__navigation-options" >
-        <label className="constructor__switch">
-          <input type="checkbox" className="constructor__checkbox"
-            checked={checked} onChange={handleChangeCheckbox} />
-          <span className="constructor__slider_name_left"> Для 10ки</span>
-          <span className="constructor__slider"></span>
-          <span className="constructor__slider_name_right">Для 25ки</span>
-        </label>
-        <form className="guild-selection__form" onSubmit={e => handleSubmitSearch(e)} >
-        <label className="constructor__switch_direction_right">
-          <input type="checkbox" className="constructor__checkbox"
-            checked={checked} onChange={handleChangeCheckbox} />
-          <span className="right-slider"></span>
-          <div className="right-slider__names">
-            <span className="right-slider__name">Найти игрока</span>
-            <span className="right-slider__name">Сменить гильдию</span>
-          </div>
-        </label>
-          <input type="search" className="guild-selection__input" onBlur={(e) => handleInputFocusOut(e)}
-            value={inputSearchValue} onChange={e => setInputSearchValue(e.target.value)}
-             />
-          <ul className="guild-selection__placeholder">
-            {searchLoading && <li>Загрузка...</li>}
-            {searchError && <li style={{color: "#ab0000", padding: '5px'}}>Сервер не доступен</li>}
-            {searchMessage && <li style={{color: "#ab0000", padding: '5px', fontSize: '0.9rem'}}>
-              {searchMessage}</li>}
-            {searchValue.length > 0 &&
-              searchValue.map((value, index: number) => (
-                <li className="guild-selection__placeholder-item"
-                  key={`${value.name}-${index}`} onClick={() => handleClickSearchValue(value)}>
-                    {value.name}</li>
-              ))}
-          </ul>
-          <button className="guild-selection__button" ref={refButton}></button>
-        </form>
-      </div>
       <div className="constructor__layout">
+        <div className="constructor__navigation-options" >
+          <div className="brackets-options">
+            <label className="left-slider">
+            <input type="checkbox" className="constructor__checkbox left-slider__checkbox"
+              checked={checkedBracket} onChange={handleChangeBracketCheckbox} />
+            <span className="left-slider_name_left"> Для 10ки</span>
+            <span className="left-slider__switch"></span>
+            <span className="left-slider_name_right">Для 25ки</span>
+          </label>
+          </div>
+          <form className="guild-selection__form" onSubmit={e => handleSubmitSearch(e)}>
+            <label className="right-slider">
+              <div className="right-slider__names">
+                <span className="right-slider__name">Найти игрока</span>
+                <span className="right-slider__name">Сменить гильдию</span>
+              </div>
+              <input type="checkbox" className="constructor__checkbox right-slider__checkbox"
+                checked={checkedSearch} onChange={handleChangeSearchCheckbox} />
+              <span className="right-slider__switch"></span>
+            </label>
+            <select className="constructor__select-realm" disabled={!checkedSearch}
+              onChange={(e) => handleSelectTypeSearch(e)} defaultValue={57}>
+              <option value={9}>х2</option>
+              <option value={33}>х4</option>
+              <option value={57}>х5</option>
+              <option disabled={true} value={1}>х6 Скоро!</option>
+            </select>
+            <input type="search" className="guild-selection__input"
+              onInput={() => checkedSearch && setShowModal(true)}
+              value={checkedSearch ? inputSearchGuildValue : inputSearchPlayerValue}
+              onChange={e => handleChangeInputValue(e.target.value)}
+            />
+              <ul className="guild-selection__placeholder">
+                {searchLoading && <li>Загрузка...</li>}
+                {searchError && <li style={{ color: "#ab0000", padding: '5px' }}>Сервер не доступен</li>}
+                {searchMessage && <li style={{ color: "#ab0000", padding: '5px', fontSize: '0.9rem' }}>
+                  {searchMessage}</li>}
+                {searchValue.length > 0 &&
+                searchValue.map((value, index: number) => (
+                  <li className="guild-selection__placeholder-item"
+                    key={`${value.name}-${index}`} onClick={() => handleClickSearchValue(value)}>
+                    {value.name}</li>
+                ))}
+              </ul>
+            <button className="guild-selection__button" disabled={inputSearchGuildValue.length < 2}></button>
+          </form>
+        </div>
         <DragDropContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
           <div className="constructor__brackets">
             <div className="constructor__brackets-delete-button"></div>
@@ -378,7 +426,7 @@ const Constructor = () => {
           <Droppable droppableId="players" isDropDisabled={true}>
             {(provided) => (
               <div className="constructor__table" {...provided.droppableProps} ref={provided.innerRef}>
-                <div className="constructor__table-drag-button" style={{ gridRowEnd: `${constructorPlayers.length + 2}` }}></div>
+                <div className="constructor__table-drag-button" style={{ gridRowEnd: `${currentPlayers.length + 2}` }}></div>
                 <div className="constructor__table-row-header">
                   <div className="constructor__table-column-header" onClick={e => sortHandler(e)}>
                     <span className="constructor__table-column-title">Имя</span>
@@ -397,7 +445,7 @@ const Constructor = () => {
                     {markSortbyIlvl && <span className="constructor__table-column-marker"></span>}
                   </div>
                 </div>
-                {constructorPlayers.map((player, index) =>
+                {currentPlayers.map((player, index) =>
                   <Draggable key={player.name} draggableId={player.name} index={index}>
                     {(provided, snapshot) => (
                       <ul className="table__row item"
@@ -407,7 +455,7 @@ const Constructor = () => {
                       >
                         <button type="button" className="table__add-button"
                           onClick={() => handleAddPlayer(player)}></button>
-                        <li className="table__cell" >{player.name}</li>
+                        <li className="table__cell">{player.name}</li>
                         <li className="table__cell" style={classColor(player)}>{player.class_name}</li>
                         <li className="table__cell">{player.race_name}</li>
                         <li className="table__cell">{player.equipment_lvl.avgItemLevel}</li>
@@ -459,6 +507,9 @@ const Constructor = () => {
         <button type="button" className="button selection-10">Отправить</button>
         <button type="button" className="button selection-25">Сохранить</button>
       </footer>
+      {showModal &&
+        <div className="background-modal" onClick={handleCloseModal}></div>
+      }
     </section>
   )
 }

@@ -6,3 +6,8 @@ export interface IGroup {
   race: string,
   ilvl?: number | null
 }
+
+export interface IGroupData extends Record<string, string | IGroup[]> {
+  title: string;
+  players: IGroup[];
+}
