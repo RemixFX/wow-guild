@@ -16,3 +16,11 @@
        url("Inter-Medium.woff?v=3.19") format("woff");
 }
 
+@font-face {
+  font-family: 'Yeseva One';
+  font-style:  normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(YesevaOne-Regular.ttf) format("woff2")
+}
+

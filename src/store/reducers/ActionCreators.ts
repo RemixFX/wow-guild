@@ -15,6 +15,7 @@ export const fetchPlayers = (id: number, realmId: string) => async (dispatch: Ap
     dispatch(playerSlice.actions.playersFetching())
     const response = await sirusApi.getUsers(id, realmId)
     const players: IPlayer[] = response.members;
+    dispatch(playerSlice.actions.getNameGuild(response.name))
     dispatch(playerSlice.actions.playersFetchingSuccess(players))
       dispatch(playerSlice.actions.playersSortbyRank())
   } catch (error: any) {
@@ -27,7 +28,6 @@ export const fetchEvents = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(scheduleSlice.actions.eventsFetching());
     const response = await dbApi.getEvents();
-
     const events: IEvents[] = response;
     setTimeout(() => {
       dispatch(scheduleSlice.actions.eventsFetchingSuccess(events))

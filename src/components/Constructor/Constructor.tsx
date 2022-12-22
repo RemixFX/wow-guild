@@ -10,13 +10,14 @@ import { classColor, groupRaceBuffs, GUILD_ID, GUILD_REALM_ID, raid10, raidBuffs
 import Topbar from "../Topbar/Topbar"
 import { searchSlice } from "../../store/reducers/searchSlice";
 import { ISearchGuild } from "../../models/searchGuild";
-import { useRef } from "react";
+const flag = require('../../images/flag.png')
 
 const Constructor = () => {
 
   const {
     players,
     constructorPlayers,
+    nameGuild,
     markSortbyClass,
     markSortbyIlvl,
     markSortbyName,
@@ -63,6 +64,12 @@ const Constructor = () => {
   const handleSelectTypeSearch = (e: ChangeEvent<HTMLSelectElement>) => {
     setRealmId(e.target.value)
     setInputSearchGuildValue('')
+  }
+
+  //Очистка списка кнопкой "Сбросить"
+  const handleClickResetButton = () => {
+    setBracketPlayers(raid10)
+    dispatch(playerSlice.actions.playersFetchingSuccess(players))
   }
 
   // Изменение значения инпута
@@ -232,7 +239,6 @@ const Constructor = () => {
       }
       let sourceItems = [...constructorPlayers] // ОК
       sourceItems = sourceItems.filter(p => p !== sourcePlayer)
-      console.log(sourcePlayer, sourceItems)
       destItems.splice(destination.index, 1, parsedPlayer); //ОК
       setBracketPlayers({
         ...bracketPlayers,
@@ -320,6 +326,12 @@ const Constructor = () => {
     <section className="constructor">
       <Topbar />
       <h1 className="constructor__header">Создать состав</h1>
+      <div className="constructor__layout-header">
+        <h2 className="constructor__name-guld">{nameGuild}</h2>
+        <img className="constructor__background-image" src={flag} alt=""/>
+      </div>
+
+     {/*  <div className="constructor__background-image"/> */}
       <div className="constructor__layout">
         <div className="constructor__navigation-options" >
           <div className="brackets-options">
@@ -330,6 +342,8 @@ const Constructor = () => {
             <span className="left-slider__switch"></span>
             <span className="left-slider_name_right">Для 25ки</span>
           </label>
+          <button className="reset-brackets-button" type="button"
+          onClick={handleClickResetButton}>Сбросить</button>
           </div>
           <form className="guild-selection__form" onSubmit={e => handleSubmitSearch(e)}>
             <label className="right-slider">

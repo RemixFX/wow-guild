@@ -5,6 +5,7 @@ export interface PlayerState {
   players: IPlayer[];
   onlinePlayers: IPlayer[];
   constructorPlayers: IPlayer[];
+  nameGuild: string;
   loading: boolean;
   error: boolean;
   textOnline: string;
@@ -20,6 +21,7 @@ const initialState: PlayerState = {
   players: [],
   onlinePlayers: [],
   constructorPlayers: [],
+  nameGuild: '',
   loading: false,
   error: false,
   textOnline: 'Список игроков',
@@ -64,6 +66,7 @@ export const playerSlice = createSlice({
       state.players = []
       state.onlinePlayers = []
       state.constructorPlayers = []
+      state.nameGuild = ""
       state.loading = true
       state.error = false
       state.textOnline = ''
@@ -88,6 +91,9 @@ export const playerSlice = createSlice({
       state.error = true
       state.textOnline = 'Сервер не отвечает'
       state.noOnline = false
+    },
+    getNameGuild: (state, action: PayloadAction<string>) => {
+      state.nameGuild = action.payload
     },
     playersChange: (state, action: PayloadAction<IPlayer[]>) => {
       state.constructorPlayers = action.payload

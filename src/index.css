@@ -1,6 +1,4 @@
-body.inheritCursors * {
-  cursor: inherit !important;
-}
+@import url('https://fonts.googleapis.com/css2?family=Zen+Antique&display=swap');
 @import url(./vendor/normalize.css);
 @import url(./vendor/fonts/inter.css);
 @import url(./components/App/App.css);
