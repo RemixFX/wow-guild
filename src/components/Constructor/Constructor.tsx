@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEvent, RefObject } from "react";
-import { IGroup } from "../../models/bracketsModel";
+import { IGroup, IGroupData } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
 import { useAppDispatch, useAppSelector, useDebounce, useSearchPlayer } from "../../store/hooks"
 import { fetchGuild, fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { classColor, groupRaceBuffs, GUILD_ID, GUILD_REALM_ID, raid10, raidBuffs } from "../../utils/config"
+import { classColor, groupRaceBuffs, GUILD_ID, GUILD_REALM_ID, raid10, raid25, raidBuffs } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
 import { searchSlice } from "../../store/reducers/searchSlice";
 import { ISearchGuild } from "../../models/searchGuild";
@@ -28,9 +28,8 @@ const Constructor = () => {
   const [checkedSearch, setCheckedSearch] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [realmId, setRealmId] = useState<string>('57')
-  const dispatch = useAppDispatch()
   const [columnSource, setColumnSource] = useState<string>('')
-  const [bracketPlayers, setBracketPlayers] = useState(raid10)
+
   const [isactiveGroupButton, setIsActiveGroupButton] = useState('active');
   const [isactiveRaidButton, setIsActiveRaidButton] = useState('');
   const [inputSearchGuildValue, setInputSearchGuildValue] = useState('');
@@ -40,17 +39,30 @@ const Constructor = () => {
   const debouncedValue = useDebounce<string>(deferredSearchGuildValue, 1000)
   const foundPlayerValue = useSearchPlayer(constructorPlayers, deferredSearchPlayerValue)
   const currentPlayers: IPlayer[] = deferredSearchPlayerValue === "" ?
-  constructorPlayers : foundPlayerValue;
+    constructorPlayers : foundPlayerValue;
+  const [bracketPlayers, setBracketPlayers] = useState(raid10)
+  const dispatch = useAppDispatch()
 
   // Запрос списка игроков если они ещё не были получены
   useEffect(() => {
     constructorPlayers.length === 0 && dispatch(fetchPlayers(GUILD_ID, GUILD_REALM_ID))
   }, [])
 
-  // Переключение списков брекета: на 10 или 25 игроков
+  // Переключатель списков брекета
   const handleChangeBracketCheckbox = () => {
     setCheckedBracket(!checkedBracket)
   }
+
+  // Функция переключения и обнуления списков брекета: на 10 или 25 игроков
+  const changeBracketGroups = () => {
+    dispatch(playerSlice.actions.playersFetchingSuccess(players))
+    checkedBracket ? setBracketPlayers(raid25) : setBracketPlayers(raid10)
+  }
+
+  // Отслеживание переключения списков брекета
+  useEffect(() => {
+    changeBracketGroups()
+  }, [checkedBracket])
 
   // Переключение поиска гильдии или игрока в списке
   const handleChangeSearchCheckbox = () => {
@@ -68,7 +80,7 @@ const Constructor = () => {
 
   //Очистка списка кнопкой "Сбросить"
   const handleClickResetButton = () => {
-    setBracketPlayers(raid10)
+    changeBracketGroups()
     dispatch(playerSlice.actions.playersFetchingSuccess(players))
   }
 
@@ -102,7 +114,7 @@ const Constructor = () => {
   // Запрос игроков другой гильдии при выборе из списка
   const handleClickSearchValue = (value: ISearchGuild) => {
     dispatch(fetchPlayers(value.entry, realmId))
-    setBracketPlayers(raid10)
+    changeBracketGroups()
     dispatch(searchSlice.actions.guildFetchingSuccess([]))
     setInputSearchGuildValue('')
     setShowModal(false)
@@ -113,7 +125,7 @@ const Constructor = () => {
     e.preventDefault()
     if (searchValue.length === 1) {
       dispatch(fetchPlayers(searchValue[0].entry, realmId))
-      setBracketPlayers(raid10)
+      changeBracketGroups()
       dispatch(searchSlice.actions.guildFetchingSuccess([]))
       setInputSearchGuildValue('')
       setShowModal(false)
@@ -328,22 +340,22 @@ const Constructor = () => {
       <h1 className="constructor__header">Создать состав</h1>
       <div className="constructor__layout-header">
         <h2 className="constructor__name-guld">{nameGuild}</h2>
-        <img className="constructor__background-image" src={flag} alt=""/>
+        <img className="constructor__background-image" src={flag} alt="" />
       </div>
 
-     {/*  <div className="constructor__background-image"/> */}
+      {/*  <div className="constructor__background-image"/> */}
       <div className="constructor__layout">
         <div className="constructor__navigation-options" >
           <div className="brackets-options">
             <label className="left-slider">
-            <input type="checkbox" className="constructor__checkbox left-slider__checkbox"
-              checked={checkedBracket} onChange={handleChangeBracketCheckbox} />
-            <span className="left-slider_name_left"> Для 10ки</span>
-            <span className="left-slider__switch"></span>
-            <span className="left-slider_name_right">Для 25ки</span>
-          </label>
-          <button className="reset-brackets-button" type="button"
-          onClick={handleClickResetButton}>Сбросить</button>
+              <input type="checkbox" className="constructor__checkbox left-slider__checkbox"
+                checked={checkedBracket} onChange={handleChangeBracketCheckbox} />
+              <span className="left-slider_name_left"> Для 10ки</span>
+              <span className="left-slider__switch"></span>
+              <span className="left-slider_name_right">Для 25ки</span>
+            </label>
+            <button className="reset-brackets-button" type="button"
+              onClick={handleClickResetButton}>Сбросить</button>
           </div>
           <form className="guild-selection__form" onSubmit={e => handleSubmitSearch(e)}>
             <label className="right-slider">
@@ -367,18 +379,18 @@ const Constructor = () => {
               value={checkedSearch ? inputSearchGuildValue : inputSearchPlayerValue}
               onChange={e => handleChangeInputValue(e.target.value)}
             />
-              <ul className="guild-selection__placeholder">
-                {searchLoading && <li>Загрузка...</li>}
-                {searchError && <li style={{ color: "#ab0000", padding: '5px' }}>Сервер не доступен</li>}
-                {searchMessage && <li style={{ color: "#ab0000", padding: '5px', fontSize: '0.9rem' }}>
-                  {searchMessage}</li>}
-                {searchValue.length > 0 &&
+            <ul className="guild-selection__placeholder">
+              {searchLoading && <li>Загрузка...</li>}
+              {searchError && <li style={{ color: "#ab0000", padding: '5px' }}>Сервер не доступен</li>}
+              {searchMessage && <li style={{ color: "#ab0000", padding: '5px', fontSize: '0.9rem' }}>
+                {searchMessage}</li>}
+              {searchValue.length > 0 &&
                 searchValue.map((value, index: number) => (
                   <li className="guild-selection__placeholder-item"
                     key={`${value.name}-${index}`} onClick={() => handleClickSearchValue(value)}>
                     {value.name}</li>
                 ))}
-              </ul>
+            </ul>
             <button className="guild-selection__button" disabled={inputSearchGuildValue.length < 2}></button>
           </form>
         </div>

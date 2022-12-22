@@ -183,6 +183,135 @@ const group2: IGroup[] = [
   }
 ]
 
+const group3: IGroup[] = [
+  {
+    id: '11',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '12',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '13',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '14',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '15',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  }
+]
+
+const group4: IGroup[] = [
+  {
+    id: '16',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '17',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '18',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '19',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '20',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  }
+]
+
+const group5: IGroup[] = [
+  {
+    id: '21',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '22',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '23',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '24',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  },
+  {
+    id: '25',
+    role: 'РДД',
+    name: '',
+    class_name: '',
+    race: '',
+    ilvl: null
+  }
+]
+
 const raid10: Record<string, IGroupData> = {
   group1: {
     title: "I группа",
@@ -191,6 +320,29 @@ const raid10: Record<string, IGroupData> = {
   group2: {
     title: "II группа",
     players: group2
+  }
+}
+
+const raid25: Record<string, IGroupData> = {
+  group1: {
+    title: "I группа",
+    players: group1
+  },
+  group2: {
+    title: "II группа",
+    players: group2
+  },
+  group3: {
+    title: "III группа",
+    players: group3
+  },
+  group4: {
+    title: "IV группа",
+    players: group4
+  },
+  group5: {
+    title: "V группа",
+    players: group5
   }
 }
 
@@ -286,4 +438,5 @@ const groupRaceBuffs = [
 
 
 
-export {GUILD_ID, GUILD_REALM_ID, cardStyle, classColor, raid10, raidBuffs, groupRaceBuffs}
+export {GUILD_ID, GUILD_REALM_ID, cardStyle, classColor, raid10, raid25,
+  raidBuffs, groupRaceBuffs}
