@@ -6,10 +6,11 @@ import { useAppDispatch, useAppSelector, useDebounce, useSearchPlayer } from "..
 import { fetchGuild, fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { classColor, groupRaceBuffs, GUILD_ID, GUILD_REALM_ID, raid10, raid25, raidBuffs } from "../../utils/config"
+import { classColor, getNameGroupBuff, groupRaceBuffs, GUILD_ID, GUILD_REALM_ID, raid10, raid25, raidBuffs } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
 import { searchSlice } from "../../store/reducers/searchSlice";
 import { ISearchGuild } from "../../models/searchGuild";
+import ModalBrackets from "../ModalBrackets/ModalBrackets";
 const flag = require('../../images/flag.png')
 
 const Constructor = () => {
@@ -30,17 +31,18 @@ const Constructor = () => {
   const [realmId, setRealmId] = useState<string>('57')
   const [columnSource, setColumnSource] = useState<string>('')
 
-  const [isactiveGroupButton, setIsActiveGroupButton] = useState('active');
-  const [isactiveRaidButton, setIsActiveRaidButton] = useState('');
-  const [inputSearchGuildValue, setInputSearchGuildValue] = useState('');
-  const [inputSearchPlayerValue, setInputSearchPlayerValue] = useState('');
+  const [isactiveGroupButton, setIsActiveGroupButton] = useState('active')
+  const [isactiveRaidButton, setIsActiveRaidButton] = useState('')
+  const [inputSearchGuildValue, setInputSearchGuildValue] = useState('')
+  const [inputSearchPlayerValue, setInputSearchPlayerValue] = useState('')
+  const [bracketPlayers, setBracketPlayers] = useState(raid10)
+  const [bracketPreviewModal, setBracketPreviewModal] = useState(false)
   const deferredSearchGuildValue = useDeferredValue(inputSearchGuildValue)
-  const deferredSearchPlayerValue = useDeferredValue(inputSearchPlayerValue);
+  const deferredSearchPlayerValue = useDeferredValue(inputSearchPlayerValue)
   const debouncedValue = useDebounce<string>(deferredSearchGuildValue, 1000)
   const foundPlayerValue = useSearchPlayer(constructorPlayers, deferredSearchPlayerValue)
   const currentPlayers: IPlayer[] = deferredSearchPlayerValue === "" ?
     constructorPlayers : foundPlayerValue;
-  const [bracketPlayers, setBracketPlayers] = useState(raid10)
   const dispatch = useAppDispatch()
 
   // Запрос списка игроков если они ещё не были получены
@@ -321,19 +323,6 @@ const Constructor = () => {
     )
   }
 
-  //Получение списка групповых бафов
-  const getNameGroupBuff = (playersGroup: IGroup[]) => {
-    let namesBuff: string[] = []
-    groupRaceBuffs.forEach((item) => {
-      return playersGroup.forEach((p) => {
-        if (item.sourseBuff === p.race) {
-          namesBuff = [...namesBuff, item.buff]
-        }
-      })
-    })
-    return namesBuff.join(', ')
-  }
-
   return (
     <section className="constructor">
       <Topbar />
@@ -530,11 +519,18 @@ const Constructor = () => {
         </div>
       </div>
       <footer className="constructor__footer">
-        <button type="button" className="button selection-10">Отправить</button>
-        <button type="button" className="button selection-25">Сохранить</button>
+        <button type="button" className="constructor__button">Отправить</button>
+        <button type="button" className="constructor__button"
+         onClick={() => setBracketPreviewModal(!bracketPreviewModal)}>Сохранить</button>
       </footer>
       {showModal &&
         <div className="background-modal" onClick={handleCloseModal}></div>
+      }
+      {bracketPreviewModal &&
+        <ModalBrackets
+          isClose={() => setBracketPreviewModal(false)}
+          bracketPlayers={bracketPlayers}
+        />
       }
     </section>
   )

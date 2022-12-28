@@ -26,7 +26,7 @@ const Header = () => {
         <img className="header__logo-sirus" src={logo_sirus} alt="" />
         <ul className='header__right-titles'>
           <li className='header__title'>
-            <NavLink to='info' className={({ isActive }) =>
+            <NavLink to='/brackets' className={({ isActive }) =>
               isActive ? "active" : "header__link"}>Составы 10 и 25</NavLink>
           </li>
           <li className='header__title'>

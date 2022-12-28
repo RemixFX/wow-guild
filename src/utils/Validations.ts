@@ -3,8 +3,8 @@
 import { useState, useEffect, ChangeEvent } from "react";
 
 interface Validation {
-  isEmpty: boolean;
-  minLength: number;
+  isEmpty?: boolean;
+  minLength?: number;
 }
 
 function useValidation(value: string, validations: Validation) {
@@ -22,7 +22,7 @@ function useValidation(value: string, validations: Validation) {
           value.length === 0 ? setIsEmpty(true) : setIsEmpty(false)
           break
         case 'minLength':
-          value.length > validations[validation] ? setIsMinLength(false) : setIsMinLength(true)
+          value.length > validations['minLength']! ? setIsMinLength(false) : setIsMinLength(true)
           break
       }
     }

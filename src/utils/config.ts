@@ -436,7 +436,20 @@ const groupRaceBuffs = [
   }
 ]
 
+  //Получение списка групповых бафов
+  const getNameGroupBuff = (playersGroup: IGroup[]) => {
+    let namesBuff: string[] = []
+    groupRaceBuffs.forEach((item) => {
+      return playersGroup.forEach((p) => {
+        if (item.sourseBuff === p.race) {
+          namesBuff = [...namesBuff, item.buff]
+        }
+      })
+    })
+    return namesBuff.join(', ')
+  }
+
 
 
 export {GUILD_ID, GUILD_REALM_ID, cardStyle, classColor, raid10, raid25,
-  raidBuffs, groupRaceBuffs}
+  raidBuffs, groupRaceBuffs, getNameGroupBuff}

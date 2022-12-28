@@ -146,7 +146,7 @@
   box-shadow: inset 0px 0px 3px 1px #00101a;
 }
 
-.button {
+.constructor__button {
   width: 30%;
   background: #4e9bdd;
   border: 2px solid #9b9b9bd6;
@@ -634,7 +634,7 @@
 .group-buffs__number {
   margin: 0;
   padding: 1px;
-  font-size: 1.2rem;
+  font-size: 1.0rem;
   text-align: center;
   color: #dcb121;
 }

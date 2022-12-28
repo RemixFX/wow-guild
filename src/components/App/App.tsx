@@ -13,6 +13,7 @@ import Form from "../Form/Form";
 import { IAccount } from "../../models/aсcountModel";
 import InfoSlider from "../InfoSlider/infoSlider";
 import Constructor from "../Constructor/Constructor";
+import ModalBrackets from "../ModalBrackets/ModalBrackets";
 
 function App() {
   const [guildMessages, setGuildMessages] = useState([]);
@@ -54,11 +55,11 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/info" element={<Info />} />
           <Route path="/invite" element={<Invite />} />
+          {/* <Route path="/brackets" element={<ModalBrackets/>} /> */}
           <Route path="/" element={<Main
             guildMessages={guildMessages}
             serverMessages={serverMessages} />
           } />
-
         </Route>
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/constructor" element={<Constructor />} />

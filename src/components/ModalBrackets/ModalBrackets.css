@@ -1,0 +1,171 @@
+
+
+.modal-background {
+  background-color: #0000008f;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  z-index: 5;
+}
+
+.modal-layout {
+  position: absolute;
+  background-color: #00000061;
+  width: 86%;
+  height: 86%;
+  top: 7%;
+  right: 7%;
+  z-index: 6;
+}
+
+.modal-brackets-close-button {
+  width: 30px;
+  height: 30px;
+  background-color: #000;
+  background-image: url(../../images/close-button.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 140ms linear;
+  z-index: 1;
+}
+
+.modal-layout:hover .modal-brackets-close-button {
+  opacity: 1;
+}
+
+.modal-brackets-change-name-button {
+  width: 67px;
+  height: 46px;
+  position: absolute;
+  font-size: 0.8rem;
+  top: 30%;
+  right: 2%;
+  cursor: pointer;
+  padding: 1px;
+}
+
+.modal-brackets {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-image: url(../../images/online_bg.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.bracket {
+  margin: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-brackets__header {
+  color: #eebc1deb;
+  margin: 0 0 30px 0;
+  text-decoration: underline overline;
+}
+
+.modal-brackets__input-header {
+  margin: 0 0 29px 0;
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  color: #eebc1deb;
+  background-color: transparent;
+}
+
+.bracket__raid {
+  display: grid;
+  width: 98%;
+  grid-template-columns: repeat(auto-fit, 32%);
+  justify-content: center;
+  column-gap: 1%;
+  row-gap: 2%;
+  margin: 0 1%;
+}
+
+/* .bracket__group {
+  background-image: url(../../images/snow.svg);
+  background-size: 221px;
+  background-repeat: repeat;
+} */
+
+.bracket__notations {
+  display: grid;
+  grid-template-columns: 16% 24% 26% 24% 10%;
+  padding: 4px;
+  background: #0d2c41;
+  border-top: solid 3px #d1defb42;
+  list-style: none;
+  margin: 0;
+}
+
+.bracket__notation {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 6px 0;
+}
+
+.bracket__players {
+  display: grid;
+  row-gap: 3px;
+}
+
+.bracket__title {
+  margin: 0;
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 2px 0;
+}
+
+.bracket__row {
+  display: grid;
+  grid-template-columns: 16% 24% 26% 24% 10%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  background: #0000008c;
+  border: 3px solid transparent;
+}
+
+.bracket__cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid #f1f1f173;
+  color: #eebc1deb;
+  font-size: 0.9rem;
+  padding: 5px 1px;
+}
+
+.bracket__group-buffs {
+  list-style: none;
+  margin: 0;
+  padding: 5px;
+  font-size: 0.8rem;
+  color: #ffa24b;
+}
+
+.modal-brackets__image-container {
+
+}
+
+.modal-brackets__image {
+  display: block;
+  height: 101%;
+  width: 101%;
+}
+
