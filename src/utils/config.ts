@@ -436,20 +436,61 @@ const groupRaceBuffs = [
   }
 ]
 
-  //Получение списка групповых бафов
-  const getNameGroupBuff = (playersGroup: IGroup[]) => {
-    let namesBuff: string[] = []
-    groupRaceBuffs.forEach((item) => {
-      return playersGroup.forEach((p) => {
-        if (item.sourseBuff === p.race) {
-          namesBuff = [...namesBuff, item.buff]
-        }
-      })
+//Получение списка групповых бафов
+const getNameGroupBuff = (playersGroup: IGroup[]) => {
+  let namesBuff: string[] = []
+  groupRaceBuffs.forEach((item) => {
+    return playersGroup.forEach((p) => {
+      if (item.sourseBuff === p.race) {
+        namesBuff = [...namesBuff, item.buff]
+      }
     })
-    return namesBuff.join(', ')
+  })
+  return namesBuff.join(', ')
+}
+
+// Изменение фона модального окна брекета
+
+const changeModalBracketBackground = (value: string) => {
+  const styleDefault = require('../images/online_bg.png')
+  const styleIce = require('../images/bg_ice.png')
+  const styleSindra = require('../images/bg_sindragosa.jpg')
+  const styleLichKing = require('../images/bg_lichking.jpg')
+  const stylePortal = require('../images/bg_portal.jpeg')
+  const styleHorde = require('../images/bg_horde.jpg')
+  const styleDragon = require('../images/bg_dragon.jpg')
+  const styleAliance = require('../images/bg_aliance.jpg')
+  const styleHeartStone = require('../images/bg_heartstone.jpg')
+  const stylePergament = require('../images/bg_pergament.jpg')
+  const styleCrystal = require('../images/bg_crystal.jpg')
+  switch (value) {
+    case 'По умолчанию':
+      return { backgroundImage: `url(${styleDefault})` }
+    case 'Лёд':
+      return { backgroundImage: `url(${styleIce})` }
+    case 'Синдрагоса':
+      return { backgroundImage: `url(${styleSindra})` }
+    case 'Король Лич':
+      return { backgroundImage: `url(${styleLichKing})` }
+    case 'Портал':
+      return { backgroundImage: `url(${stylePortal})` }
+    case 'Орда':
+      return { backgroundImage: `url(${styleHorde})` }
+    case 'Альянс':
+      return { backgroundImage: `url(${styleAliance})` }
+    case 'Смертокрыл':
+      return { backgroundImage: `url(${styleDragon})` }
+    case 'HeartStone':
+      return { backgroundImage: `url(${styleHeartStone})` }
+    case 'Пергамент':
+      return { backgroundImage: `url(${stylePergament})` }
+    case 'Crystal':
+      return { backgroundImage: `url(${styleCrystal})` }
   }
+}
 
 
-
-export {GUILD_ID, GUILD_REALM_ID, cardStyle, classColor, raid10, raid25,
-  raidBuffs, groupRaceBuffs, getNameGroupBuff}
+export {
+  GUILD_ID, GUILD_REALM_ID, cardStyle, classColor, raid10, raid25,
+  raidBuffs, groupRaceBuffs, getNameGroupBuff, changeModalBracketBackground
+}
