@@ -2,6 +2,7 @@ import html2canvas from "html2canvas"
 import { FC, MouseEvent, MouseEventHandler, useEffect, useRef, useState } from "react"
 import { IGroupData } from "../../models/bracketsModel";
 import { changeModalBracketBackground, classColor, getNameGroupBuff } from "../../utils/config"
+import { HexColorPicker } from "react-colorful";
 
 interface IProps {
   isClose: MouseEventHandler<HTMLButtonElement>;
@@ -13,12 +14,14 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
   const modalRef = useRef<HTMLElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const selectRef = useRef<HTMLSelectElement>(null)
+  const paletteRef = useRef<HTMLDivElement>(null)
   const [image, setImage] = useState('')
   const [isOpenTextInput, setIsOpenTextInput] = useState(false)
   const [textInputValue, setTextInputValue] = useState('')
   const [isOpenSelectInput, setIsOpenSelectInput] = useState(false)
   const [selectInputValue, setSelectInputValue] = useState('')
-
+  const [isOpenColorPalette, setIsOpenColorPalette] = useState(false)
+  const [color, setColor] = useState("#eebc1deb");
 
   /*       useEffect(() => {
           html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 2.0 }).then(function (canvas) {
@@ -47,13 +50,30 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
   }, [selectInputValue])
 
   const handleClickModal = (e: MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLDivElement
     if (isOpenTextInput && e.target !== inputRef.current) {
       setIsOpenTextInput(false)
+    }
+    if (isOpenColorPalette && !(target.classList.contains('react-colorful__interactive')
+     || target.classList.contains('react-colorful__pointer'))) {
+      setIsOpenColorPalette(false)
     }
     if (isOpenSelectInput && e.target !== selectRef.current) {
       setIsOpenSelectInput(false)
     }
   }
+
+  useEffect(() => {
+    const handleKeyDown = (evt: KeyboardEvent) => {
+      evt.key === 'Escape' && setIsOpenColorPalette(false)
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [isOpenColorPalette])
 
 
 
@@ -64,11 +84,14 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
           onClick={isClose} style={{ right: image && "-1%" }}></button>
         {!image ?
           <>
-            <button className="modal-button modal-options-button modal-options-button_type_change-name" type="button"
+            <button className="modal-button modal-options-button modal-options-button_type_change-name"
+              type="button"
               onClick={() => setIsOpenTextInput(true)}>Изменить название</button>
-            <button className={`modal-button modal-options-button modal-options-button_type_change-font ${isOpenSelectInput && 'animation-opacity'}`} type="button"
-              onClick={() => setIsOpenSelectInput(true)}>Изменить шрифт</button>
-            <button className={`modal-button modal-options-button modal-options-button_type_change-background ${isOpenSelectInput && 'animation-opacity'}`} type="button"
+            <button className={`modal-button modal-options-button modal-options-button_type_change-font
+             ${isOpenColorPalette && 'animation-opacity'}`} type="button"
+              onClick={() => setIsOpenColorPalette(true)}>Изменить шрифт</button>
+            <button className={`modal-button modal-options-button modal-options-button_type_change-background
+             ${isOpenSelectInput && 'animation-opacity'}`} type="button"
               onClick={() => setIsOpenSelectInput(true)}>Изменить стиль</button>
             <section className="modal-brackets" ref={modalRef} onClick={e => handleClickModal(e)}
               style={changeModalBracketBackground(selectInputValue)}>
@@ -77,6 +100,11 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
                   <input className="modal-brackets__input-header" ref={inputRef}
                     value={textInputValue} onChange={e => setTextInputValue(e.target.value)} /> :
                   <h1 className="modal-brackets__header">{textInputValue}</h1>}
+                {isOpenColorPalette &&
+                  <div className="modal-brackets__color-input" ref={paletteRef}>
+                    <HexColorPicker className="animation-appear" color={color} onChange={setColor} />
+                  </div>
+                }
                 {isOpenSelectInput &&
                   <select className="modal-brackets__input-select" ref={selectRef}
                     value={selectInputValue} onChange={e => setSelectInputValue(e.target.value)}>
@@ -104,15 +132,16 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
                     </ul>
                     <div className="bracket__players">
                       <h2 className="bracket__title">{group.title}</h2>
-                      {group.players.map((bplayer) => <ul className="bracket__row" key={bplayer.id}>
-                        <li className="bracket__cell">{bplayer.role}</li>
-                        <li className="bracket__cell">{bplayer.name}</li>
-                        <li className="bracket__cell" style={classColor(bplayer)}>
-                          {bplayer.class_name}
-                        </li>
-                        <li className="bracket__cell">{bplayer.race}</li>
-                        <li className="bracket__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
-                      </ul>
+                      {group.players.map((bplayer) =>
+                        <ul className="bracket__row" key={bplayer.id} style={{ color: color }}>
+                          <li className="bracket__cell">{bplayer.role}</li>
+                          <li className="bracket__cell">{bplayer.name}</li>
+                          <li className="bracket__cell" style={classColor(bplayer)}>
+                            {bplayer.class_name}
+                          </li>
+                          <li className="bracket__cell">{bplayer.race}</li>
+                          <li className="bracket__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
+                        </ul>
                       )}
                       <ul className="bracket__group-buffs">
                         <li className="bracket__group-buff">{getNameGroupBuff(group.players)}</li>
