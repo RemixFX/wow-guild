@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
-
+  const successImg = require('../../images/success.png')
   const modalRef = useRef<HTMLElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const selectRef = useRef<HTMLSelectElement>(null)
@@ -21,14 +21,44 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
   const [isOpenSelectInput, setIsOpenSelectInput] = useState(false)
   const [selectInputValue, setSelectInputValue] = useState('')
   const [isOpenColorPalette, setIsOpenColorPalette] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
   const [color, setColor] = useState("#eebc1deb");
 
-  /*       useEffect(() => {
-          html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 2.0 }).then(function (canvas) {
-            const url = canvas.toDataURL("image/png", 1)
-            setTimeout(() => setImage(url), 0)
-          });
-        }, []) */
+  const handleClickDownloadButton = () => {
+    html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 2.0 })
+      .then(function (canvas) {
+        const url = canvas.toDataURL("image/png", 1)
+        const link = document.createElement("a");
+        link.href = url
+        link.setAttribute('download', textInputValue ? textInputValue :
+          Object.keys(bracketPlayers).length > 2 ? '25ка' : '10ка')
+        link.click()
+      });
+  }
+
+  /*         useEffect(() => {
+            html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 2.0 })
+            .then(function (canvas) {
+              const url = canvas.toDataURL("image/png", 1)
+              const link = document.createElement("a");
+              link.href = url
+              link.setAttribute('download', 'download')
+              link.click()
+              //setImage(url)
+            });
+          }, []) */
+
+  const handleClickCopyButton = async () => {
+    html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 1.4 })
+    .then((canvas) => {
+      canvas.toBlob((blob) => {
+        const blobItem = new ClipboardItem({ 'image/png': blob! });
+        navigator.clipboard.write([blobItem]);
+        setIsCopied(true)
+      })
+    })
+    .catch((err) => console.log(err))
+  }
 
   useEffect(() => {
     if (inputRef.current && isOpenTextInput) {
@@ -55,7 +85,7 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
       setIsOpenTextInput(false)
     }
     if (isOpenColorPalette && !(target.classList.contains('react-colorful__interactive')
-     || target.classList.contains('react-colorful__pointer'))) {
+      || target.classList.contains('react-colorful__pointer'))) {
       setIsOpenColorPalette(false)
     }
     if (isOpenSelectInput && e.target !== selectRef.current) {
@@ -75,7 +105,7 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
     }
   }, [isOpenColorPalette])
 
-
+console.log(isCopied)
 
   return (
     <div className="modal-background">
@@ -93,6 +123,12 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
             <button className={`modal-button modal-options-button modal-options-button_type_change-background
              ${isOpenSelectInput && 'animation-opacity'}`} type="button"
               onClick={() => setIsOpenSelectInput(true)}>Изменить стиль</button>
+            <button className="modal-button modal-download-button" type="button"
+              onClick={handleClickDownloadButton}></button>
+            <button className="modal-button modal-copy-button" type="button"
+              onClick={handleClickCopyButton} style={{backgroundImage: isCopied ? `url(${successImg})` : ''}}
+               onBlur={() => setIsCopied(false)}>
+              </button>
             <section className="modal-brackets" ref={modalRef} onClick={e => handleClickModal(e)}
               style={changeModalBracketBackground(selectInputValue)}>
               <div className="bracket">
@@ -155,8 +191,7 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
             </section></>
           :
 
-          <img className="modal-brackets__image" src={image} alt="" />
-
+          <><img className="modal-brackets__image" src={image} alt="" /><a href={image} download>Загрузить</a></>
         }
       </div>
     </div>
