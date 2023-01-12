@@ -519,8 +519,9 @@ const Constructor = () => {
         </div>
       </div>
       <footer className="constructor__footer">
-        <button type="button" className="constructor__button">Отправить</button>
-        <button type="button" className="constructor__button"
+        <button type="button" className="constructor__button"data-title='Доступно только для ГМа и офицеров'
+        >Отправить</button>
+        <button type="button" className="constructor__button" data-title='Изменить стиль и сохранить как картинку'
          onClick={() => setBracketPreviewModal(!bracketPreviewModal)}>Сохранить</button>
       </footer>
       {showModal &&

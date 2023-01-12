@@ -33,7 +33,7 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
         const link = document.createElement("a");
         link.href = url
         link.setAttribute('download', textInputValue ? textInputValue :
-        groupsInBracket === 25 ? '25ка' : '10ка')
+          groupsInBracket === 25 ? '25ка' : '10ка')
         link.click()
       });
   }
@@ -52,14 +52,14 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
 
   const handleClickCopyButton = async () => {
     html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 1.4 })
-    .then((canvas) => {
-      canvas.toBlob((blob) => {
-        const blobItem = new ClipboardItem({ 'image/png': blob! });
-        navigator.clipboard.write([blobItem]);
-        setIsCopied(true)
+      .then((canvas) => {
+        canvas.toBlob((blob) => {
+          const blobItem = new ClipboardItem({ 'image/png': blob! });
+          navigator.clipboard.write([blobItem]);
+          setIsCopied(true)
+        })
       })
-    })
-    .catch((err) => console.log(err))
+      .catch((err) => console.log(err))
   }
 
   useEffect(() => {
@@ -107,134 +107,90 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
     }
   }, [isOpenColorPalette])
 
-console.log(isCopied)
-
   return (
     <div className="modal-background">
       <div className="modal-layout">
         <button className="modal-button modal-close-button" type="button"
           onClick={isClose} style={{ right: image && "-1%" }}></button>
-        {!image ?
-          <>
-            <button className="modal-button modal-options-button modal-options-button_type_change-name"
-              type="button"
-              onClick={() => setIsOpenTextInput(true)}>Изменить название</button>
-            <button className={`modal-button modal-options-button modal-options-button_type_change-font
+        <button className="modal-button modal-options-button modal-options-button_type_change-name"
+          type="button"
+          onClick={() => setIsOpenTextInput(true)}>Изменить название</button>
+        <button className={`modal-button modal-options-button modal-options-button_type_change-font
              ${isOpenColorPalette && 'animation-opacity'}`} type="button"
-              onClick={() => setIsOpenColorPalette(true)}>Изменить шрифт</button>
-            <button className={`modal-button modal-options-button modal-options-button_type_change-background
+          onClick={() => setIsOpenColorPalette(true)}>Изменить шрифт</button>
+        <button className={`modal-button modal-options-button modal-options-button_type_change-background
              ${isOpenSelectInput && 'animation-opacity'}`} type="button"
-              onClick={() => setIsOpenSelectInput(true)}>Изменить стиль</button>
-            <button className="modal-button modal-download-button" type="button"
-              onClick={handleClickDownloadButton}></button>
-            <button className="modal-button modal-copy-button" type="button"
-              onClick={handleClickCopyButton} style={{backgroundImage: isCopied ? `url(${successImg})` : ''}}
-               onBlur={() => setIsCopied(false)}>
-              </button>
-            <section className="modal-brackets" ref={modalRef} onClick={e => handleClickModal(e)}
-              style={changeModalBracketBackground(selectInputValue)}>
-              <div className="bracket">
-                {isOpenTextInput ?
-                  <input className="modal-brackets__input-header" ref={inputRef}
-                    value={textInputValue} onChange={e => setTextInputValue(e.target.value)} /> :
-                  <h1 className="modal-brackets__header">{textInputValue}</h1>}
-                {isOpenColorPalette &&
-                  <div className="modal-brackets__color-input" ref={paletteRef}>
-                    <HexColorPicker className="animation-appear" color={color} onChange={setColor} />
-                  </div>
-                }
-                {isOpenSelectInput &&
-                  <select className="modal-brackets__input-select" ref={selectRef}
-                    value={selectInputValue} onChange={e => setSelectInputValue(e.target.value)}>
-                    <option value='По умолчанию'>По умолчанию</option>
-                    <option value='Лёд'>Лёд</option>
-                    <option value='Синдрагоса'>Синдрагоса</option>
-                    <option value='Король Лич'>Король Лич</option>
-                    <option value='Портал'>Портал</option>
-                    <option value='Орда'>Орда</option>
-                    <option value='Альянс'>Альянс</option>
-                    <option value='Смертокрыл'>Смертокрыл</option>
-                    <option value='HeartStone'>HeartStone</option>
-                    <option value='Пергамент'>Пергамент</option>
-                    <option value='Crystal'>Crystal</option>
-                  </select>
-                }
-                <div className="bracket__raid" style={{gridTemplateColumns: groupsInBracket === 10 ?
-                   'repeat(auto-fit, 49%)' : 'repeat(auto-fit, 32%)'}}>
-                  {Object.entries(bracketPlayers).map(([groupId, group]) => <div className="bracket__group" key={groupId}>
-                    <ul className="bracket__notations">
-                      <li className="bracket__notation">Роль</li>
-                      <li className="bracket__notation">Имя</li>
-                      <li className="bracket__notation">Класс</li>
-                      <li className="bracket__notation">Раса</li>
-                      <li className="bracket__notation">Ilvl</li>
+          onClick={() => setIsOpenSelectInput(true)}>Изменить стиль</button>
+        <button className="modal-button modal-download-button" type="button"
+          onClick={handleClickDownloadButton} data-title='Cкачать как картинку'></button>
+        <button className="modal-button modal-copy-button" type="button"
+          onClick={handleClickCopyButton} style={{ backgroundImage: isCopied ? `url(${successImg})` : '' }}
+          onBlur={() => setIsCopied(false)} data-title='Скопировать. Используйте Ctrl+V в дискорд'></button>
+        <section className="modal-brackets" ref={modalRef} onClick={e => handleClickModal(e)}
+          style={changeModalBracketBackground(selectInputValue)}>
+          <div className="bracket">
+            {isOpenTextInput ?
+              <input className="modal-brackets__input-header" ref={inputRef}
+                value={textInputValue} onChange={e => setTextInputValue(e.target.value)} /> :
+              <h1 className="modal-brackets__header">{textInputValue}</h1>}
+            {isOpenColorPalette &&
+              <div className="modal-brackets__color-input" ref={paletteRef}>
+                <HexColorPicker className="animation-appear" color={color} onChange={setColor} />
+              </div>
+            }
+            {isOpenSelectInput &&
+              <select className="modal-brackets__input-select" ref={selectRef}
+                value={selectInputValue} onChange={e => setSelectInputValue(e.target.value)}>
+                <option value='По умолчанию'>По умолчанию</option>
+                <option value='Лёд'>Лёд</option>
+                <option value='Синдрагоса'>Синдрагоса</option>
+                <option value='Король Лич'>Король Лич</option>
+                <option value='Портал'>Портал</option>
+                <option value='Орда'>Орда</option>
+                <option value='Альянс'>Альянс</option>
+                <option value='Смертокрыл'>Смертокрыл</option>
+                <option value='HeartStone'>HeartStone</option>
+                <option value='Пергамент'>Пергамент</option>
+                <option value='Crystal'>Crystal</option>
+              </select>
+            }
+            <div className="bracket__raid" style={{
+              gridTemplateColumns: groupsInBracket === 10 ?
+                'repeat(auto-fit, 49%)' : 'repeat(auto-fit, 32%)'
+            }}>
+              {Object.entries(bracketPlayers).map(([groupId, group]) => <div className="bracket__group" key={groupId}>
+                <ul className="bracket__notations">
+                  <li className="bracket__notation">Роль</li>
+                  <li className="bracket__notation">Имя</li>
+                  <li className="bracket__notation">Класс</li>
+                  <li className="bracket__notation">Раса</li>
+                  <li className="bracket__notation">Ilvl</li>
+                </ul>
+                <div className="bracket__players">
+                  <h2 className="bracket__title">{group.title}</h2>
+                  {group.players.map((bplayer) =>
+                    <ul className="bracket__row" key={bplayer.id} style={{ color: color }}>
+                      <li className="bracket__cell">{bplayer.role}</li>
+                      <li className="bracket__cell">{bplayer.name}</li>
+                      <li className="bracket__cell" style={classColor(bplayer)}>
+                        {bplayer.class_name}
+                      </li>
+                      <li className="bracket__cell">{bplayer.race}</li>
+                      <li className="bracket__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
                     </ul>
-                    <div className="bracket__players">
-                      <h2 className="bracket__title">{group.title}</h2>
-                      {group.players.map((bplayer) =>
-                        <ul className="bracket__row" key={bplayer.id} style={{ color: color }}>
-                          <li className="bracket__cell">{bplayer.role}</li>
-                          <li className="bracket__cell">{bplayer.name}</li>
-                          <li className="bracket__cell" style={classColor(bplayer)}>
-                            {bplayer.class_name}
-                          </li>
-                          <li className="bracket__cell">{bplayer.race}</li>
-                          <li className="bracket__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
-                        </ul>
-                      )}
-                      <ul className="bracket__group-buffs">
-                        <li className="bracket__group-buff">{getNameGroupBuff(group.players)}</li>
-                      </ul>
-                    </div>
-                  </div>
                   )}
+                  <ul className="bracket__group-buffs">
+                    <li className="bracket__group-buff">{getNameGroupBuff(group.players)}</li>
+                  </ul>
                 </div>
               </div>
-
-            </section></>
-          :
-
-          <><img className="modal-brackets__image" src={image} alt="" /><a href={image} download>Загрузить</a></>
-        }
+              )}
+            </div>
+          </div>
+        </section>
       </div>
     </div>
-
   )
 }
 
-
 export default ModalBrackets
-
-
-/* showResult()
-  function showResult() {
-    const img = new Image();
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    document.getElementById('btn').addEventListener('click', () => {
-      copyToClipboard('https://openjavascript.info/code-lives/projects/images/bike.jpg');
-    });
-    function writeToCanvas(src: string) {
-      return new Promise((res, rej) => {
-        img.src = src;
-        img.onload = function () {
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-          ctx!.drawImage(img, 0, 0)
-          canvas.toBlob((blob) => {
-            res(blob);
-          }, 'image/png');
-        }
-      });
-    }
-    async function copyToClipboard(src: string) {
-      const image = await writeToCanvas(src);
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            [image.type]: image,
-          })
-        ]);
-        alert("Success");
-      } catch (e) {
-*/

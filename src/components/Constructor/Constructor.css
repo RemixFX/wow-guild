@@ -672,3 +672,37 @@
   width: 100%;
   z-index: 3;
 }
+
+.modal-brackets__image {
+  display: block;
+  height: 101%;
+  width: 101%;
+}
+
+[data-title]:hover:after {
+  opacity: 1;
+  transition: all 0.1s ease 0.5s;
+  visibility: visible;
+}
+[data-title]:after {
+  content: attr(data-title);
+  background: rgb(255,236,179);
+  background: linear-gradient(180deg, rgb(0 92 207) 25%, rgb(10 48 70) 62%);
+  color: #fff;
+  font-size: 0.8rem;
+  position: absolute;
+  padding: 4px 4px 4px 8px;
+  border-radius: 5px;
+  top: -2.5em;
+  left: 13%;
+  white-space: nowrap;
+  box-shadow: 0px 0px 4px 1px #000000;
+  opacity: 0;
+  border: 1px solid #111111;
+  z-index: 5;
+  visibility: hidden;
+}
+
+[data-title] {
+  position: relative;
+}
