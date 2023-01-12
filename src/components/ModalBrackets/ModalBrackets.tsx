@@ -24,6 +24,8 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
   const [isCopied, setIsCopied] = useState(false)
   const [color, setColor] = useState("#eebc1deb");
 
+  const groupsInBracket: number = Object.keys(bracketPlayers).length > 2 ? 25 : 10
+
   const handleClickDownloadButton = () => {
     html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 2.0 })
       .then(function (canvas) {
@@ -31,7 +33,7 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
         const link = document.createElement("a");
         link.href = url
         link.setAttribute('download', textInputValue ? textInputValue :
-          Object.keys(bracketPlayers).length > 2 ? '25ка' : '10ка')
+        groupsInBracket === 25 ? '25ка' : '10ка')
         link.click()
       });
   }
@@ -157,7 +159,8 @@ console.log(isCopied)
                     <option value='Crystal'>Crystal</option>
                   </select>
                 }
-                <div className="bracket__raid">
+                <div className="bracket__raid" style={{gridTemplateColumns: groupsInBracket === 10 ?
+                   'repeat(auto-fit, 49%)' : 'repeat(auto-fit, 32%)'}}>
                   {Object.entries(bracketPlayers).map(([groupId, group]) => <div className="bracket__group" key={groupId}>
                     <ul className="bracket__notations">
                       <li className="bracket__notation">Роль</li>
