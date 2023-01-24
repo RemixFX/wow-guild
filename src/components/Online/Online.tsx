@@ -5,7 +5,7 @@ import { fetchPlayers } from "../../store/reducers/ActionCreators";
 import { OnlineComponentSlice } from '../../store/reducers/onlineComponentSlice';
 import { playerSlice } from '../../store/reducers/playerSlice';
 import { GUILD_ID, GUILD_REALM_ID } from '../../utils/config';
-import PreloaderOnline from '../PreloaderOnline/PreloaderOnline';
+import PreloaderTable from '../PreloaderTable/PreloaderTable';
 import Sheet from "../Sheet/Sheet";
 
 const Online = () => {
@@ -97,7 +97,7 @@ const Online = () => {
           </div>
           {((noOnline && !showAllPlayers) || error || loading || !isShowOnline) &&
             (<div className="online__background-preloader">
-              {loading && <PreloaderOnline isLoading={loading} />}
+              {loading && <PreloaderTable />}
               <p className="online-empty">{textOnline}</p>
             </div>)}
           {((isEndAnimation && !error && !loading && !noOnline) || (noOnline && showAllPlayers)) &&

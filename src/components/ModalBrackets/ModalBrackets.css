@@ -295,14 +295,6 @@
   color: #ffc38a;
 }
 
-.modal-brackets__image-container {}
-
-.modal-brackets__image {
-  display: block;
-  height: 101%;
-  width: 101%;
-}
-
 .modal-button[data-title]:hover:after {
   opacity: 1;
   transition: all 0.1s ease 0.5s;

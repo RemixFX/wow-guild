@@ -1,7 +1,7 @@
 
-const PreloaderOnline = (props: any) => {
+const Loader = () => {
 
-  return props.isLoading && (
+  return (
     <div className="boxes">
       <div className="box"></div>
       <div className="box"></div>
@@ -16,4 +16,4 @@ const PreloaderOnline = (props: any) => {
   )
 }
 
-export default PreloaderOnline;
+export default Loader;

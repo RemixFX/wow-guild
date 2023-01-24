@@ -14,14 +14,16 @@ const Topbar = () => {
     if (loggedIn) {
       dispatch(fetchLogout())
     } else
-    dispatch(adminSlice.actions.isOpenLoginForm())
+      dispatch(adminSlice.actions.isOpenLoginForm())
   }
 
   const changeStyle = () => {
     switch (location.pathname) {
       case '/schedule':
-       return true
+        return true
       case '/constructor':
+        return true
+      case '/brackets':
         return true
       default:
         return false
@@ -29,23 +31,24 @@ const Topbar = () => {
   }
 
 
-  return(
+  return (
     <div className="topbar">
-    <Link className="schedule__navigation-link" to="/" style={changeStyle() ?
-  {visibility: 'visible'} : {}}>&#8635; На главную страницу</Link>
-    <div className="topbar__authorization">
-      <p className="topbar__authorization-name">{currentUser}</p>
-      <button className={`topbar__authorization-button ${location.pathname === '/schedule'
-      && 'topbar__authorization-button_type_schedule'}`} type="button"
-      onClick={handleButtonClick}
-      >{loggedIn ? 'Выйти' : 'Войти'}</button>
-      {loggedIn &&
-        <button className={`topbar__authorization-button ${location.pathname === '/schedule'
-        && 'topbar__authorization-button_type_schedule'}`} type="button"
-        onClick={() => dispatch(adminSlice.actions.isOpenRegisterForm())}>Создать аккаунт</button>
-      }
+      <Link className="schedule__navigation-link" to="/" style={changeStyle() ?
+        { visibility: 'visible' } : {}}>&#8635; На главную страницу</Link>
+      <div className="topbar__authorization">
+        <p className="topbar__authorization-name">{currentUser}</p>
+        <button className={`topbar__authorization-button ${(location.pathname === '/schedule'
+          || location.pathname === '/brackets')
+          && 'topbar__authorization-button_style_gold'}`} type="button"
+          onClick={handleButtonClick}
+        >{loggedIn ? 'Выйти' : 'Войти'}</button>
+        {loggedIn &&
+          <button className={`topbar__authorization-button ${location.pathname === '/schedule'
+            && 'topbar__authorization-button_type_schedule'}`} type="button"
+            onClick={() => dispatch(adminSlice.actions.isOpenRegisterForm())}>Создать аккаунт</button>
+        }
+      </div>
     </div>
-  </div>
   )
 }
 

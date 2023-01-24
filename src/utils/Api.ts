@@ -1,4 +1,5 @@
 import { IAccount } from "../models/aсcountModel";
+import { IBracket } from "../models/bracketsModel";
 import { IEvents } from "../models/eventsModel";
 
 class Api {
@@ -127,6 +128,24 @@ class Api {
     return fetch(`${this._url}/search?search=${word}&realm_id=${realmId}`, {
       method: 'GET',
       headers: this._headers
+    })
+      .then(this._checkResponse);
+  }
+
+  getBrackets() {
+    return fetch(`${this._url}/brackets`, {
+      method: 'GET',
+      headers: this._headers
+    })
+      .then(this._checkResponse);
+  }
+
+  postBracket(bracket: any) {
+    return fetch(`${this._url}/brackets`, {
+      method: 'POST',
+      headers: this._headers,
+      credentials: 'include',
+      body: JSON.stringify(bracket)
     })
       .then(this._checkResponse);
   }

@@ -1,10 +1,12 @@
 import { IAccount } from "../../models/aсcountModel"
+import { IBracket } from "../../models/bracketsModel"
 import { IEvents } from "../../models/eventsModel"
 import { IPlayer } from "../../models/playerModel"
 import { ISearchGuild } from "../../models/searchGuild"
 import { dbApi, sirusApi } from "../../utils/Api"
 import { AppDispatch } from "../store"
 import { adminSlice } from "./adminSlice"
+import { bracketsSlice } from "./bracketsSlice"
 import { OnlineComponentSlice } from "./onlineComponentSlice"
 import { playerSlice } from "./playerSlice"
 import { scheduleSlice } from "./scheduleSlice"
@@ -17,7 +19,7 @@ export const fetchPlayers = (id: number, realmId: string) => async (dispatch: Ap
     const players: IPlayer[] = response.members;
     dispatch(playerSlice.actions.getNameGuild(response.name))
     dispatch(playerSlice.actions.playersFetchingSuccess(players))
-      dispatch(playerSlice.actions.playersSortbyRank())
+    dispatch(playerSlice.actions.playersSortbyRank())
   } catch (error: any) {
     dispatch(playerSlice.actions.playersFetchingError())
     setTimeout(() => dispatch(OnlineComponentSlice.actions.hideOnline()), 700)
@@ -146,5 +148,15 @@ export const fetchGuild = (searchWord: string, realmId: string) => async (dispat
     dispatch(searchSlice.actions.guildFetchingSuccess(guilds))
   } catch (error: any) {
     dispatch(searchSlice.actions.guildFetchingError())
+  }
+}
+
+export const fetchBrackets = () => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(bracketsSlice.actions.bracketsFetching())
+    const response: IBracket[] = await dbApi.getBrackets();
+    dispatch(bracketsSlice.actions.bracketsFetchingSuccess(response))
+  } catch (error: any) {
+    dispatch(bracketsSlice.actions.bracketsFetchingError())
   }
 }

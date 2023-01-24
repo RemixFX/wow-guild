@@ -7,6 +7,11 @@
   background-size: cover;
 }
 
+.constructor__preloader {
+  top: calc(50vh - 49px);
+  left: calc(50vw - 49px);
+}
+
 .constructor__header {
   text-align: center;
   margin: 0;

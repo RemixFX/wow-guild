@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEvent, RefObject } from "react";
-import { IGroup, IGroupData } from "../../models/bracketsModel";
+import { IBracket, IGroup, IGroupData } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
 import { useAppDispatch, useAppSelector, useDebounce, useSearchPlayer } from "../../store/hooks"
 import { fetchGuild, fetchPlayers } from "../../store/reducers/ActionCreators";
@@ -11,6 +11,10 @@ import Topbar from "../Topbar/Topbar"
 import { searchSlice } from "../../store/reducers/searchSlice";
 import { ISearchGuild } from "../../models/searchGuild";
 import ModalBrackets from "../ModalBrackets/ModalBrackets";
+import InfoSlider from "../InfoSlider/infoSlider";
+import { dbApi } from "../../utils/Api";
+import Loader from "../PreloaderTable/PreloaderTable";
+import Preloader from "../Preloader/Preloader";
 const flag = require('../../images/flag.png')
 
 const Constructor = () => {
@@ -30,7 +34,8 @@ const Constructor = () => {
   const [showModal, setShowModal] = useState(false)
   const [realmId, setRealmId] = useState<string>('57')
   const [columnSource, setColumnSource] = useState<string>('')
-
+  const [isLoading, setisLoading] = useState(false)
+  const [isShowPostMessage, setIsShowPostMessage] = useState(false)
   const [isactiveGroupButton, setIsActiveGroupButton] = useState('active')
   const [isactiveRaidButton, setIsActiveRaidButton] = useState('')
   const [inputSearchGuildValue, setInputSearchGuildValue] = useState('')
@@ -323,16 +328,50 @@ const Constructor = () => {
     )
   }
 
+  // Подготовка рейда к сохранению на сервере
+  const extractPlayers = () => {
+    const raidID = Date.now();
+    let newBracket: IBracket[] = []
+    Object.keys(bracketPlayers).forEach(group => {
+      bracketPlayers[group].players.forEach(player => {
+        newBracket.push({
+          ...player,
+          note: '',
+          group_name: group,
+          raid_id: raidID
+        });
+      });
+    });
+    return newBracket;
+  }
+
+  // Сохранение нового рейда на сервер, прелоадер и уведомление
+  const postBracket = () => {
+    setIsShowPostMessage(false)
+    setisLoading(true)
+    const newBracket = extractPlayers()
+    dbApi.postBracket(newBracket)
+    .then(() => {
+      setisLoading(false)
+      setIsShowPostMessage(true)
+    })
+    .catch((err) => console.log(err))
+    .finally(() => setisLoading(false))
+  }
+
   return (
     <section className="constructor">
       <Topbar />
+      {isLoading &&
+      <div className="background-modal">
+        <Preloader addClass="constructor__preloader"/>
+      </div>}
+      {isShowPostMessage && <InfoSlider infoMessage="Рейд сохранён"/>}
       <h1 className="constructor__header">Создать состав</h1>
       <div className="constructor__layout-header">
         <h2 className="constructor__name-guld">{nameGuild}</h2>
         <img className="constructor__background-image" src={flag} alt="" />
       </div>
-
-      {/*  <div className="constructor__background-image"/> */}
       <div className="constructor__layout">
         <div className="constructor__navigation-options" >
           <div className="brackets-options">
@@ -519,10 +558,10 @@ const Constructor = () => {
         </div>
       </div>
       <footer className="constructor__footer">
-        <button type="button" className="constructor__button"data-title='Доступно только для ГМа и офицеров'
-        >Отправить</button>
+        <button type="button" className="constructor__button" data-title='Доступно только для ГМа и офицеров'
+        onClick={postBracket}>Отправить</button>
         <button type="button" className="constructor__button" data-title='Изменить стиль и сохранить как картинку'
-         onClick={() => setBracketPreviewModal(!bracketPreviewModal)}>Сохранить</button>
+          onClick={() => setBracketPreviewModal(!bracketPreviewModal)}>Сохранить</button>
       </footer>
       {showModal &&
         <div className="background-modal" onClick={handleCloseModal}></div>

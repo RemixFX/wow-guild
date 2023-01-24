@@ -62,6 +62,7 @@ function App() {
           } />
         </Route>
         <Route path="/schedule" element={<Schedule />} />
+        <Route path="/brackets" element={<Brackets />} />
         <Route path="/constructor" element={<Constructor />} />
       </Routes>
       {openLoginForm && <Form
