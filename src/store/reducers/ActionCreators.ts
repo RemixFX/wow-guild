@@ -1,5 +1,5 @@
 import { IAccount } from "../../models/aсcountModel"
-import { IBracket } from "../../models/bracketsModel"
+import { IBracket, IBrackets } from "../../models/bracketsModel"
 import { IEvents } from "../../models/eventsModel"
 import { IPlayer } from "../../models/playerModel"
 import { ISearchGuild } from "../../models/searchGuild"
@@ -155,7 +155,17 @@ export const fetchBrackets = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(bracketsSlice.actions.bracketsFetching())
     const response: IBracket[] = await dbApi.getBrackets();
-    dispatch(bracketsSlice.actions.bracketsFetchingSuccess(response))
+    const groupedBrackets: IBrackets = {};
+    for (const bracket of response) {
+      if (!groupedBrackets[bracket.raid_id]) {
+        groupedBrackets[bracket.raid_id] = {};
+      }
+      if (!groupedBrackets[bracket.raid_id][bracket.group_name]) {
+        groupedBrackets[bracket.raid_id][bracket.group_name] = [];
+      }
+      groupedBrackets[bracket.raid_id][bracket.group_name].push(bracket);
+    }
+    dispatch(bracketsSlice.actions.bracketsFetchingSuccess(groupedBrackets))
   } catch (error: any) {
     dispatch(bracketsSlice.actions.bracketsFetchingError())
   }

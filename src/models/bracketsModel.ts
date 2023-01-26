@@ -1,4 +1,3 @@
-import { raid25, raid10 } from "../utils/config";
 
 export interface IGroup {
   id: string;
@@ -26,4 +25,9 @@ export interface IBracket {
   raid_id: number;
 }
 
+export interface IBrackets {
+  [raid_id: string]: {
+    [group_name: string]: IBracket[]
+  }
+}
 

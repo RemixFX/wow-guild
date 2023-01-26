@@ -1,19 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEvent, RefObject } from "react";
-import { IBracket, IGroup, IGroupData } from "../../models/bracketsModel";
+import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEvent } from "react";
+import { IBracket, IGroup } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
 import { useAppDispatch, useAppSelector, useDebounce, useSearchPlayer } from "../../store/hooks"
 import { fetchGuild, fetchPlayers } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { classColor, getNameGroupBuff, groupRaceBuffs, GUILD_ID, GUILD_REALM_ID, raid10, raid25, raidBuffs } from "../../utils/config"
+import { classColor, getNameGroupBuff, GUILD_ID, GUILD_REALM_ID, raid10, raid25, raidBuffs } from "../../utils/config"
 import Topbar from "../Topbar/Topbar"
 import { searchSlice } from "../../store/reducers/searchSlice";
 import { ISearchGuild } from "../../models/searchGuild";
 import ModalBrackets from "../ModalBrackets/ModalBrackets";
 import InfoSlider from "../InfoSlider/infoSlider";
 import { dbApi } from "../../utils/Api";
-import Loader from "../PreloaderTable/PreloaderTable";
 import Preloader from "../Preloader/Preloader";
 const flag = require('../../images/flag.png')
 
@@ -329,7 +328,22 @@ const Constructor = () => {
   }
 
   // Подготовка рейда к сохранению на сервере
-  const extractPlayers = () => {
+  const convertBracket = () => {
+    const convertGroupName = (group: string) => {
+      switch (group) {
+        case 'group1':
+          return 'I группа'
+        case 'group2':
+          return 'II группа'
+        case 'group3':
+          return 'III группа'
+        case 'group4':
+          return 'IV группа'
+        case 'group5':
+          return 'V группа'
+      }
+      return group
+    }
     const raidID = Date.now();
     let newBracket: IBracket[] = []
     Object.keys(bracketPlayers).forEach(group => {
@@ -337,7 +351,7 @@ const Constructor = () => {
         newBracket.push({
           ...player,
           note: '',
-          group_name: group,
+          group_name: convertGroupName(group),
           raid_id: raidID
         });
       });
@@ -349,24 +363,24 @@ const Constructor = () => {
   const postBracket = () => {
     setIsShowPostMessage(false)
     setisLoading(true)
-    const newBracket = extractPlayers()
+    const newBracket = convertBracket()
     dbApi.postBracket(newBracket)
-    .then(() => {
-      setisLoading(false)
-      setIsShowPostMessage(true)
-    })
-    .catch((err) => console.log(err))
-    .finally(() => setisLoading(false))
+      .then(() => {
+        setisLoading(false)
+        setIsShowPostMessage(true)
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setisLoading(false))
   }
 
   return (
     <section className="constructor">
       <Topbar />
       {isLoading &&
-      <div className="background-modal">
-        <Preloader addClass="constructor__preloader"/>
-      </div>}
-      {isShowPostMessage && <InfoSlider infoMessage="Рейд сохранён"/>}
+        <div className="background-modal">
+          <Preloader addClass="constructor__preloader" />
+        </div>}
+      {isShowPostMessage && <InfoSlider infoMessage="Рейд сохранён" />}
       <h1 className="constructor__header">Создать состав</h1>
       <div className="constructor__layout-header">
         <h2 className="constructor__name-guld">{nameGuild}</h2>
@@ -559,7 +573,7 @@ const Constructor = () => {
       </div>
       <footer className="constructor__footer">
         <button type="button" className="constructor__button" data-title='Доступно только для ГМа и офицеров'
-        onClick={postBracket}>Отправить</button>
+          onClick={postBracket}>Отправить</button>
         <button type="button" className="constructor__button" data-title='Изменить стиль и сохранить как картинку'
           onClick={() => setBracketPreviewModal(!bracketPreviewModal)}>Сохранить</button>
       </footer>
