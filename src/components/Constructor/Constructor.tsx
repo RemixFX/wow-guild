@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEvent } from "react";
-import { IBracket, IGroup } from "../../models/bracketsModel";
+import { IGroup, IGroupDB } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
 import { useAppDispatch, useAppSelector, useDebounce, useSearchPlayer } from "../../store/hooks"
 import { fetchGuild, fetchPlayers } from "../../store/reducers/ActionCreators";
@@ -345,7 +345,7 @@ const Constructor = () => {
       return group
     }
     const raidID = Date.now();
-    let newBracket: IBracket[] = []
+    let newBracket: IGroupDB[] = []
     Object.keys(bracketPlayers).forEach(group => {
       bracketPlayers[group].players.forEach(player => {
         newBracket.push({

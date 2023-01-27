@@ -1,5 +1,5 @@
 import { IAccount } from "../../models/aсcountModel"
-import { IBracket, IBrackets } from "../../models/bracketsModel"
+import { IGroupDB, IBracket, IRaid } from "../../models/bracketsModel"
 import { IEvents } from "../../models/eventsModel"
 import { IPlayer } from "../../models/playerModel"
 import { ISearchGuild } from "../../models/searchGuild"
@@ -154,18 +154,26 @@ export const fetchGuild = (searchWord: string, realmId: string) => async (dispat
 export const fetchBrackets = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(bracketsSlice.actions.bracketsFetching())
-    const response: IBracket[] = await dbApi.getBrackets();
-    const groupedBrackets: IBrackets = {};
+    const response: IGroupDB[] = await dbApi.getBrackets();
+    const newBracket = {raid25: [] as IBracket[], raid10: [] as IBracket[]};
+    const groupedBrackets: IRaid = {};
     for (const bracket of response) {
-      if (!groupedBrackets[bracket.raid_id]) {
-        groupedBrackets[bracket.raid_id] = {};
-      }
-      if (!groupedBrackets[bracket.raid_id][bracket.group_name]) {
-        groupedBrackets[bracket.raid_id][bracket.group_name] = [];
-      }
-      groupedBrackets[bracket.raid_id][bracket.group_name].push(bracket);
+        if (!groupedBrackets[bracket.raid_id]) {
+            groupedBrackets[bracket.raid_id] = {};
+        }
+        if (!groupedBrackets[bracket.raid_id][bracket.group_name]) {
+            groupedBrackets[bracket.raid_id][bracket.group_name] = [];
+        }
+        groupedBrackets[bracket.raid_id][bracket.group_name].push(bracket);
     }
-    dispatch(bracketsSlice.actions.bracketsFetchingSuccess(groupedBrackets))
+    Object.entries(groupedBrackets).forEach(([raidID, raid]) => {
+      if (Object.values(raid).length > 2) {
+        newBracket.raid25.push({raidID, raid})
+      } else {
+        newBracket.raid10.push({raidID, raid})
+      }
+    });
+    dispatch(bracketsSlice.actions.bracketsFetchingSuccess(newBracket))
   } catch (error: any) {
     dispatch(bracketsSlice.actions.bracketsFetchingError())
   }

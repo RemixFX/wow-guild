@@ -19,11 +19,22 @@
 
 .bracket__raid_page_bracket {
   display: flex;
+  position: relative;
   flex-wrap: wrap;
   justify-content: center;
   width: 97%;
   margin: auto;
+  margin-bottom: 35px;
   background: radial-gradient(circle, rgb(0 133 255 / 21%) 25%, rgba(27,27,27,1) 89%);
+  border: solid 5px;
+  border-image: linear-gradient( to bottom, #15324b, rgb(0 0 0 / 0%) ) 1 44%;
+}
+
+.bracket__raid-id {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.7rem;
 }
 
 .bracket__group {

@@ -8,7 +8,10 @@ import { IBrackets } from "../../models/bracketsModel";
 }
 
 const initialState: BracketsSlice = {
-  brackets: {},
+  brackets: {
+    raid25: [],
+    raid10: []
+  },
   loading: false,
   error: false
 }
@@ -18,7 +21,10 @@ export const bracketsSlice = createSlice({
   initialState,
   reducers: {
     bracketsFetching: state => {
-      state.brackets = {}
+      state.brackets = {
+        raid25: [],
+        raid10: []
+      }
       state.loading = true
       state.error = false
     },
@@ -28,7 +34,10 @@ export const bracketsSlice = createSlice({
       state.error = false
     },
     bracketsFetchingError: state => {
-      state.brackets = {}
+      state.brackets = {
+        raid25: [],
+        raid10: []
+      }
       state.loading = false
       state.error = true
     }
