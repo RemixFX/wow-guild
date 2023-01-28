@@ -43,8 +43,9 @@ const Topbar = () => {
           onClick={handleButtonClick}
         >{loggedIn ? 'Выйти' : 'Войти'}</button>
         {loggedIn &&
-          <button className={`topbar__authorization-button ${location.pathname === '/schedule'
-            && 'topbar__authorization-button_type_schedule'}`} type="button"
+          <button className={`topbar__authorization-button ${(location.pathname === '/schedule'
+            || location.pathname === '/brackets')
+            && 'topbar__authorization-button_style_gold'}`} type="button"
             onClick={() => dispatch(adminSlice.actions.isOpenRegisterForm())}>Создать аккаунт</button>
         }
       </div>

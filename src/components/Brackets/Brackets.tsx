@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchBrackets } from "../../store/reducers/ActionCreators"
 import { classColor, getNameGroupBuff } from "../../utils/config"
+import Preloader from "../Preloader/Preloader";
 import Topbar from "../Topbar/Topbar"
 
 const Brackets = () => {
@@ -14,8 +15,20 @@ const Brackets = () => {
     dispatch(fetchBrackets())
   }, [])
 
-  console.log(brackets)
-
+  if (loading) {
+    return (
+      <section className="brackets">
+        <Preloader addClass="constructor__preloader" />
+      </section>
+    )
+  } if (error) {
+    return (
+      <section className="brackets">
+        <Topbar />
+        <h1 className="brackets__error-message">Нет ответа от сервера...</h1>
+      </section>
+    )
+  }
   return (
     <section className="brackets">
       <Topbar />
@@ -52,7 +65,9 @@ const Brackets = () => {
                 </div>
               </div>
             )}
+            <div className="bracket__raid-border"></div>
           </div>
+
         )}
         <h1 className="bracket__header">Составы 10ки:</h1>
         {brackets.raid10.map((bracket) =>
@@ -86,6 +101,7 @@ const Brackets = () => {
                 </div>
               </div>
             )}
+            <div className="bracket__raid-border"></div>
           </div>
         )}
       </div>
