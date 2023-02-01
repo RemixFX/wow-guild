@@ -158,32 +158,33 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
               gridTemplateColumns: groupsInBracket === 10 ?
                 'repeat(auto-fit, 49%)' : 'repeat(auto-fit, 32%)'
             }}>
-              {Object.entries(bracketPlayers).map(([groupId, group]) => <div className="bracket__group" key={groupId}>
-                <ul className="bracket__notations">
-                  <li className="bracket__notation">Роль</li>
-                  <li className="bracket__notation">Имя</li>
-                  <li className="bracket__notation">Класс</li>
-                  <li className="bracket__notation">Раса</li>
-                  <li className="bracket__notation">Ilvl</li>
-                </ul>
-                <div className="bracket__players">
-                  <h2 className="bracket__title">{group.title}</h2>
-                  {group.players.map((bplayer) =>
-                    <ul className="bracket__row" key={bplayer.id} style={{ color: color }}>
-                      <li className="bracket__cell">{bplayer.role}</li>
-                      <li className="bracket__cell">{bplayer.name}</li>
-                      <li className="bracket__cell" style={classColor(bplayer)}>
-                        {bplayer.class_name}
-                      </li>
-                      <li className="bracket__cell">{bplayer.race}</li>
-                      <li className="bracket__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
-                    </ul>
-                  )}
-                  <ul className="bracket__group-buffs">
-                    <li className="bracket__group-buff">{getNameGroupBuff(group.players)}</li>
+              {Object.entries(bracketPlayers).map(([groupId, group]) =>
+                <div className="bracket__group" key={groupId}>
+                  <ul className="bracket__notations">
+                    <li className="bracket__notation">Роль</li>
+                    <li className="bracket__notation">Имя</li>
+                    <li className="bracket__notation">Класс</li>
+                    <li className="bracket__notation">Раса</li>
+                    <li className="bracket__notation">Ilvl</li>
                   </ul>
+                  <div className="bracket__players">
+                    <h2 className="bracket__title">{group.title}</h2>
+                    {group.players.map((bplayer) =>
+                      <ul className="bracket__row" key={bplayer.id} style={{ color: color }}>
+                        <li className="bracket__cell">{bplayer.role}</li>
+                        <li className="bracket__cell">{bplayer.name}</li>
+                        <li className="bracket__cell" style={classColor(bplayer)}>
+                          {bplayer.class_name}
+                        </li>
+                        <li className="bracket__cell">{bplayer.race}</li>
+                        <li className="bracket__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
+                      </ul>
+                    )}
+                    <ul className="bracket__group-buffs">
+                      <li className="bracket__group-buff">{getNameGroupBuff(group.players)}</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
               )}
             </div>
           </div>

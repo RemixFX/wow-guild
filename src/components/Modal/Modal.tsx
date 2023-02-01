@@ -29,11 +29,12 @@ const Modal: FC<{ children: ReactNode, title: string }> = ({ children, title }) 
   })
 
   return (
-    <dialog className={`modal ${location.pathname === '/schedule' && 'modal_style_gold'}`}
+    <dialog className={`modal ${(location.pathname === '/schedule'
+      || location.pathname === '/brackets') && 'modal_style_gold'}`}
       ref={modal} onClick={(evt) => closeOnBackDropClick(evt)}>
       <div className='modal__wrapper'>
-        <h3 className={`modal__header ${location.pathname === '/schedule' &&
-          'modal__header_style_gold'}`}>{title}</h3>
+        <h3 className={`modal__header ${(location.pathname === '/schedule'
+          || location.pathname === '/brackets') && 'modal__header_style_gold'}`}>{title}</h3>
         <button type="button" className="modal__close-button"
           onClick={() => modal.current?.close()}> &#215;</button>
         <div className="modal__inner">

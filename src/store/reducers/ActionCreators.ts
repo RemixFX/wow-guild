@@ -178,3 +178,17 @@ export const fetchBrackets = () => async (dispatch: AppDispatch) => {
     dispatch(bracketsSlice.actions.bracketsFetchingError())
   }
 }
+
+export const fetchChangeNote = (note: string, playerID: string, raidID: string, ) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(bracketsSlice.actions.bracketNoteFetching());
+    const response = await dbApi.changeNote(note, playerID, raidID);
+    setTimeout(() => {
+      dispatch(bracketsSlice.actions.bracketNoteFetchingSuccess(response))
+    }, 1000)
+
+  } catch (error: any) {
+    dispatch(bracketsSlice.actions.bracketNoteFetchingError())
+    console.log(error)
+  }
+}

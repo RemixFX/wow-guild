@@ -149,6 +149,16 @@ class Api {
     })
       .then(this._checkResponse);
   }
+
+  changeNote(note: string, playerID: string, raidID: string) {
+    return fetch(`${this._url}/update`, {
+      method: 'PUT',
+      headers: this._headers,
+      credentials: 'include',
+      body: JSON.stringify({note, playerID, raidID})
+    })
+      .then(this._checkResponse);
+  }
 }
 
 const headers = new Headers(

@@ -231,12 +231,6 @@
   margin: 0 1%;
 }
 
-/* .bracket__group {
-  background-image: url(../../images/snow.svg);
-  background-size: 221px;
-  background-repeat: repeat;
-} */
-
 .bracket__notations {
   display: grid;
   grid-template-columns: 16% 24% 26% 24% 10%;
