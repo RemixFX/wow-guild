@@ -81,7 +81,7 @@ const Brackets = () => {
                         {player.class_name}
                       </li>
                       <li className="bracket__cell bracket__cell_page_bracket">{player.race}</li>
-                      <li className="bracket__cell bracket__cell_page_bracket">{player.note}</li>
+                      <li className="bracket__cell bracket__cell_page_bracket" data-title={player.note}>{player.note}</li>
                       <button type="button" className={`bracket__edit-note-button
                        ${(player.id === data.playerID && loadingNote) && 'bracket__loading-button'}`}
                         onClick={() => handleOpenModal(bracket.raidID, player.id, player.note)}></button>
@@ -120,7 +120,7 @@ const Brackets = () => {
                         {player.class_name}
                       </li>
                       <li className="bracket__cell bracket__cell_page_bracket">{player.race}</li>
-                      <li className="bracket__cell bracket__cell_page_bracket">{player.note}</li>
+                      <li className="bracket__cell bracket__cell_page_bracket" data-title={player.note}>{player.note}</li>
                       <button type="button" className={`bracket__edit-note-button
                        ${(player.id === data.playerID && loadingNote) && 'bracket__loading-button'}`}
                         onClick={() => handleOpenModal(bracket.raidID, player.id, player.note)}></button>

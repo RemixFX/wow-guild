@@ -684,12 +684,12 @@
   width: 101%;
 }
 
-[data-title]:hover:after {
+.constructor__button[data-title]:hover:after {
   opacity: 1;
   transition: all 0.1s ease 0.5s;
   visibility: visible;
 }
-[data-title]:after {
+.constructor__button[data-title]:after {
   content: attr(data-title);
   background: rgb(255,236,179);
   background: linear-gradient(180deg, rgb(0 92 207) 25%, rgb(10 48 70) 62%);
@@ -708,6 +708,6 @@
   visibility: hidden;
 }
 
-[data-title] {
+.constructor__button[data-title] {
   position: relative;
 }
