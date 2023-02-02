@@ -180,7 +180,7 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
                         <li className="bracket__cell">{bplayer.ilvl ? bplayer.ilvl : ""}</li>
                       </ul>
                     )}
-                    <ul className="bracket__group-buffs">
+                    <ul className="bracket__group-buffs bracket__group-buffs_style_modal">
                       <li className="bracket__group-buff">{getNameGroupBuff(group.players)}</li>
                     </ul>
                   </div>

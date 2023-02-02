@@ -289,6 +289,12 @@
   color: #ffc38a;
 }
 
+.bracket__group-buffs_style_modal {
+  min-height: 44px;
+  border-bottom: solid 3px #d1defb42;
+  background: #0d2c41;
+}
+
 .modal-button[data-title]:hover:after {
   opacity: 1;
   transition: all 0.1s ease 0.5s;
