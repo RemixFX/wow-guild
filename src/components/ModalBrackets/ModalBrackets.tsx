@@ -107,6 +107,8 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
     }
   }, [isOpenColorPalette])
 
+  console.log(groupsInBracket)
+
   return (
     <div className="modal-background">
       <div className="modal-layout">
@@ -154,12 +156,10 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
                 <option value='Crystal'>Crystal</option>
               </select>
             }
-            <div className="bracket__raid" style={{
-              gridTemplateColumns: groupsInBracket === 10 ?
-                'repeat(auto-fit, 49%)' : 'repeat(auto-fit, 32%)'
-            }}>
+            <div className="bracket__raid">
               {Object.entries(bracketPlayers).map(([groupId, group]) =>
-                <div className="bracket__group" key={groupId}>
+                <div className="bracket__group" key={groupId}
+                 style={{width: groupsInBracket === 10 ? '48%' : '32%'}}>
                   <ul className="bracket__notations">
                     <li className="bracket__notation">Роль</li>
                     <li className="bracket__notation">Имя</li>

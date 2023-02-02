@@ -224,11 +224,15 @@
 .bracket__raid {
   display: grid;
   width: 98%;
-  grid-template-columns: repeat(auto-fit, 32%);
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  column-gap: 1%;
-  row-gap: 2%;
   margin: 0 1%;
+}
+
+.bracket__group {
+  width: 32%;
+  margin: 14px 7px;
 }
 
 .bracket__notations {
