@@ -52,7 +52,7 @@
 }
 
 @keyframes appearance {
-  100%{
+  100% {
     opacity: 1;
   }
 }
@@ -138,11 +138,11 @@
 
 .online__background-preloader {
   display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    background: #00000000;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background: #00000000;
 }
 
 .online__table {
@@ -188,11 +188,11 @@
 
 /* CSSTransition start ====> */
 
-.transform-enter   {
+.transform-enter {
   width: 45%;
 }
 
- .transform-enter-active {
+.transform-enter-active {
   transform: translateX(15%);
   width: 13%;
   transition: all 2000ms ease-in-out;
@@ -224,6 +224,7 @@
     transform-origin: top;
     min-width: 230%;
   }
+
   100% {
     opacity: 1;
     transform: rotate(90deg);
@@ -269,4 +270,3 @@
   opacity: 1;
   transition: all 1800ms ease-in-out;
 }
-

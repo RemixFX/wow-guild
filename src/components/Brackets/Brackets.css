@@ -1,4 +1,4 @@
-@keyframes pulse {
+@keyframes opacity-error {
   100% {
     opacity: 1;
   }
@@ -21,7 +21,7 @@
   font-size: 1.4rem;
   font-family: monospace, 'Inter';
   opacity: 0;
-  animation: pulse 1500ms ease-in infinite alternate;
+  animation: opacity-error 1500ms ease-in infinite alternate;
 }
 
 .bracket__header {
