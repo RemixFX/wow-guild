@@ -29,3 +29,7 @@
 .content__message {
   white-space: pre-line;
 }
+
+.content__message a {
+  color: inherit;
+}

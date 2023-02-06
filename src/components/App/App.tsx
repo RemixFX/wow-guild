@@ -24,6 +24,7 @@ function App() {
   // Запрос данных при загрузке сайта
   useEffect(() => {
     dispatch(fetchAuthorization())
+    getServerMessages()
   }, [])
 
 

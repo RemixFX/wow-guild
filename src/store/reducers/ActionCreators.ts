@@ -18,7 +18,9 @@ export const fetchPlayers = (id: number, realmId: string) => async (dispatch: Ap
     const response = await sirusApi.getUsers(id, realmId)
     const players: IPlayer[] = response.members;
     dispatch(playerSlice.actions.getNameGuild(response.name))
+    setTimeout(() => {
     dispatch(playerSlice.actions.playersFetchingSuccess(players))
+    }, 1000)
     dispatch(playerSlice.actions.playersSortbyRank())
   } catch (error: any) {
     dispatch(playerSlice.actions.playersFetchingError())

@@ -33,10 +33,12 @@ function News(props: any) {
             }}
           >Новости сервера</button>
         </div>
+        <div>
         <div className='tabcontent'>
-          {(activeNewsGuild === 'active' ? props.guildMessages : props.serverMessages).map((message: any) =>
+          {(activeNewsGuild === 'active' ? props.guildMessages.reverse() : props.serverMessages.reverse()).map((message: any) =>
             <NewsContent message={message} key={message.id} />
           )}
+        </div>
         </div>
       </section>
     </CSSTransition>
