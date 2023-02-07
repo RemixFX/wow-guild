@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { adminSlice } from "./reducers/adminSlice";
 import { bracketsSlice } from "./reducers/bracketsSlice";
+import { newsSlice } from "./reducers/newsSlice";
 import { OnlineComponentSlice } from "./reducers/onlineComponentSlice";
 import { playerSlice } from './reducers/playerSlice';
 import { scheduleSlice } from "./reducers/scheduleSlice";
@@ -13,7 +14,8 @@ export const store = configureStore({
     admin: adminSlice.reducer,
     schedule: scheduleSlice.reducer,
     search: searchSlice.reducer,
-    brackets: bracketsSlice.reducer
+    brackets: bracketsSlice.reducer,
+    news: newsSlice.reducer
   }
 })
 

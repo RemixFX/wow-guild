@@ -1,12 +1,14 @@
 import { IAccount } from "../../models/aсcountModel"
 import { IGroupDB, IBracket, IRaid } from "../../models/bracketsModel"
 import { IEvents } from "../../models/eventsModel"
+import { INews } from "../../models/newsModel"
 import { IPlayer } from "../../models/playerModel"
 import { ISearchGuild } from "../../models/searchGuild"
 import { dbApi, sirusApi } from "../../utils/Api"
 import { AppDispatch } from "../store"
 import { adminSlice } from "./adminSlice"
 import { bracketsSlice } from "./bracketsSlice"
+import { newsSlice } from "./newsSlice"
 import { OnlineComponentSlice } from "./onlineComponentSlice"
 import { playerSlice } from "./playerSlice"
 import { scheduleSlice } from "./scheduleSlice"
@@ -194,3 +196,18 @@ export const fetchChangeNote = (note: string, playerID: string, raidID: string, 
     console.log(error)
   }
 }
+
+export const fetchServerNews = () => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(newsSlice.actions.isFetchingServerNews());
+    const response: INews[] = await dbApi.getMessages();
+    setTimeout(() => {
+      dispatch(newsSlice.actions.isSuccessFetchingServerNews(response))
+    }, 1000)
+
+  } catch (error: any) {
+    dispatch(newsSlice.actions.isErrorFetchingServerNews({isError: true, message: error.message}))
+    console.log(error)
+  }
+}
+

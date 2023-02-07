@@ -1,6 +1,14 @@
 @keyframes slideDown {
-  0%, 100% { transform: translateY(-50px); }
-  10%, 90% { transform: translateY(0px); }
+
+  0%,
+  100% {
+    transform: translateY(-50px);
+  }
+
+  10%,
+  90% {
+    transform: translateY(0px);
+  }
 }
 
 .slider {
@@ -9,11 +17,17 @@
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(90deg, rgb(4 29 67) 9%, rgba(115,170,253,1) 29%,
-   rgb(17 84 174) 50%, rgba(115,170,253,1) 72%, rgb(4 28 66) 93%);
+  background: linear-gradient(90deg, rgb(4 29 67) 9%, rgba(115, 170, 253, 1) 29%,
+      rgb(17 84 174) 50%, rgba(115, 170, 253, 1) 72%, rgb(4 28 66) 93%);
   text-align: center;
   line-height: 2.5;
   overflow: hidden;
   box-shadow: 0px 4px 11px 2px #9eb3f1;
   animation: slideDown 4s ease forwards;
+}
+
+.slider__error {
+  background: linear-gradient(90deg, rgb(67 4 4) 9%, rgb(253 115 115) 29%,
+      rgb(174 17 17) 50%, rgb(253 115 115) 72%, rgb(66 4 4) 93%);
+  box-shadow: 0px 4px 11px 2px #f19e9e;
 }

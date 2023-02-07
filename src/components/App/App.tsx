@@ -7,7 +7,7 @@ import Layout from "../Layout/Layout";
 import Invite from "../Invite/Invite";
 import Schedule from "../Schedule/Schedule";
 import Brackets from "../Brackets/Brackets";
-import { fetchAuthorization, fetchEvents, fetchLogin, fetchRegister } from "../../store/reducers/ActionCreators";
+import { fetchAuthorization, fetchEvents, fetchLogin, fetchRegister, fetchServerNews } from "../../store/reducers/ActionCreators";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Form from "../Form/Form";
 import { IAccount } from "../../models/aсcountModel";
@@ -16,15 +16,13 @@ import Constructor from "../Constructor/Constructor";
 import ModalBrackets from "../ModalBrackets/ModalBrackets";
 
 function App() {
-  const [guildMessages, setGuildMessages] = useState([]);
-  const [serverMessages, setServerMessages] = useState([]);
   const dispatch = useAppDispatch();
   const { error, loading, infoMessage, openLoginForm, openRegisterForm } = useAppSelector(state => state.admin)
 
   // Запрос данных при загрузке сайта
   useEffect(() => {
     dispatch(fetchAuthorization())
-    getServerMessages()
+    dispatch(fetchServerNews())
   }, [])
 
 
@@ -36,13 +34,6 @@ function App() {
   // Вход в аккаунт
   const login = (value: IAccount) => {
     dispatch(fetchLogin(value))
-  }
-
-  // Функция для запроса сообщений сервера
-  const getServerMessages = () => {
-    dbApi.getMessages()
-      .then((messages) => setServerMessages(messages))
-      .catch((err) => console.log(err.message))
   }
 
   // Запрос массива созданных событий
@@ -57,9 +48,7 @@ function App() {
           <Route path="/info" element={<Info />} />
           <Route path="/invite" element={<Invite />} />
           {/* <Route path="/brackets" element={<ModalBrackets/>} /> */}
-          <Route path="/" element={<Main
-            guildMessages={guildMessages}
-            serverMessages={serverMessages} />
+          <Route path="/" element={<Main />
           } />
         </Route>
         <Route path="/schedule" element={<Schedule />} />

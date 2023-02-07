@@ -5,9 +5,7 @@ const Main = (props: any) => {
 
 return (
   <section className='main' >
-    <News
-    guildMessages={props.guildMessages}
-    serverMessages={props.serverMessages}/>
+    <News />
     <Online/>
   </section>
 )

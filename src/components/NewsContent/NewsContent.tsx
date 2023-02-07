@@ -1,10 +1,11 @@
+import { INews } from "../../models/newsModel";
 
-function NewsContent(props: any) {
+const NewsContent = (props: {message: INews}) => {
 
   const URL_REGEX = /(\b((https?|ftp|file):\/\/|(www))[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]*)/ig;
 
-  const renderText = (txt: string) => {
-    return txt.split("\n").join(" \n ").split(' ')
+  const renderText = (text: string) => {
+    return text.split("\n").join(" \n ").split(' ')
       .map(part => {
         if (part.includes('<https')) part = part.replace('<https', 'https')
         if (part.includes('/>')) part = part.replace('/>', '')
