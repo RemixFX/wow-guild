@@ -21,7 +21,7 @@ export const fetchPlayers = (id: number, realmId: string) => async (dispatch: Ap
     const players: IPlayer[] = response.members;
     dispatch(playerSlice.actions.getNameGuild(response.name))
     setTimeout(() => {
-    dispatch(playerSlice.actions.playersFetchingSuccess(players))
+      dispatch(playerSlice.actions.playersFetchingSuccess(players))
     }, 1000)
     dispatch(playerSlice.actions.playersSortbyRank())
   } catch (error: any) {
@@ -159,22 +159,22 @@ export const fetchBrackets = () => async (dispatch: AppDispatch) => {
   try {
     dispatch(bracketsSlice.actions.bracketsFetching())
     const response: IGroupDB[] = await dbApi.getBrackets();
-    const newBracket = {raid25: [] as IBracket[], raid10: [] as IBracket[]};
+    const newBracket = { raid25: [] as IBracket[], raid10: [] as IBracket[] };
     const groupedBrackets: IRaid = {};
     for (const bracket of response) {
-        if (!groupedBrackets[bracket.raid_id]) {
-            groupedBrackets[bracket.raid_id] = {};
-        }
-        if (!groupedBrackets[bracket.raid_id][bracket.group_name]) {
-            groupedBrackets[bracket.raid_id][bracket.group_name] = [];
-        }
-        groupedBrackets[bracket.raid_id][bracket.group_name].push(bracket);
+      if (!groupedBrackets[bracket.raid_id]) {
+        groupedBrackets[bracket.raid_id] = {};
+      }
+      if (!groupedBrackets[bracket.raid_id][bracket.group_name]) {
+        groupedBrackets[bracket.raid_id][bracket.group_name] = [];
+      }
+      groupedBrackets[bracket.raid_id][bracket.group_name].push(bracket);
     }
     Object.entries(groupedBrackets).forEach(([raidID, raid]) => {
       if (Object.values(raid).length > 2) {
-        newBracket.raid25.push({raidID, raid})
+        newBracket.raid25.push({ raidID, raid })
       } else {
-        newBracket.raid10.push({raidID, raid})
+        newBracket.raid10.push({ raidID, raid })
       }
     });
     dispatch(bracketsSlice.actions.bracketsFetchingSuccess(newBracket))
@@ -183,14 +183,13 @@ export const fetchBrackets = () => async (dispatch: AppDispatch) => {
   }
 }
 
-export const fetchChangeNote = (note: string, playerID: string, raidID: string, ) => async (dispatch: AppDispatch) => {
+export const fetchChangeNote = (note: string, playerID: string, raidID: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(bracketsSlice.actions.bracketNoteFetching());
     const response = await dbApi.changeNote(note, playerID, raidID);
     setTimeout(() => {
       dispatch(bracketsSlice.actions.bracketNoteFetchingSuccess(response))
     }, 1000)
-
   } catch (error: any) {
     dispatch(bracketsSlice.actions.bracketNoteFetchingError())
     console.log(error)
@@ -204,9 +203,8 @@ export const fetchServerNews = () => async (dispatch: AppDispatch) => {
     setTimeout(() => {
       dispatch(newsSlice.actions.isSuccessFetchingServerNews(response))
     }, 1000)
-
   } catch (error: any) {
-    dispatch(newsSlice.actions.isErrorFetchingServerNews({isError: true, message: error.message}))
+    dispatch(newsSlice.actions.isErrorFetchingServerNews({ isError: true, message: error.message }))
     console.log(error)
   }
 }
@@ -218,10 +216,22 @@ export const fetchGuildNews = () => async (dispatch: AppDispatch) => {
     setTimeout(() => {
       dispatch(newsSlice.actions.isSuccessFetchingGuildNews(response))
     }, 1000)
-
   } catch (error: any) {
-    dispatch(newsSlice.actions.isErrorFetchingGuildNews({isError: true, message: error.message}))
+    dispatch(newsSlice.actions.isErrorFetchingGuildNews({ isError: true, message: error.message }))
     console.log(error)
   }
+}
+
+export const postNewsGuild = (content: string, owner: string) => async (dispatch: AppDispatch) => {
+  try {
+    const response: INews = await dbApi.postGuildMessage(content, owner);
+    dispatch(newsSlice.actions.postGuildNews(response))
+  } catch (error: any) {
+    console.log(error)
+  }
+
+
+
+
 }
 

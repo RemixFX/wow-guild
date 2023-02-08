@@ -3,7 +3,7 @@ import { MouseEvent, useEffect, useState, ChangeEvent, useDeferredValue, FormEve
 import { IGroup, IGroupDB } from "../../models/bracketsModel";
 import { IPlayer } from "../../models/playerModel";
 import { useAppDispatch, useAppSelector, useDebounce, useSearchPlayer } from "../../store/hooks"
-import { fetchGuild, fetchPlayers } from "../../store/reducers/ActionCreators";
+import { fetchGuild, fetchPlayers, postNewsGuild } from "../../store/reducers/ActionCreators";
 import { playerSlice } from "../../store/reducers/playerSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { classColor, getNameGroupBuff, GUILD_ID, GUILD_REALM_ID, raid10, raid25, raidBuffs } from "../../utils/config"
@@ -28,6 +28,7 @@ const Constructor = () => {
     markSortbyRace
   } = useAppSelector(state => state.player)
   const { searchValue, searchLoading, searchError, searchMessage } = useAppSelector(state => state.search)
+  const { currentUser } = useAppSelector(state => state.admin)
   const [checkedBracket, setCheckedBracket] = useState(false)
   const [checkedSearch, setCheckedSearch] = useState(false)
   const [showModal, setShowModal] = useState(false)
@@ -368,6 +369,10 @@ const Constructor = () => {
       .then(() => {
         setisLoading(false)
         setIsShowPostMessage(true)
+        dispatch(postNewsGuild(
+          `Создан новый рейд-состав для ${checkedBracket ? '25ки' : '10ки'}`,
+          currentUser
+        ))
       })
       .catch((err) => console.log(err))
       .finally(() => setisLoading(false))

@@ -72,6 +72,8 @@ isErrorFetchingGuildNews: (state, action: PayloadAction<IError>) => {
   state.loadingGuildNews = false
   state.errorGuildNews = action.payload
 },
-
+postGuildNews: (state, action: PayloadAction<INews>) => {
+  state.guildNews.unshift(action.payload)
+},
   }
 })

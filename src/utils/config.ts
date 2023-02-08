@@ -1,6 +1,10 @@
 import { IGroup, IGroupData } from "../models/bracketsModel";
 import { IEvents } from "../models/eventsModel";
 import { IPlayer } from "../models/playerModel";
+import { newsSlice } from "../store/reducers/newsSlice";
+import { AppDispatch } from "../store/store";
+import { dbApi } from "./Api";
+
 
 // ID гильдии
 const GUILD_ID = 5
@@ -491,6 +495,6 @@ const changeModalBracketBackground = (value: string) => {
 
 
 export {
-  GUILD_ID, GUILD_REALM_ID, cardStyle, classColor, raid10, raid25,
-  raidBuffs, groupRaceBuffs, getNameGroupBuff, changeModalBracketBackground
+  GUILD_ID, GUILD_REALM_ID, cardStyle, classColor, raid10, raid25, raidBuffs,
+  groupRaceBuffs, getNameGroupBuff, changeModalBracketBackground
 }
