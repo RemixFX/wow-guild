@@ -7,7 +7,7 @@ import Layout from "../Layout/Layout";
 import Invite from "../Invite/Invite";
 import Schedule from "../Schedule/Schedule";
 import Brackets from "../Brackets/Brackets";
-import { fetchAuthorization, fetchEvents, fetchLogin, fetchRegister, fetchServerNews } from "../../store/reducers/ActionCreators";
+import { fetchAuthorization, fetchEvents, fetchGuildNews, fetchLogin, fetchRegister, fetchServerNews } from "../../store/reducers/ActionCreators";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Form from "../Form/Form";
 import { IAccount } from "../../models/aсcountModel";
@@ -23,6 +23,7 @@ function App() {
   useEffect(() => {
     dispatch(fetchAuthorization())
     dispatch(fetchServerNews())
+    dispatch(fetchGuildNews())
   }, [])
 
 

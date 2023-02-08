@@ -34,6 +34,24 @@ class Api {
       .then(this._checkResponse);
   }
 
+  postGuildMessage(content: string, owner: string) {
+    return fetch(`${this._url}/news`, {
+      method: 'POST',
+      headers: this._headers,
+      credentials: 'include',
+      body: JSON.stringify({content, owner})
+    })
+      .then(this._checkResponse);
+  }
+
+  getGuildMessages() {
+    return fetch(`${this._url}/news`, {
+      method: 'GET',
+      headers: this._headers
+    })
+      .then(this._checkResponse);
+  }
+
   getEvents() {
     return fetch(`${this._url}/events`, {
       method: 'GET',

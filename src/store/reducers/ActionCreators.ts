@@ -211,3 +211,17 @@ export const fetchServerNews = () => async (dispatch: AppDispatch) => {
   }
 }
 
+export const fetchGuildNews = () => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(newsSlice.actions.isFetchingGuildNews());
+    const response: INews[] = await dbApi.getGuildMessages();
+    setTimeout(() => {
+      dispatch(newsSlice.actions.isSuccessFetchingGuildNews(response))
+    }, 1000)
+
+  } catch (error: any) {
+    dispatch(newsSlice.actions.isErrorFetchingGuildNews({isError: true, message: error.message}))
+    console.log(error)
+  }
+}
+
