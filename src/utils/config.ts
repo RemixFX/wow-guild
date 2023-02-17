@@ -1,10 +1,6 @@
 import { IGroup, IGroupData } from "../models/bracketsModel";
 import { IEvents } from "../models/eventsModel";
 import { IPlayer } from "../models/playerModel";
-import { newsSlice } from "../store/reducers/newsSlice";
-import { AppDispatch } from "../store/store";
-import { dbApi } from "./Api";
-
 
 // ID гильдии
 const GUILD_ID = 5

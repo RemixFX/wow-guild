@@ -32,7 +32,6 @@ function useValidation(value: string, validations: Validation) {
     if (isEmpty) {
       setInputValid(false)
       setError(emptyError)
-      return
     }
     if (isMinLength) {
       setInputValid(false)
@@ -51,8 +50,8 @@ function useInput(initialState: string, validations: Validation) {
   const [value, setValue] = useState(initialState)
   const [isDirty, setIsDirty] = useState<boolean>(false)
   const valid = useValidation(value, validations)
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setValue(e.target.value)
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setValue(e.target.value.trim())
   }
 
   const onBlur = () => {

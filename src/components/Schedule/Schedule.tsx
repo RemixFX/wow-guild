@@ -3,7 +3,7 @@ import { WheelEvent, useState, useMemo, useEffect } from "react";
 import { CSSTransition } from 'react-transition-group';
 import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchChangeEvents, fetchCreateEvents, fetchDeleteEvents } from "../../store/reducers/ActionCreators";
+import { fetchChangeEvents, fetchCreateEvents, fetchDeleteEvents, postNewsGuild } from "../../store/reducers/ActionCreators";
 import { scheduleSlice } from "../../store/reducers/scheduleSlice";
 import { cardStyle } from "../../utils/config";
 import EventForm from "../EventForm/EventForm";
@@ -30,6 +30,7 @@ const Schedule = () => {
   const dispatch = useAppDispatch();
   const { loggedIn } = useAppSelector(state => state.admin)
   const { events, loading, loadingEvent, error, errorEvent, openEventForm } = useAppSelector(state => state.schedule)
+  const { currentUser } = useAppSelector(state => state.admin)
 
   // Создание массива со всеми датами на предыдущий, текущий и следующий месяц
   let arrAllDays: IArrAllDays[] = useMemo(() => {
@@ -116,9 +117,6 @@ const Schedule = () => {
     }
   }
 
-
-
-
   // Открытие формы для создания события
   const handleOpenModal = (date: Date) => {
     if (loggedIn && date! >= nowDateWithoutTime) {
@@ -136,20 +134,19 @@ const Schedule = () => {
   //Создание события
   const createEvent = (event: IEvents) => {
     dispatch(fetchCreateEvents(event))
+    dispatch(postNewsGuild(
+      `Создан новый рейд в расписании на ${event.date.getDate() + ' ' + arrMonthName[event.date.getMonth()]}`,
+      currentUser
+    ))
   }
 
   // Изменение события
   const changeEvent = (event: IEvents) => {
     dispatch(fetchChangeEvents(event))
-    /* dbApi.changeEvent(event)
-      .then((res) => {
-        const udpatedEvents = events.map(updatedEvent => {
-          return updatedEvent.id === event.id ? res : updatedEvent
-        })
-        dispatch(scheduleSlice.actions.eventsFetchingSuccess(udpatedEvents))
-      })
-      .catch((e) => console.log(e));
-    dispatch(scheduleSlice.actions.iscloseEventForm()) */
+    dispatch(postNewsGuild(
+      `Изменилась информация в расписании рейдов на ${event.date.getDate() + ' ' + arrMonthName[event.date.getMonth()]}`,
+      currentUser
+    ))
   }
 
   // Удаление события

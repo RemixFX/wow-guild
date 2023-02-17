@@ -224,9 +224,15 @@ export const fetchGuildNews = () => async (dispatch: AppDispatch) => {
 
 export const postNewsGuild = (content: string, owner: string) => async (dispatch: AppDispatch) => {
   try {
+    dispatch(newsSlice.actions.isFetchingPostGuildNews())
     const response: INews = await dbApi.postGuildMessage(content, owner);
-    dispatch(newsSlice.actions.postGuildNews(response))
+    setTimeout(() => {
+    dispatch(newsSlice.actions.isSucessFetchingPostGuildNews(response))
+    dispatch(newsSlice.actions.isClosingForm())
+  }, 1000)
   } catch (error: any) {
+    dispatch(newsSlice.actions.isErrorFetchingPostGuildNews({ isError: true, message: error.message }))
+    dispatch(newsSlice.actions.isClosingForm())
     console.log(error)
   }
 

@@ -56,7 +56,7 @@ const Brackets = () => {
   return (
     <section className="brackets">
       <Topbar />
-      {errorLoadingNote && <InfoSlider infoMessage="Ошибка сервера"/>}
+      {errorLoadingNote && <InfoSlider infoMessage="Ошибка сервера. Не удалось обновить заметку" error={true}/>}
       <div className="bracket">
         <h1 className="bracket__header">Составы 25ки:</h1>
         {brackets.raid25.map((bracket) =>

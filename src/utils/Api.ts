@@ -39,7 +39,7 @@ class Api {
       method: 'POST',
       headers: this._headers,
       credentials: 'include',
-      body: JSON.stringify({content, owner})
+      body: JSON.stringify({ content, owner })
     })
       .then(this._checkResponse);
   }
@@ -173,11 +173,13 @@ class Api {
       method: 'PUT',
       headers: this._headers,
       credentials: 'include',
-      body: JSON.stringify({note, playerID, raidID})
+      body: JSON.stringify({ note, playerID, raidID })
     })
       .then(this._checkResponse);
   }
 }
+
+
 
 const headers = new Headers(
   [
@@ -202,4 +204,4 @@ const mockApi = new Api({
   headers: headers
 });
 
-export { sirusApi, dbApi, mockApi};
+export { sirusApi, dbApi, mockApi };

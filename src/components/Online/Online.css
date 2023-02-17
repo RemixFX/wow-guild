@@ -67,7 +67,8 @@
   right: 10px;
   top: 10px;
   border-radius: 7px;
-  background-color: #91ddfff7;
+  background: linear-gradient(180deg, rgb(171 229 255) 21%,
+   rgb(87 170 249) 50%, rgb(99 193 235) 71%);
   transition: all 0.1s ease-in-out;
   box-shadow: inset 0px 0px 3px 1px #153c52;
   cursor: pointer;

@@ -7,8 +7,11 @@ interface NewsState {
   guildNews: INews[];
   loadingServerNews: boolean;
   loadingGuildNews: boolean;
+  loadingPostGuildNews: boolean;
+  isOpenForm: boolean;
   errorServerNews: IError;
   errorGuildNews: IError;
+  errorPostGuildNews: IError;
 }
 
 const initialState: NewsState = {
@@ -16,11 +19,17 @@ const initialState: NewsState = {
   guildNews: [],
   loadingServerNews: false,
   loadingGuildNews: false,
+  loadingPostGuildNews: false,
+  isOpenForm: false,
   errorServerNews: {
     isError: false,
     message: ''
   },
   errorGuildNews: {
+    isError: false,
+    message: ''
+  },
+  errorPostGuildNews: {
     isError: false,
     message: ''
   }
@@ -72,8 +81,31 @@ isErrorFetchingGuildNews: (state, action: PayloadAction<IError>) => {
   state.loadingGuildNews = false
   state.errorGuildNews = action.payload
 },
-postGuildNews: (state, action: PayloadAction<INews>) => {
-  state.guildNews.unshift(action.payload)
+isFetchingPostGuildNews: state => {
+  state.loadingPostGuildNews = true
+  state.errorPostGuildNews = {
+    isError: false,
+    message: ''
+  }
 },
+isSucessFetchingPostGuildNews: (state, action: PayloadAction<INews>) => {
+  state.guildNews.unshift(action.payload)
+  state.loadingPostGuildNews = false
+  state.errorPostGuildNews = {
+    isError: false,
+    message: ''
+  }
+},
+isErrorFetchingPostGuildNews: (state, action: PayloadAction<IError>) => {
+  state.loadingPostGuildNews = false
+  state.errorPostGuildNews = action.payload
+},
+isOpeningForm: state => {
+  state.isOpenForm = true
+},
+isClosingForm: state => {
+  state.isOpenForm = false
+}
+
   }
 })
