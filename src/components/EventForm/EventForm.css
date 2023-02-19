@@ -4,8 +4,34 @@
   font-size: 0.8em;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
+.event-form__placeholder {
+  position: absolute;
+  width: 100%;
+  top: 63%;
+  left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: #e5d59a;
+  font-weight: 500;
+  color: #000;
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+  z-index: 2;
+}
+
+.event-form__placeholder-item {
+  padding: 5px 5px 0 5px;
+  border-bottom: 1px dotted #0b1c28;
+  cursor: pointer;
+}
+
+.event-form__placeholder-item:hover {
+  background-color: #ae7d23;
+}
 
 .event-form__select, .event-form__input {
   width: calc(100% - 16px);

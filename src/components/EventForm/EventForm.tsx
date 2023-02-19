@@ -1,5 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ChangeEvent, FC, FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { IEvents } from "../../models/eventsModel";
+import { IPlayer } from "../../models/playerModel";
+import { useAppDispatch, useAppSelector, useSearchPlayer } from "../../store/hooks";
+import { fetchPlayers } from "../../store/reducers/ActionCreators";
+import { GUILD_ID, GUILD_REALM_ID } from "../../utils/config";
 import { useInput } from "../../utils/Validations";
 import Modal from "../Modal/Modal";
 import Preloader from "../Preloader/Preloader";
@@ -18,6 +23,25 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
 
   const keyRef: RefObject<HTMLInputElement> = useRef(null);
   const [showInput, setShowInput] = useState(false);
+  const raidleaderInput = useInput(withEvent ? withEvent.raidleader : '', {minLength: 2, isEmpty: true })
+  const timeInput = useInput(withEvent ? withEvent.time : '', { minLength: 2, isEmpty: true })
+  const selectInput = useInput(withEvent ? withEvent.name : '', { minLength: 2, isEmpty: true })
+  const { players } = useAppSelector(state => state.player)
+  const [searchName, setSearchName] = useState<IPlayer[]>([])
+  const resultSearch = useSearchPlayer(players, raidleaderInput.value)
+  const dispatch = useAppDispatch()
+
+    // Запрос списка игроков если они ещё не были получены
+    useEffect(() => {
+      players.length === 0 && dispatch(fetchPlayers(GUILD_ID, GUILD_REALM_ID))
+    }, [])
+
+  useEffect(() => {
+    if (raidleaderInput.value !== resultSearch[0]?.name) {
+      setSearchName(resultSearch)
+    }
+  }, [raidleaderInput.value])
+
 
   useEffect(() => {
     if (showInput && keyRef.current) {
@@ -50,9 +74,14 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
     onDelete(withEvent!.id)
   }
 
-  const raidleaderInput = useInput(withEvent ? withEvent.raidleader : '', {minLength: 2, isEmpty: true })
-  const timeInput = useInput(withEvent ? withEvent.time : '', { minLength: 2, isEmpty: true })
-  const selectInput = useInput(withEvent ? withEvent.name : '', { minLength: 2, isEmpty: true })
+  const handleClickPlaceholderItem = (value: string) => {
+    raidleaderInput.setValue(value)
+    setSearchName([])
+  }
+
+
+
+
 
   return (
     <Modal title={title}>
@@ -94,6 +123,17 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
           <span className="event-form__error">
             {raidleaderInput.isDirty && raidleaderInput.error}
           </span>
+          <ul className="event-form__placeholder">
+              {/* {searchMessage && <li style={{ color: "#ab0000", padding: '5px', fontSize: '0.9rem' }}>
+                {searchMessage}</li>} */}
+              {searchName.length > 0 &&
+                searchName.map((value, index: number) => (
+                  <li className="event-form__placeholder-item"
+                    key={`${value.name}-${index}`} onClick={() => handleClickPlaceholderItem(value.name)}>
+                    {value.name}</li>
+                ))}
+            </ul>
+
         </label>
 
         <label className="event-form__label">Время

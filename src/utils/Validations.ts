@@ -51,7 +51,7 @@ function useInput(initialState: string, validations: Validation) {
   const [isDirty, setIsDirty] = useState<boolean>(false)
   const valid = useValidation(value, validations)
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setValue(e.target.value.trim())
+    setValue(e.target.value.trimStart())
   }
 
   const onBlur = () => {
