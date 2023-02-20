@@ -35,7 +35,7 @@ class Api {
   }
 
   postGuildMessage(content: string, owner: string) {
-    return fetch(`${this._url}/nesws`, {
+    return fetch(`${this._url}/news`, {
       method: 'POST',
       headers: this._headers,
       credentials: 'include',
@@ -47,7 +47,17 @@ class Api {
   getGuildMessages() {
     return fetch(`${this._url}/news`, {
       method: 'GET',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
+    })
+      .then(this._checkResponse);
+  }
+
+  deleteGuildMessage(id: number) {
+    return fetch(`${this._url}/news/${id}`, {
+      method: 'DELETE',
+      headers: this._headers,
+      credentials: 'include',
     })
       .then(this._checkResponse);
   }

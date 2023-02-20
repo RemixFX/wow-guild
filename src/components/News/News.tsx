@@ -27,6 +27,7 @@ const News = () => {
     errorGuildNews,
     loadingPostGuildNews,
     errorPostGuildNews,
+    errorDeleteGuildNews,
     isOpenForm
   } = useAppSelector(state => state.news)
 
@@ -53,8 +54,6 @@ const News = () => {
     setIsCheckValid(true)
   }
 
-  console.log(errorPostGuildNews.isError)
-
   return (
     <CSSTransition
       in={!isShowOnline}
@@ -63,6 +62,7 @@ const News = () => {
     >
       <section className='news'>
         {errorPostGuildNews.isError && <InfoSlider infoMessage="Ошибка сервера. Не удалось добавить новость" error={true}/>}
+        {errorDeleteGuildNews.isError && <InfoSlider infoMessage="Ошибка сервера. Не удалось удалить новость" error={true}/>}
         <div className="tab">
           <div className='tab__block'>
             <button
@@ -82,7 +82,7 @@ const News = () => {
           </div>
           {(loggedIn && activeNewsGuild) &&
             <button className='tab__open-form' type='button'
-              onClick={handleOpenForm}>Добавить новость</button>
+              onClick={isOpenForm ? handleCloseForm : handleOpenForm}>Добавить новость</button>
           }
         </div>
         {activeNewsGuild === 'active' &&

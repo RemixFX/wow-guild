@@ -28,7 +28,7 @@ const Constructor = () => {
     markSortbyRace
   } = useAppSelector(state => state.player)
   const { searchValue, searchLoading, searchError, searchMessage } = useAppSelector(state => state.search)
-  const { currentUser } = useAppSelector(state => state.admin)
+  const { currentUser, loggedIn } = useAppSelector(state => state.admin)
   const [checkedBracket, setCheckedBracket] = useState(false)
   const [checkedSearch, setCheckedSearch] = useState(false)
   const [showModal, setShowModal] = useState(false)
@@ -578,7 +578,7 @@ const Constructor = () => {
       </div>
       <footer className="constructor__footer">
         <button type="button" className="constructor__button" data-title='Доступно только для ГМа и офицеров'
-          onClick={postBracket}>Отправить</button>
+          onClick={postBracket} disabled={!loggedIn}>Отправить</button>
         <button type="button" className="constructor__button" data-title='Изменить стиль и сохранить как картинку'
           onClick={() => setBracketPreviewModal(!bracketPreviewModal)}>Сохранить</button>
       </footer>

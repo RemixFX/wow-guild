@@ -163,6 +163,11 @@
   cursor: pointer;
 }
 
+.constructor__button:disabled {
+  background: #7993a9;
+  cursor: default;
+}
+
 .constructor__layout {
   display: grid;
   grid-template-columns: 1fr 1fr;

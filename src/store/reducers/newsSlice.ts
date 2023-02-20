@@ -12,6 +12,7 @@ interface NewsState {
   errorServerNews: IError;
   errorGuildNews: IError;
   errorPostGuildNews: IError;
+  errorDeleteGuildNews: IError;
 }
 
 const initialState: NewsState = {
@@ -30,6 +31,10 @@ const initialState: NewsState = {
     message: ''
   },
   errorPostGuildNews: {
+    isError: false,
+    message: ''
+  },
+  errorDeleteGuildNews: {
     isError: false,
     message: ''
   }
@@ -106,8 +111,22 @@ isOpeningForm: state => {
 isClosingForm: state => {
   state.isOpenForm = false
 },
+isSucessDeleteGuildNews: (state, action: PayloadAction<number>) => {
+  state.guildNews = state.guildNews.filter((news) => news.id !== action.payload)
+  state.errorDeleteGuildNews = {
+    isError: false,
+    message: ''
+  }
+},
+isErrorDeleteGuildNews: (state, action: PayloadAction<IError>) => {
+  state.errorDeleteGuildNews = action.payload
+},
 resetError: state => {
   state.errorPostGuildNews = {
+    isError: false,
+    message: ''
+  }
+  state.errorDeleteGuildNews = {
     isError: false,
     message: ''
   }

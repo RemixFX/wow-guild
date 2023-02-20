@@ -10,6 +10,13 @@
   flex-direction: row;
   padding-top: 15px;
   align-items: flex-end;
+  justify-content: space-between;
+  min-height: 24px;
+}
+
+.content__align-block {
+  display: flex;
+  flex-direction: row;
 }
 
 .content__owner {
@@ -24,6 +31,18 @@
   font-size: 0.9rem;
   font-style: italic;
   color: #54a4ff;
+}
+
+.content__delete-button {
+  margin-right: 8px;
+  width: 30px;
+  height: 24px;
+  background: url(../../images/delete_button.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  border: none;
 }
 
 .content__message {

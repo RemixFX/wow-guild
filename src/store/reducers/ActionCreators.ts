@@ -238,9 +238,20 @@ export const postNewsGuild = (content: string, owner: string) => async (dispatch
   }, 5000)
     console.log(error)
   }
+}
 
-
-
-
+export const fetchDeleteGuildNews = (id: number) => async (dispatch: AppDispatch) => {
+  try {
+    const response = await dbApi.deleteGuildMessage(id)
+    console.log(response)
+    dispatch(newsSlice.actions.isSucessDeleteGuildNews(response))
+  }
+  catch (error: any) {
+    dispatch(newsSlice.actions.isErrorDeleteGuildNews({ isError: true, message: error.message }))
+    setTimeout(() => {
+    dispatch(newsSlice.actions.resetError())
+  }, 5000)
+    console.log(error)
+  }
 }
 
