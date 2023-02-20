@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { postNewsGuild } from '../../store/reducers/ActionCreators';
@@ -30,6 +30,11 @@ const News = () => {
     isOpenForm
   } = useAppSelector(state => state.news)
 
+
+  useEffect(() => {
+    dispatch(newsSlice.actions.isClosingForm())
+  }, [])
+
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (formInput.inputValid) {
@@ -48,6 +53,7 @@ const News = () => {
     setIsCheckValid(true)
   }
 
+  console.log(errorPostGuildNews.isError)
 
   return (
     <CSSTransition

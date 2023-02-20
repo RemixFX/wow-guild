@@ -105,6 +105,12 @@ isOpeningForm: state => {
 },
 isClosingForm: state => {
   state.isOpenForm = false
+},
+resetError: state => {
+  state.errorPostGuildNews = {
+    isError: false,
+    message: ''
+  }
 }
 
   }

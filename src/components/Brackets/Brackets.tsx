@@ -11,9 +11,10 @@ const Brackets = () => {
 
   const dispatch = useAppDispatch();
   const { brackets, error, loading, errorLoadingNote, loadingNote } = useAppSelector(state => state.brackets)
+  const { loggedIn } = useAppSelector(state => state.admin)
   const modal: RefObject<HTMLDialogElement> = useRef(null)
   const inputValue: RefObject<HTMLTextAreaElement> = useRef(null)
-  const [data, setData] = useState({raidID: '', playerID: '', playerNote: '' })
+  const [data, setData] = useState({ raidID: '', playerID: '', playerNote: '' })
 
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const Brackets = () => {
   return (
     <section className="brackets">
       <Topbar />
-      {errorLoadingNote && <InfoSlider infoMessage="Ошибка сервера. Не удалось обновить заметку" error={true}/>}
+      {errorLoadingNote && <InfoSlider infoMessage="Ошибка сервера. Не удалось обновить заметку" error={true} />}
       <div className="bracket">
         <h1 className="bracket__header">Составы 25ки:</h1>
         {brackets.raid25.map((bracket) =>
@@ -82,9 +83,11 @@ const Brackets = () => {
                       </li>
                       <li className="bracket__cell bracket__cell_page_bracket">{player.race}</li>
                       <li className="bracket__cell bracket__cell_page_bracket" data-title={player.note}>{player.note}</li>
-                      <button type="button" className={`bracket__edit-note-button
+                      {loggedIn &&
+                        <button type="button" className={`bracket__edit-note-button
                        ${(player.id === data.playerID && loadingNote) && 'bracket__loading-button'}`}
-                        onClick={() => handleOpenModal(bracket.raidID, player.id, player.note)}></button>
+                          onClick={() => handleOpenModal(bracket.raidID, player.id, player.note)}></button>
+                      }
                     </ul>
                   )}
                   <ul className="bracket__group-buffs bracket__group-buffs_color_black">
@@ -121,9 +124,11 @@ const Brackets = () => {
                       </li>
                       <li className="bracket__cell bracket__cell_page_bracket">{player.race}</li>
                       <li className="bracket__cell bracket__cell_page_bracket" data-title={player.note}>{player.note}</li>
-                      <button type="button" className={`bracket__edit-note-button
+                      {loggedIn &&
+                        <button type="button" className={`bracket__edit-note-button
                        ${(player.id === data.playerID && loadingNote) && 'bracket__loading-button'}`}
-                        onClick={() => handleOpenModal(bracket.raidID, player.id, player.note)}></button>
+                          onClick={() => handleOpenModal(bracket.raidID, player.id, player.note)}></button>
+                      }
                     </ul>
                   )}
                   <ul className="bracket__group-buffs">

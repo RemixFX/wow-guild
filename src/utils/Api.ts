@@ -35,7 +35,7 @@ class Api {
   }
 
   postGuildMessage(content: string, owner: string) {
-    return fetch(`${this._url}/news`, {
+    return fetch(`${this._url}/nesws`, {
       method: 'POST',
       headers: this._headers,
       credentials: 'include',

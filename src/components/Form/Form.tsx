@@ -48,8 +48,8 @@ const Form: FC<IProps> = ({ children, title, error, loading, titleButton, submit
           </span>
         </label>
         <button disabled={!loginInput.inputValid || !passwordInput.inputValid}
-          type="submit" className={`form__button ${location.pathname === '/schedule' &&
-            'form__button_style_gold'}`}>
+          type="submit" className={`form__button ${location.pathname === ('/schedule' &&
+          '/brackets') && 'form__button_style_gold'}`}>
           {titleButton}
         </button>
       </form>

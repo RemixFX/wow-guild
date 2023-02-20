@@ -233,6 +233,9 @@ export const postNewsGuild = (content: string, owner: string) => async (dispatch
   } catch (error: any) {
     dispatch(newsSlice.actions.isErrorFetchingPostGuildNews({ isError: true, message: error.message }))
     dispatch(newsSlice.actions.isClosingForm())
+    setTimeout(() => {
+    dispatch(newsSlice.actions.resetError())
+  }, 5000)
     console.log(error)
   }
 
