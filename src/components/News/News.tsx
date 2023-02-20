@@ -17,7 +17,7 @@ const News = () => {
   const formInput = useInput('', { minLength: 2, isEmpty: true })
   const [isCheckValid, setIsCheckValid] = useState(true)
   const dispatch = useAppDispatch();
-  const { currentUser } = useAppSelector(state => state.admin)
+  const { currentUser, loggedIn } = useAppSelector(state => state.admin)
   const {
     serverNews,
     loadingServerNews,
@@ -74,14 +74,14 @@ const News = () => {
               }}
             >Новости сервера</button>
           </div>
-          {activeNewsGuild &&
+          {(loggedIn && activeNewsGuild) &&
             <button className='tab__open-form' type='button'
               onClick={handleOpenForm}>Добавить новость</button>
           }
         </div>
         {activeNewsGuild === 'active' &&
           <div className='tabcontent'>
-            {isOpenForm &&
+            {(loggedIn && isOpenForm) &&
               <div className='news-form'>
                 <form onSubmit={e => submitForm(e)}>
                   <label htmlFor='newstext' className='news-form__label'> Введите текст Новости
