@@ -109,7 +109,7 @@ const News = () => {
             {errorGuildNews.isError &&
               <p className="tabcontent__error">{errorGuildNews.message}</p>}
             {guildNews.map((message) =>
-              <NewsContent message={message} key={message.id} />
+              <NewsContent message={message} key={message.id} activeNewsGuild={activeNewsGuild}/>
             )}
           </div>
         }
@@ -119,7 +119,7 @@ const News = () => {
             {errorServerNews.isError &&
               <p className="tabcontent__error">{errorServerNews.message}</p>}
             {serverNews.map((message) =>
-              <NewsContent message={message} key={message.id} />
+              <NewsContent message={message} key={message.id} activeNewsGuild={activeNewsGuild}/>
             )}
           </div>
         }

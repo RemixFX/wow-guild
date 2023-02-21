@@ -1,10 +1,11 @@
 import { INews } from "../../models/newsModel";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchDeleteGuildNews } from "../../store/reducers/ActionCreators";
 
-const NewsContent = (props: {message: INews}) => {
+const NewsContent = (props: {message: INews, activeNewsGuild: string}) => {
 
   const dispatch = useAppDispatch();
+  const {loggedIn} = useAppSelector(state => state.admin)
   const URL_REGEX = /(\b((https?|ftp|file):\/\/|(www))[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]*)/ig;
 
   const renderText = (text: string) => {
@@ -29,7 +30,8 @@ const NewsContent = (props: {message: INews}) => {
           <p className="content__owner">{props.message.owner}</p>
           <p className="content__date">{props.message.date}</p>
         </div>
-        {props.message.owner !== 'SIRUS #рейды' &&
+        {(props.message.owner !== 'SIRUS #рейды' && loggedIn
+         && props.activeNewsGuild === 'active') &&
         <button className="content__delete-button" type="button"
         onClick={() => handleClickDeleteButton(props.message.id)}></button>}
       </div>
