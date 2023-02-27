@@ -1,4 +1,4 @@
-import { FC, FormEvent, ReactNode } from "react";
+import { FC, FormEvent, memo, ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { IAccount } from "../../models/aсcountModel";
 import { useInput } from "../../utils/Validations";
@@ -6,7 +6,7 @@ import Modal from "../Modal/Modal"
 import Preloader from "../Preloader/Preloader";
 
 interface IProps {
-  children?: ReactNode,
+  children?: ReactNode;
   title: string;
   error: string;
   loading: boolean;
@@ -14,7 +14,7 @@ interface IProps {
   submit: (values: IAccount) => void;
 }
 
-const Form: FC<IProps> = ({ children, title, error, loading, titleButton, submit }) => {
+const Form: FC<IProps> = memo(({ children, title, error, loading, titleButton, submit }) => {
 
   const location = useLocation();
   const loginInput = useInput('', { minLength: 2, isEmpty: true })
@@ -58,8 +58,8 @@ const Form: FC<IProps> = ({ children, title, error, loading, titleButton, submit
         {error && '-- ' + error + ' --'}
       </div>
     </Modal>
-  )
-}
+    )
+})
 
 export default Form
 

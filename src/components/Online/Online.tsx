@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { MouseEvent, useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { useAppDispatch, useAppSelector } from "../../store/hooks";

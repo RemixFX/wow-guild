@@ -31,11 +31,12 @@ const News = () => {
     isOpenForm
   } = useAppSelector(state => state.news)
 
-
+  // Закрытие формы добавления новости если она открыта при рендере компонента
   useEffect(() => {
     dispatch(newsSlice.actions.isClosingForm())
   }, [])
 
+  // Отправка и сохранение новости
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (formInput.inputValid) {
@@ -45,10 +46,12 @@ const News = () => {
     }
   }
 
+  // Открытие формы добавления новости
   const handleOpenForm = () => {
     dispatch(newsSlice.actions.isOpeningForm())
   }
 
+  // Закрытие формы добавления новости
   const handleCloseForm = () => {
     dispatch(newsSlice.actions.isClosingForm())
     setIsCheckValid(true)
@@ -61,8 +64,8 @@ const News = () => {
       timeout={2000}
     >
       <section className='news'>
-        {errorPostGuildNews.isError && <InfoSlider infoMessage="Ошибка сервера. Не удалось добавить новость" error={true}/>}
-        {errorDeleteGuildNews.isError && <InfoSlider infoMessage="Ошибка сервера. Не удалось удалить новость" error={true}/>}
+        {errorPostGuildNews.isError && <InfoSlider infoMessage="Ошибка сервера. Не удалось добавить новость" error={true} />}
+        {errorDeleteGuildNews.isError && <InfoSlider infoMessage="Ошибка сервера. Не удалось удалить новость" error={true} />}
         <div className="tab">
           <div className='tab__block'>
             <button
@@ -92,7 +95,7 @@ const News = () => {
                 <form onSubmit={e => submitForm(e)}>
                   <label htmlFor='newstext' className='news-form__label'> Введите текст Новости
                     <textarea className='news-form__input' id='newstext'
-                      style={loadingPostGuildNews ? {opacity: '0.3'} : {opacity: '1'}}
+                      style={loadingPostGuildNews ? { opacity: '0.3' } : { opacity: '1' }}
                       placeholder='Описание новости' onChange={e => formInput.onChange(e)} />
                   </label>
                   <div className='news-form__buttons'>
@@ -102,14 +105,14 @@ const News = () => {
                   </div>
                   <span className='news-form__error'>{!isCheckValid && formInput.error}</span>
                 </form>
-                {loadingPostGuildNews && <Preloader addClass={'news-preloader'}/>}
+                {loadingPostGuildNews && <Preloader addClass={'news-preloader'} />}
               </div>
             }
             {loadingGuildNews && <PreloaderTable />}
             {errorGuildNews.isError &&
               <p className="tabcontent__error">{errorGuildNews.message}</p>}
             {guildNews.map((message) =>
-              <NewsContent message={message} key={message.id} activeNewsGuild={activeNewsGuild}/>
+              <NewsContent message={message} key={message.id} activeNewsGuild={activeNewsGuild} />
             )}
           </div>
         }
@@ -119,11 +122,10 @@ const News = () => {
             {errorServerNews.isError &&
               <p className="tabcontent__error">{errorServerNews.message}</p>}
             {serverNews.map((message) =>
-              <NewsContent message={message} key={message.id} activeNewsGuild={activeNewsGuild}/>
+              <NewsContent message={message} key={message.id} activeNewsGuild={activeNewsGuild} />
             )}
           </div>
         }
-
       </section>
     </CSSTransition>
   )

@@ -12,7 +12,7 @@
   background-image: url('../../images/online_bg.png');
   background-repeat: no-repeat;
   background-size: cover;
-  overflow-x: auto;
+  overflow-x: hidden;
   border: solid 10px;
   border-image: url(../../images/border2.svg) round round;
   border-image-slice: 4%;

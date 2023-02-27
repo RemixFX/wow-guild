@@ -1,17 +1,18 @@
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { INews } from "../../models/newsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchDeleteGuildNews } from "../../store/reducers/ActionCreators";
 
-const NewsContent = (props: {message: INews, activeNewsGuild: string}) => {
+ const NewsContent = memo((props: {message: INews, activeNewsGuild: string}) => {
 
   const dispatch = useAppDispatch();
   const {loggedIn} = useAppSelector(state => state.admin)
   const [isShowConfirmBlock, setIsShowConfirmBlock] = useState(false)
-  const URL_REGEX = /(\b((https?|ftp|file):\/\/|(www))[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]*)/ig;
 
-  const renderText = (text: string) => {
-    return text.split("\n").join(" \n ").split(' ')
+  // Добавление кликабельных ссылок в текст
+  const renderText = useMemo(() => {
+    const URL_REGEX = /(\b((https?|ftp|file):\/\/|(www))[-A-Z0-9+&@#\\/%?=~_|!:,.;]*[-A-Z0-9+&@#\\/%=~_|]*)/ig;
+    return props.message.content.split("\n").join(" \n ").split(' ')
       .map(part => {
         if (part.includes('<https')) part = part.replace('<https', 'https')
         if (part.includes('/>')) part = part.replace('/>', '')
@@ -19,8 +20,9 @@ const NewsContent = (props: {message: INews, activeNewsGuild: string}) => {
           return (<a href={part} target="_blank" key={part} rel="noreferrer">{part + ' '} </a>)
         } else return part + " "
       })
-  }
+  }, [props.message])
 
+  // Удаление новости
   const handleClickAcceptToDelete = (id: number) => {
     dispatch(fetchDeleteGuildNews(id))
     setIsShowConfirmBlock(true)
@@ -47,9 +49,9 @@ const NewsContent = (props: {message: INews, activeNewsGuild: string}) => {
         </div>}
         </div>}
       </div>
-      <p className="content__message">{renderText(props.message.content)}</p>
+      <p className="content__message">{renderText}</p>
     </article>
   )
-}
+})
 
-export default NewsContent;
+export default NewsContent

@@ -66,7 +66,6 @@ export const adminSlice = createSlice({
       state.infoMessage = action.payload
     },
     isErrorFetchingForm: (state, action: PayloadAction<any>) => {
-      state.loggedIn = false
       state.loading = false
       state.error = action.payload
     },

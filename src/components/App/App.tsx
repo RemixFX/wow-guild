@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useMemo } from "react";
 import Main from '../Main/Main'
-import { dbApi } from '../../utils/Api'
 import { Route, Routes } from "react-router-dom";
 import Info from "../Info/Info";
 import Layout from "../Layout/Layout";
@@ -13,7 +13,6 @@ import Form from "../Form/Form";
 import { IAccount } from "../../models/aсcountModel";
 import InfoSlider from "../InfoSlider/infoSlider";
 import Constructor from "../Constructor/Constructor";
-import ModalBrackets from "../ModalBrackets/ModalBrackets";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -48,7 +47,6 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/info" element={<Info />} />
           <Route path="/invite" element={<Invite />} />
-          {/* <Route path="/brackets" element={<ModalBrackets/>} /> */}
           <Route path="/" element={<Main />
           } />
         </Route>
@@ -56,27 +54,24 @@ function App() {
         <Route path="/brackets" element={<Brackets />} />
         <Route path="/constructor" element={<Constructor />} />
       </Routes>
-      {openLoginForm && <Form
-        title={'Войти в аккаунт'}
-        titleButton={'Войти'}
+      <Form
+        title={openRegisterForm ? 'Создать новый аккаунт для офицеров' : 'Войти в аккаунт'}
+        titleButton={openRegisterForm ? 'Создать' : 'Войти'}
         error={error.message}
         loading={loading}
-        submit={login}>
-        <p style={{ marginTop: "0", fontSize: "0.8rem", fontStyle: "italic" }}>
-          Войти в аккаунт могут только учётные записи администратора.
-          Что бы создать такой аккаунт, нужно зайти с учётной записи администратора.
-        </p>
-      </Form>}
-      {openRegisterForm && <Form
-        title={'Создать новый аккаунт для офицеров'}
-        submit={register}
-        error={error.message}
-        loading={loading}
-        titleButton={'Создать'}>
-        <p style={{ marginBottom: "0", fontSize: "0.8rem", fontStyle: "italic" }}>
-          Созданный аккаунт будет обладать всеми правами администратора.
-        </p>
-      </Form>}
+        submit={openRegisterForm ? register : login}>
+        {
+          openRegisterForm ?
+            <p style={{ marginBottom: "0", fontSize: "0.8rem", fontStyle: "italic" }}>
+              Созданный аккаунт будет обладать всеми правами администратора.
+            </p>
+            :
+            <p style={{ marginTop: "0", fontSize: "0.8rem", fontStyle: "italic" }}>
+              Войти в аккаунт могут только учётные записи администратора.
+              Что бы создать такой аккаунт, нужно зайти с учётной записи администратора.
+            </p>
+        }
+      </Form>
       {(infoMessage) && <InfoSlider infoMessage={infoMessage} />}
 
     </div>

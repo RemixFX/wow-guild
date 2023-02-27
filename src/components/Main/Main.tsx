@@ -1,7 +1,7 @@
 import News from "../News/News";
 import Online from "../Online/Online";
 
-const Main = (props: any) => {
+const Main = () => {
 
 return (
   <section className='main' >
