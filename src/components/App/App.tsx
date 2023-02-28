@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import Main from '../Main/Main'
 import { Route, Routes } from "react-router-dom";
 import Info from "../Info/Info";

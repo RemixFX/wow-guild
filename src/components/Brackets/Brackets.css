@@ -31,22 +31,63 @@
   text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.1);
 }
 
-.bracket__raid_page_bracket {
+.bracket__block {
   display: flex;
-  position: relative;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 97%;
-  margin: auto;
-  margin-bottom: 35px;
+  flex-direction: column;
   background: radial-gradient(circle, rgb(0 133 255 / 21%) 25%, rgba(27, 27, 27, 1) 89%);
 }
 
-.bracket__raid-id {
-  position: absolute;
-  top: 0;
-  font-size: 0.7rem;
+.bracket__raid-info {
+  width: 93%;
+  margin: auto;
+  min-width: 500px;
 }
+
+.bracket__raid-header {
+  text-align: center;
+  margin: 15px 0 0;
+  font-family: 'Yeseva One', cursive;
+  font-size: 1.7rem;
+  font-weight: 400;
+  color: #dbb341;
+}
+
+.bracket__raid-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.bracket__raid_page_bracket {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+  margin-bottom: 35px;
+}
+
+.bracket__raid-id {
+  font-size: 0.7rem;
+  position: relative;
+  top: 12px;
+}
+
+.bracket__raid-buttons {
+  display: flex;
+}
+
+.bracket__button-changename {
+  height: 24px;
+  width: 34px;
+  background: url(../../images/change_name.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  border: none;
+}
+
 
 .bracket__group_page_bracket {
   min-width: 500px;
@@ -216,3 +257,10 @@
 .brackets__modal-button:hover {
   box-shadow: 0px 0px 3px 3px #fffacd;
 }
+
+@media screen and (max-width: 1052px) {
+  .bracket__raid-info {
+    width: 46%;
+  }
+}
+

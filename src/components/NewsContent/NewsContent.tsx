@@ -1,13 +1,13 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useMemo } from "react";
 import { INews } from "../../models/newsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchDeleteGuildNews } from "../../store/reducers/ActionCreators";
+import ConfirmDelete from "../ConfirmDelete/ConfirmDelete";
 
  const NewsContent = memo((props: {message: INews, activeNewsGuild: string}) => {
 
   const dispatch = useAppDispatch();
   const {loggedIn} = useAppSelector(state => state.admin)
-  const [isShowConfirmBlock, setIsShowConfirmBlock] = useState(false)
 
   // Добавление кликабельных ссылок в текст
   const renderText = useMemo(() => {
@@ -23,9 +23,8 @@ import { fetchDeleteGuildNews } from "../../store/reducers/ActionCreators";
   }, [props.message])
 
   // Удаление новости
-  const handleClickAcceptToDelete = (id: number) => {
+  const fetchDelete = (id: number) => {
     dispatch(fetchDeleteGuildNews(id))
-    setIsShowConfirmBlock(true)
   }
 
   return (
@@ -37,17 +36,7 @@ import { fetchDeleteGuildNews } from "../../store/reducers/ActionCreators";
         </div>
         {(props.message.owner !== 'SIRUS #рейды' && loggedIn
          && props.activeNewsGuild === 'active') &&
-         <div className="content__delete-button-block">
-        <button className="content__delete-button" type="button"
-        onClick={() => setIsShowConfirmBlock(true)}></button>
-        {isShowConfirmBlock &&
-        <div className="confirm-delete">
-          <button className="confirm-delete__button confirm-delete__button_type_accept"
-          type="button" onClick={() => handleClickAcceptToDelete(props.message.id)}>&#10003;</button>
-          <button className="confirm-delete__button confirm-delete__button_type_cancel"
-          type="button" onClick={() => setIsShowConfirmBlock(false)}>&#10007;</button>
-        </div>}
-        </div>}
+         <ConfirmDelete confirmationAccepted={() => fetchDelete(props.message.id)}/>}
       </div>
       <p className="content__message">{renderText}</p>
     </article>
