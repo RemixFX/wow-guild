@@ -68,14 +68,13 @@ const Brackets = () => {
               <div className="bracket__raid-tools">
                 <span className="bracket__raid-id">id рейда: {bracket.raidID}</span>
                 <div className="bracket__raid-buttons">
-                <ConfirmDelete confirmationAccepted={() => console.log('удалено')}/>
+                  <ConfirmDelete confirmationAccepted={() => console.log('удалено')} />
                   <button className="bracket__button-changename"
                     type="button"></button>
                 </div>
               </div>
             </div>
             <div className="bracket__raid_page_bracket">
-
               {Object.entries(bracket.raid).map(([groupName, groupPlayers]) =>
                 <div className="bracket__group bracket__group_page_bracket" key={groupName}>
                   <ul className="bracket__notations_page_bracket">
@@ -115,42 +114,54 @@ const Brackets = () => {
         )}
         <h1 className="bracket__header">Составы 10ки:</h1>
         {brackets.raid10.map((bracket) =>
-          <div className="bracket__raid_page_bracket" key={bracket.raidID}>
-            <span className="bracket__raid-id">id рейда: {bracket.raidID}</span>
-            {Object.entries(bracket.raid).map(([groupName, groupPlayers]) =>
-              <div className="bracket__group bracket__group_page_bracket" key={groupName}>
-                <ul className="bracket__notations_page_bracket">
-                  <li className="bracket__notation">Роль</li>
-                  <li className="bracket__notation">Имя</li>
-                  <li className="bracket__notation">Класс</li>
-                  <li className="bracket__notation">Раса</li>
-                  <li className="bracket__notation">Заметка</li>
-                </ul>
-                <div className="bracket__players">
-                  <h2 className="bracket__group-title">{groupName}</h2>
-                  {groupPlayers.map((player) =>
-                    <ul className="bracket__row_page_bracket" key={player.id}>
-                      <li className="bracket__cell bracket__cell_page_bracket">{player.role}</li>
-                      <li className="bracket__cell bracket__cell_page_bracket">{player.name}</li>
-                      <li className="bracket__cell bracket__cell_page_bracket" style={classColor(player)}>
-                        {player.class_name}
-                      </li>
-                      <li className="bracket__cell bracket__cell_page_bracket">{player.race}</li>
-                      <li className="bracket__cell bracket__cell_page_bracket" data-title={player.note}>{player.note}</li>
-                      {loggedIn &&
-                        <button type="button" className={`bracket__edit-note-button
-                       ${(player.id === data.playerID && loadingNote) && 'bracket__loading-button'}`}
-                          onClick={() => handleOpenModal(bracket.raidID, player.id, player.note)}></button>
-                      }
-                    </ul>
-                  )}
-                  <ul className="bracket__group-buffs">
-                    <li className="bracket__group-buff">{getNameGroupBuff(groupPlayers)}</li>
-                  </ul>
+          <div className="bracket__block" key={bracket.raidID}>
+            <div className="bracket__raid-info">
+              <h2 className="bracket__raid-header">header 123</h2>
+              <div className="bracket__raid-tools">
+                <span className="bracket__raid-id">id рейда: {bracket.raidID}</span>
+                <div className="bracket__raid-buttons">
+                  <ConfirmDelete confirmationAccepted={() => console.log('удалено')} />
+                  <button className="bracket__button-changename"
+                    type="button"></button>
                 </div>
               </div>
-            )}
-            <div className="bracket__raid-border"></div>
+            </div>
+            <div className="bracket__raid_page_bracket">
+              {Object.entries(bracket.raid).map(([groupName, groupPlayers]) =>
+                <div className="bracket__group bracket__group_page_bracket" key={groupName}>
+                  <ul className="bracket__notations_page_bracket">
+                    <li className="bracket__notation">Роль</li>
+                    <li className="bracket__notation">Имя</li>
+                    <li className="bracket__notation">Класс</li>
+                    <li className="bracket__notation">Раса</li>
+                    <li className="bracket__notation">Заметка</li>
+                  </ul>
+                  <div className="bracket__players">
+                    <h2 className="bracket__group-title">{groupName}</h2>
+                    {groupPlayers.map((player) =>
+                      <ul className="bracket__row_page_bracket" key={player.id}>
+                        <li className="bracket__cell bracket__cell_page_bracket">{player.role}</li>
+                        <li className="bracket__cell bracket__cell_page_bracket">{player.name}</li>
+                        <li className="bracket__cell bracket__cell_page_bracket" style={classColor(player)}>
+                          {player.class_name}
+                        </li>
+                        <li className="bracket__cell bracket__cell_page_bracket">{player.race}</li>
+                        <li className="bracket__cell bracket__cell_page_bracket" data-title={player.note}>{player.note}</li>
+                        {loggedIn &&
+                          <button type="button" className={`bracket__edit-note-button
+                       ${(player.id === data.playerID && loadingNote) && 'bracket__loading-button'}`}
+                            onClick={() => handleOpenModal(bracket.raidID, player.id, player.note)}></button>
+                        }
+                      </ul>
+                    )}
+                    <ul className="bracket__group-buffs">
+                      <li className="bracket__group-buff">{getNameGroupBuff(groupPlayers)}</li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+              <div className="bracket__raid-border"></div>
+            </div>
           </div>
         )}
       </div>
