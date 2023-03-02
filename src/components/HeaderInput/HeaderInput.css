@@ -1,0 +1,16 @@
+.header-text {
+  color: #eebc1deb;
+  margin: 0 30px 30px 30px;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.header-input {
+  margin: 0 0 29px 0;
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  color: #eebc1deb;
+  background-color: transparent;
+}

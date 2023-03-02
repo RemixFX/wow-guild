@@ -151,23 +151,6 @@
   overflow: hidden;
 }
 
-.modal-brackets__header {
-  color: #eebc1deb;
-  margin: 0 30px 30px 30px;
-  text-align: center;
-  text-decoration: underline;
-}
-
-.modal-brackets__input-header {
-  margin: 0 0 29px 0;
-  font-size: 2em;
-  font-weight: bold;
-  text-align: center;
-  border: none;
-  color: #eebc1deb;
-  background-color: transparent;
-}
-
 .modal-brackets__color-input {
   position: absolute;
   top: 45%;
@@ -292,6 +275,10 @@
   min-height: 44px;
   border-bottom: solid 3px #d1defb42;
   background: #0d2c41;
+}
+
+.modal-button:disabled {
+  display: none;
 }
 
 .modal-button[data-title]:hover:after {

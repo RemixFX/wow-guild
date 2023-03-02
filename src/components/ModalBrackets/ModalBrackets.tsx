@@ -3,6 +3,7 @@ import { FC, MouseEvent, MouseEventHandler, useEffect, useRef, useState } from "
 import { IGroupData } from "../../models/bracketsModel";
 import { changeModalBracketBackground, classColor, getNameGroupBuff } from "../../utils/config"
 import { HexColorPicker } from "react-colorful";
+import HeaderInput from "../HeaderInput/HeaderInput";
 
 interface IProps {
   isClose: MouseEventHandler<HTMLButtonElement>;
@@ -26,13 +27,13 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
   const groupsInBracket: number = Object.keys(bracketPlayers).length > 2 ? 25 : 10
 
   const handleClickDownloadButton = () => {
-    html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 2.0 })
+      html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 2.0 })
       .then(function (canvas) {
         const url = canvas.toDataURL("image/png", 1)
         const link = document.createElement("a");
         link.href = url
         link.setAttribute('download', textInputValue ? textInputValue :
-          groupsInBracket === 25 ? '25ка' : '10ка')
+        groupsInBracket === 25 ? '25ка' : '10ка')
         link.click()
       });
   }
@@ -108,17 +109,13 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
         <button className={`modal-button modal-options-button modal-options-button_type_change-background
              ${isOpenSelectInput && 'animation-opacity'}`} type="button"
           onClick={() => setIsOpenSelectInput(true)}>Изменить стиль</button>
-        <button className="modal-button modal-download-button" type="button"
+        <button className="modal-button modal-download-button" type="button" disabled={isOpenTextInput}
           onClick={handleClickDownloadButton} data-title='Cкачать как картинку'></button>
-        <button className="modal-button modal-copy-button" type="button"
+        <button className="modal-button modal-copy-button" type="button" disabled={isOpenTextInput}
           onClick={handleClickCopyButton} style={{ backgroundImage: isCopied ? `url(${successImg})` : '' }}
           onBlur={() => setIsCopied(false)} data-title='Скопировать. Используйте Ctrl+V в дискорд'></button>
         <section className="modal-brackets" ref={modalRef} onClick={e => handleClickModal(e)}
           style={changeModalBracketBackground(selectInputValue)}>
-            {isOpenTextInput ?
-              <input className="modal-brackets__input-header" ref={inputRef}
-                value={textInputValue} onChange={e => setTextInputValue(e.target.value)} /> :
-              <h1 className="modal-brackets__header">{textInputValue}</h1>}
             {isOpenColorPalette &&
               <div className="modal-brackets__color-input" ref={paletteRef}>
                 <HexColorPicker className="animation-appear" color={color} onChange={setColor} />
@@ -140,6 +137,8 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
                 <option value='Crystal'>Crystal</option>
               </select>
             }
+              <HeaderInput isOpenTextInput={isOpenTextInput} inputRef={inputRef}
+               inputValue={(value: string) => setTextInputValue(value)}/>
             <div className="bracket__raid">
               {Object.entries(bracketPlayers).map(([groupId, group]) =>
                 <div className="bracket__group" key={groupId}
