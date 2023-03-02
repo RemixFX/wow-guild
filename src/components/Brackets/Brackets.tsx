@@ -159,7 +159,7 @@ const Brackets = () => {
                         }
                       </ul>
                     )}
-                    <ul className="bracket__group-buffs">
+                    <ul className="bracket__group-buffs bracket__group-buffs_color_black">
                       <li className="bracket__group-buff">{getNameGroupBuff(groupPlayers)}</li>
                     </ul>
                   </div>
