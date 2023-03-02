@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IBrackets } from "../../models/bracketsModel";
+import { IError } from "../../models/globalError";
 
- interface BracketsSlice {
+interface BracketsSlice {
   brackets: IBrackets
   loading: boolean;
   error: boolean;
   loadingNote: boolean;
-  errorLoadingNote: boolean;
+  errorLoadingNote: IError;
+  errorDeleteBracket: IError
 }
 
 const initialState: BracketsSlice = {
@@ -17,7 +19,8 @@ const initialState: BracketsSlice = {
   loading: false,
   error: false,
   loadingNote: false,
-  errorLoadingNote: false
+  errorLoadingNote: { isError: false, message: '' },
+  errorDeleteBracket: { isError: false, message: '' }
 }
 
 export const bracketsSlice = createSlice({
@@ -47,9 +50,9 @@ export const bracketsSlice = createSlice({
     },
     bracketNoteFetching: state => {
       state.loadingNote = true
-      state.errorLoadingNote = false
+      state.errorLoadingNote = { isError: false, message: '' }
     },
-    bracketNoteFetchingSuccess: (state, action: PayloadAction<{note: string, raid_id: string, id: string, group_name: string}>) => {
+    bracketNoteFetchingSuccess: (state, action: PayloadAction<{ note: string, raid_id: string, id: string, group_name: string }>) => {
       state.brackets.raid10 = state.brackets.raid10.map((raid) => {
         if (raid.raidID === action.payload.raid_id) {
           raid.raid[action.payload.group_name].map((player) => {
@@ -73,11 +76,21 @@ export const bracketsSlice = createSlice({
         return raid
       });
       state.loadingNote = false
-      state.errorLoadingNote = false
+      state.errorLoadingNote = { isError: false, message: '' }
     },
-    bracketNoteFetchingError: state => {
+    bracketNoteFetchingError: (state, action: PayloadAction<IError>) => {
       state.loadingNote = false
-      state.errorLoadingNote = true
+      state.errorLoadingNote = action.payload
     },
+    deleteBracketFetching: state => {
+      state.errorDeleteBracket = { isError: false, message: ''}
+    },
+    deleteBracketFetchingSuccess: (state, action: PayloadAction<string>) => {
+      state.brackets.raid25 = state.brackets.raid25.filter((raid) => raid.raidID !== action.payload)
+      state.brackets.raid10 = state.brackets.raid10.filter((raid) => raid.raidID !== action.payload)
+    },
+    deleteBracketFetchingError: (state, action: PayloadAction<IError>) => {
+      state.errorDeleteBracket = action.payload
+    }
   }
 })

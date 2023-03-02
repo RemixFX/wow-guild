@@ -183,6 +183,18 @@ export const fetchBrackets = () => async (dispatch: AppDispatch) => {
   }
 }
 
+export const fetchDeleteBracket = (id: string) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(bracketsSlice.actions.deleteBracketFetching())
+    const response: string = await dbApi.deleteBracket(id)
+    dispatch(bracketsSlice.actions.deleteBracketFetchingSuccess(response))
+  } catch  (error: any ) {
+    dispatch(bracketsSlice.actions.deleteBracketFetchingError({isError: true, message: error.message}))
+    console.log(error)
+  }
+
+}
+
 export const fetchChangeNote = (note: string, playerID: string, raidID: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(bracketsSlice.actions.bracketNoteFetching());
@@ -191,7 +203,7 @@ export const fetchChangeNote = (note: string, playerID: string, raidID: string) 
       dispatch(bracketsSlice.actions.bracketNoteFetchingSuccess(response))
     }, 1000)
   } catch (error: any) {
-    dispatch(bracketsSlice.actions.bracketNoteFetchingError())
+    dispatch(bracketsSlice.actions.bracketNoteFetchingError({isError: true, message: error.message}))
     console.log(error)
   }
 }

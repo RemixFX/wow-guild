@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { RefObject, useEffect, useRef, MouseEvent, useState, FormEvent } from "react"
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchBrackets, fetchChangeNote } from "../../store/reducers/ActionCreators"
+import { fetchBrackets, fetchChangeNote, fetchDeleteBracket } from "../../store/reducers/ActionCreators"
 import { classColor, getNameGroupBuff } from "../../utils/config"
 import ConfirmDelete from "../ConfirmDelete/ConfirmDelete";
 import InfoSlider from "../InfoSlider/infoSlider";
@@ -11,7 +11,7 @@ import Topbar from "../Topbar/Topbar"
 const Brackets = () => {
 
   const dispatch = useAppDispatch();
-  const { brackets, error, loading, errorLoadingNote, loadingNote } = useAppSelector(state => state.brackets)
+  const { brackets, error, loading, errorLoadingNote, loadingNote, errorDeleteBracket } = useAppSelector(state => state.brackets)
   const { loggedIn } = useAppSelector(state => state.admin)
   const modal: RefObject<HTMLDialogElement> = useRef(null)
   const inputValue: RefObject<HTMLTextAreaElement> = useRef(null)
@@ -40,6 +40,10 @@ const Brackets = () => {
     }
   }
 
+  const deleteBracket = (id: string) => {
+    dispatch(fetchDeleteBracket(id))
+  }
+
 
   if (loading) {
     return (
@@ -58,7 +62,8 @@ const Brackets = () => {
   return (
     <section className="brackets">
       <Topbar />
-      {errorLoadingNote && <InfoSlider infoMessage="Ошибка сервера. Не удалось обновить заметку" error={true} />}
+      {errorLoadingNote.isError && <InfoSlider infoMessage={errorLoadingNote.message} error={true} />}
+      {errorDeleteBracket.isError && <InfoSlider infoMessage={errorDeleteBracket.message} error={true} />}
       <div className="bracket">
         <h1 className="bracket__header">Составы 25ки:</h1>
         {brackets.raid25.map((bracket) =>
@@ -68,7 +73,7 @@ const Brackets = () => {
               <div className="bracket__raid-tools">
                 <span className="bracket__raid-id">id рейда: {bracket.raidID}</span>
                 <div className="bracket__raid-buttons">
-                  <ConfirmDelete confirmationAccepted={() => console.log('удалено')} />
+                  <ConfirmDelete confirmationAccepted={() => deleteBracket(bracket.raidID)} />
                   <button className="bracket__button-changename"
                     type="button"></button>
                 </div>
@@ -120,7 +125,7 @@ const Brackets = () => {
               <div className="bracket__raid-tools">
                 <span className="bracket__raid-id">id рейда: {bracket.raidID}</span>
                 <div className="bracket__raid-buttons">
-                  <ConfirmDelete confirmationAccepted={() => console.log('удалено')} />
+                  <ConfirmDelete confirmationAccepted={() => deleteBracket(bracket.raidID)} />
                   <button className="bracket__button-changename"
                     type="button"></button>
                 </div>

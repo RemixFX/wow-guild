@@ -1,5 +1,4 @@
 import { IAccount } from "../models/aсcountModel";
-import { IBracket } from "../models/bracketsModel";
 import { IEvents } from "../models/eventsModel";
 
 class Api {
@@ -174,6 +173,15 @@ class Api {
       headers: this._headers,
       credentials: 'include',
       body: JSON.stringify(bracket)
+    })
+      .then(this._checkResponse);
+  }
+
+  deleteBracket(id: string) {
+    return fetch(`${this._url}/bracket/${id}`, {
+      method: 'DELETE',
+      headers: this._headers,
+      credentials: 'include',
     })
       .then(this._checkResponse);
   }
