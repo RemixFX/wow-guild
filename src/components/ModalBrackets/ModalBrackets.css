@@ -139,6 +139,9 @@
 
 .modal-brackets {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100%;
   width: 100%;
   background-image: url(../../images/online_bg.png);
@@ -146,14 +149,6 @@
   background-size: cover;
   background-repeat: no-repeat;
   overflow: hidden;
-}
-
-.bracket {
-  margin: auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .modal-brackets__header {
@@ -269,7 +264,7 @@
   grid-template-columns: 16% 24% 26% 24% 10%;
   margin: 0;
   padding: 0;
-  color: #eebc1deb;
+  color: #eebc1d;
   font-size: 0.9rem;
   list-style-type: none;
   background: #0000008c;

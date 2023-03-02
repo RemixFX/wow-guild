@@ -15,14 +15,13 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const selectRef = useRef<HTMLSelectElement>(null)
   const paletteRef = useRef<HTMLDivElement>(null)
-  const [image, setImage] = useState('')
   const [isOpenTextInput, setIsOpenTextInput] = useState(false)
   const [textInputValue, setTextInputValue] = useState('')
   const [isOpenSelectInput, setIsOpenSelectInput] = useState(false)
   const [selectInputValue, setSelectInputValue] = useState('')
   const [isOpenColorPalette, setIsOpenColorPalette] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
-  const [color, setColor] = useState("#eebc1deb");
+  const [color, setColor] = useState("#ffc200");
 
   const groupsInBracket: number = Object.keys(bracketPlayers).length > 2 ? 25 : 10
 
@@ -37,18 +36,6 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
         link.click()
       });
   }
-
-  /*         useEffect(() => {
-            html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 2.0 })
-            .then(function (canvas) {
-              const url = canvas.toDataURL("image/png", 1)
-              const link = document.createElement("a");
-              link.href = url
-              link.setAttribute('download', 'download')
-              link.click()
-              //setImage(url)
-            });
-          }, []) */
 
   const handleClickCopyButton = async () => {
     html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 1.4 })
@@ -107,13 +94,11 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
     }
   }, [isOpenColorPalette])
 
-  console.log(groupsInBracket)
-
   return (
     <div className="modal-background">
       <div className="modal-layout">
         <button className="modal-button modal-close-button" type="button"
-          onClick={isClose} style={{ right: image && "-1%" }}></button>
+          onClick={isClose}></button>
         <button className="modal-button modal-options-button modal-options-button_type_change-name"
           type="button"
           onClick={() => setIsOpenTextInput(true)}>Изменить название</button>
@@ -130,7 +115,6 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
           onBlur={() => setIsCopied(false)} data-title='Скопировать. Используйте Ctrl+V в дискорд'></button>
         <section className="modal-brackets" ref={modalRef} onClick={e => handleClickModal(e)}
           style={changeModalBracketBackground(selectInputValue)}>
-          <div className="bracket">
             {isOpenTextInput ?
               <input className="modal-brackets__input-header" ref={inputRef}
                 value={textInputValue} onChange={e => setTextInputValue(e.target.value)} /> :
@@ -187,7 +171,6 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
                 </div>
               )}
             </div>
-          </div>
         </section>
       </div>
     </div>
