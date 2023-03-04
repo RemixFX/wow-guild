@@ -12,10 +12,12 @@ export interface IGroupDB extends IGroup{
   note: string;
   group_name: string;
   raid_id: number;
+  raid_name?: string;
 }
 
 export interface IBracket {
   raidID: string;
+  raidName?: string;
   raid: {[group_name: string]: IGroupDB[]}
 }
 

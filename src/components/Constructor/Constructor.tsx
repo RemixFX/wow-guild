@@ -353,7 +353,8 @@ const Constructor = () => {
           ...player,
           note: '',
           group_name: convertGroupName(group),
-          raid_id: raidID
+          raid_id: raidID,
+          raid_name: ''
         });
       });
     });

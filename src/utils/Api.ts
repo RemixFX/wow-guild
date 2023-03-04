@@ -186,6 +186,16 @@ class Api {
       .then(this._checkResponse);
   }
 
+  changeNameBracket(raidName: string, raidID: string) {
+    return fetch(`${this._url}/update`, {
+      method: 'PUT',
+      headers: this._headers,
+      credentials: 'include',
+      body: JSON.stringify({ raidName, raidID })
+    })
+      .then(this._checkResponse);
+  }
+
   changeNote(note: string, playerID: string, raidID: string) {
     return fetch(`${this._url}/update`, {
       method: 'PUT',

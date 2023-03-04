@@ -171,15 +171,17 @@ export const fetchBrackets = () => async (dispatch: AppDispatch) => {
       groupedBrackets[bracket.raid_id][bracket.group_name].push(bracket);
     }
     Object.entries(groupedBrackets).forEach(([raidID, raid]) => {
-      if (Object.values(raid).length > 2) {
-        newBracket.raid25.push({ raidID, raid })
+      const raidName = Object.values(raid)[0][0].raid_name
+      if (Object.keys(raid).length > 2) {
+        newBracket.raid25.push({ raidID, raidName: raidName, raid })
       } else {
-        newBracket.raid10.push({ raidID, raid })
+        newBracket.raid10.push({ raidID, raidName: raidName, raid })
       }
     });
     dispatch(bracketsSlice.actions.bracketsFetchingSuccess(newBracket))
   } catch (error: any) {
     dispatch(bracketsSlice.actions.bracketsFetchingError())
+    console.log(error)
   }
 }
 
@@ -192,7 +194,16 @@ export const fetchDeleteBracket = (id: string) => async (dispatch: AppDispatch) 
     dispatch(bracketsSlice.actions.deleteBracketFetchingError({isError: true, message: error.message}))
     console.log(error)
   }
+}
 
+export const fetchChangeNameBracket = (raidName: string, raidID: string) => (dispatch: AppDispatch) => {
+  try {
+    dispatch(bracketsSlice.actions.bracketNameFetching());
+    dbApi.changeNameBracket(raidName, raidID);
+  } catch (error: any) {
+    dispatch(bracketsSlice.actions.bracketNameFetchingError({isError: true, message: error.message}))
+    console.log(error)
+  }
 }
 
 export const fetchChangeNote = (note: string, playerID: string, raidID: string) => async (dispatch: AppDispatch) => {
