@@ -8,7 +8,6 @@ interface BracketsSlice {
   error: boolean;
   loadingNote: boolean;
   castomError: IError;
-  //errorDeleteBracket: IError
 }
 
 const initialState: BracketsSlice = {

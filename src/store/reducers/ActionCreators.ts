@@ -39,8 +39,8 @@ export const fetchEvents = () => async (dispatch: AppDispatch) => {
       dispatch(scheduleSlice.actions.eventsFetchingSuccess(events))
     }, 1000)
 
-  } catch (error) {
-    dispatch(scheduleSlice.actions.eventsFetchingError())
+  } catch (error: any) {
+    dispatch(scheduleSlice.actions.eventsFetchingError({isError: true, message: error.message}))
   }
 }
 
@@ -53,8 +53,8 @@ export const fetchCreateEvents = (event: IEvents) => async (dispatch: AppDispatc
       dispatch(scheduleSlice.actions.createEventFetchingSuccess(response))
     }, 1000)
 
-  } catch (error: unknown) {
-    dispatch(scheduleSlice.actions.eventFetchingError(error))
+  } catch (error: any) {
+    dispatch(scheduleSlice.actions.eventFetchingError({isError: true, message: error.message}))
   }
 }
 
@@ -67,8 +67,8 @@ export const fetchChangeEvents = (event: IEvents) => async (dispatch: AppDispatc
       dispatch(scheduleSlice.actions.changeEventFetchingSuccess(response))
     }, 1000)
 
-  } catch (error: unknown) {
-    dispatch(scheduleSlice.actions.eventFetchingError(error))
+  } catch (error: any) {
+    dispatch(scheduleSlice.actions.eventFetchingError({isError: true, message: error.message}))
   }
 }
 
@@ -81,8 +81,8 @@ export const fetchDeleteEvents = (id: number) => async (dispatch: AppDispatch) =
       dispatch(scheduleSlice.actions.deleteEventFetchingSuccess(response.id))
     }, 1000)
 
-  } catch (error: unknown) {
-    dispatch(scheduleSlice.actions.eventFetchingError(error))
+  } catch (error: any) {
+    dispatch(scheduleSlice.actions.eventFetchingError({isError: true, message: error.message}))
   }
 }
 
@@ -95,8 +95,8 @@ export const fetchLogin = (value: IAccount) => async (dispatch: AppDispatch) => 
       dispatch(adminSlice.actions.isSucessFetchingLoginForm(response.name))
     }, 1000)
 
-  } catch (error: unknown) {
-    dispatch(adminSlice.actions.isErrorFetchingForm(error))
+  } catch (error: any) {
+    dispatch(adminSlice.actions.isErrorFetchingForm({ isError: true, message: error.message }))
   }
 }
 
@@ -109,8 +109,8 @@ export const fetchRegister = (value: IAccount) => async (dispatch: AppDispatch) 
       dispatch(adminSlice.actions.isSucessFetchingRegisterForm(response.message))
     }, 1000)
 
-  } catch (error: unknown) {
-    dispatch(adminSlice.actions.isErrorFetchingForm(error))
+  } catch (error: any) {
+    dispatch(adminSlice.actions.isErrorFetchingForm({ isError: true, message: error.message }))
   }
 }
 
@@ -123,8 +123,8 @@ export const fetchLogout = () => async (dispatch: AppDispatch) => {
       dispatch(adminSlice.actions.isSucessFetchingLogout(response.message))
     }, 1000)
 
-  } catch (error: unknown) {
-    dispatch(adminSlice.actions.isErrorFetchingForm(error))
+  } catch (error: any) {
+    dispatch(adminSlice.actions.isErrorFetchingForm({ isError: true, message: error.message }))
   }
 }
 
@@ -151,7 +151,7 @@ export const fetchGuild = (searchWord: string, realmId: string) => async (dispat
     })
     dispatch(searchSlice.actions.guildFetchingSuccess(guilds))
   } catch (error: any) {
-    dispatch(searchSlice.actions.guildFetchingError())
+    dispatch(searchSlice.actions.guildFetchingError({isError: true, message: 'Сервер не доступен'}))
   }
 }
 
@@ -227,7 +227,7 @@ export const fetchServerNews = () => async (dispatch: AppDispatch) => {
       dispatch(newsSlice.actions.isSuccessFetchingServerNews(response))
     }, 1000)
   } catch (error: any) {
-    dispatch(newsSlice.actions.isErrorFetchingServerNews({ isError: true, message: error.message }))
+    dispatch(newsSlice.actions.isErrorFetchingServerNews({ isError: true, message: 'Ошибка сервера. Не удалось загрузить новости' }))
     console.log(error)
   }
 }

@@ -1,6 +1,7 @@
-import { FC, FormEvent, memo, ReactNode } from "react";
+import { FC, FormEvent, ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { IAccount } from "../../models/aсcountModel";
+import { IError } from "../../models/globalError";
 import { useInput } from "../../utils/Validations";
 import Modal from "../Modal/Modal"
 import Preloader from "../Preloader/Preloader";
@@ -8,13 +9,13 @@ import Preloader from "../Preloader/Preloader";
 interface IProps {
   children?: ReactNode;
   title: string;
-  error: string;
+  error: IError;
   loading: boolean;
   titleButton: string;
   submit: (values: IAccount) => void;
 }
 
-const Form: FC<IProps> = memo(({ children, title, error, loading, titleButton, submit }) => {
+const Form: FC<IProps> = ({ children, title, error, loading, titleButton, submit }) => {
 
   const location = useLocation();
   const loginInput = useInput('', { minLength: 2, isEmpty: true })
@@ -55,11 +56,11 @@ const Form: FC<IProps> = memo(({ children, title, error, loading, titleButton, s
       </form>
       <div className="form__error-response">
         {loading && <Preloader addClass={'lds-spinner_style_l'} />}
-        {error && '-- ' + error + ' --'}
+        {error.isError && '-- ' + error.message + ' --'}
       </div>
     </Modal>
     )
-})
+}
 
 export default Form
 

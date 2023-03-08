@@ -29,7 +29,7 @@ const Schedule = () => {
   const nextMonthDays = new Date(nowYear, nowMonth + 2, 0).getDate()
   const dispatch = useAppDispatch();
   const { loggedIn } = useAppSelector(state => state.admin)
-  const { events, loading, loadingEvent, error, errorEvent, openEventForm } = useAppSelector(state => state.schedule)
+  const { events, loading, loadingEvent, error, errorForm, openEventForm } = useAppSelector(state => state.schedule)
   const { currentUser } = useAppSelector(state => state.admin)
 
   // Создание массива со всеми датами на предыдущий, текущий и следующий месяц
@@ -181,7 +181,7 @@ const Schedule = () => {
             <article className='card' key={index}>
               <p className="card__date">{`${nowDateWithoutTime.getTime() === element.date.getTime() ? 'Cегодня,' : ''}
              ${element.date.getDate()} ${arrMonthName[element.date.getMonth()]}`}
-                {error && <span className="card__event-error">Не удалось загрузить события</span>}
+                {error.isError && <span className="card__event-error">{error.message}</span>}
               </p>
               <div className="card__layout-element">
 
@@ -215,7 +215,7 @@ const Schedule = () => {
         <EventForm
           date={selectedDate}
           withEvent={selectedEvent}
-          error={errorEvent.message}
+          error={errorForm}
           loading={loadingEvent}
           submit={selectedDate ? createEvent : changeEvent}
           onDelete={deleteEvent}

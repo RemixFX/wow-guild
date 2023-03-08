@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FormEvent, useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -26,9 +27,8 @@ const News = () => {
     loadingGuildNews,
     errorGuildNews,
     loadingPostGuildNews,
-    errorPostGuildNews,
-    errorDeleteGuildNews,
-    isOpenForm
+    isOpenForm,
+    errorForSlider
   } = useAppSelector(state => state.news)
 
   // Закрытие формы добавления новости если она открыта при рендере компонента
@@ -64,8 +64,7 @@ const News = () => {
       timeout={2000}
     >
       <section className='news'>
-        {errorPostGuildNews.isError && <InfoSlider infoMessage="Ошибка сервера. Не удалось добавить новость" error={true} />}
-        {errorDeleteGuildNews.isError && <InfoSlider infoMessage="Ошибка сервера. Не удалось удалить новость" error={true} />}
+        {errorForSlider.isError && <InfoSlider infoMessage={errorForSlider.message} error={true} />}
         <div className="tab">
           <div className='tab__block'>
             <button

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ChangeEvent, FC, FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { IEvents } from "../../models/eventsModel";
+import { IError } from "../../models/globalError";
 import { IPlayer } from "../../models/playerModel";
 import { useAppDispatch, useAppSelector, useSearchPlayer } from "../../store/hooks";
 import { fetchPlayers } from "../../store/reducers/ActionCreators";
@@ -13,7 +14,7 @@ interface IProps {
   withEvent: IEvents | null;
   date: Date | null;
   title: string;
-  error: string;
+  error: IError;
   loading: boolean;
   submit: (event: IEvents) => void;
   onDelete: (id: number) => void;
@@ -154,7 +155,7 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
       </form>
       <div className="event-form__error-response">
         {loading && <Preloader addClass={'lds-spinner_style_l'} />}
-        {error && '-- ' + error + ' --'}
+        {error.isError && '-- ' + error.message + ' --'}
       </div>
       </Modal>
   )

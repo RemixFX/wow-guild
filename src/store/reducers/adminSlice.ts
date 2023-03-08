@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IError } from "../../models/globalError";
 
 interface AdminState {
   loggedIn: boolean;
@@ -6,7 +7,7 @@ interface AdminState {
   openLoginForm: boolean;
   openRegisterForm: boolean;
   loading: boolean,
-  error: any,
+  error: IError,
   infoMessage: string;
 }
 
@@ -16,7 +17,7 @@ const initialState: AdminState = {
   openLoginForm: false,
   openRegisterForm: false,
   loading: false,
-  error: false,
+  error: { isError: false, message: '' },
   infoMessage: ''
 }
 
@@ -27,16 +28,16 @@ export const adminSlice = createSlice({
     isOpenLoginForm: state => {
       state.openLoginForm = true
       state.loading = false
-      state.error = false
+      state.error = { isError: false, message: '' }
     },
     isOpenRegisterForm: state => {
       state.openRegisterForm = true
       state.loading = false
-      state.error = false
+      state.error = { isError: false, message: '' }
     },
     isFetchingForm: state => {
       state.loading = true
-      state.error = false
+      state.error = { isError: false, message: '' }
       state.infoMessage = ''
     },
     isSucessFetchingLoginForm: (state, action: PayloadAction<string>) => {
@@ -44,7 +45,7 @@ export const adminSlice = createSlice({
       state.loading = false
       state.openLoginForm = false
       state.openRegisterForm = false
-      state.error = false
+      state.error = { isError: false, message: '' }
       state.currentUser = action.payload
       state.infoMessage = 'Успешный вход'
     },
@@ -53,7 +54,7 @@ export const adminSlice = createSlice({
       state.loading = false
       state.openLoginForm = false
       state.openRegisterForm = false
-      state.error = false
+      state.error = { isError: false, message: '' }
       state.infoMessage = action.payload
     },
     isSucessFetchingLogout: (state, action: PayloadAction<string>) => {
@@ -61,11 +62,11 @@ export const adminSlice = createSlice({
       state.loading = false
       state.openLoginForm = false
       state.openRegisterForm = false
-      state.error = false
+      state.error = { isError: false, message: '' }
       state.currentUser = ''
       state.infoMessage = action.payload
     },
-    isErrorFetchingForm: (state, action: PayloadAction<any>) => {
+    isErrorFetchingForm: (state, action: PayloadAction<IError>) => {
       state.loading = false
       state.error = action.payload
     },

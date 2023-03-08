@@ -429,7 +429,7 @@ const Constructor = () => {
             />
             <ul className="guild-selection__placeholder">
               {searchLoading && <li>Загрузка...</li>}
-              {searchError && <li style={{ color: "#ab0000", padding: '5px' }}>Сервер не доступен</li>}
+              {searchError.isError && <li style={{ color: "#ab0000", padding: '5px' }}>{searchError.message}</li>}
               {searchMessage && <li style={{ color: "#ab0000", padding: '5px', fontSize: '0.9rem' }}>
                 {searchMessage}</li>}
               {searchValue.length > 0 &&

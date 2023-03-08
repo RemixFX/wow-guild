@@ -57,7 +57,7 @@ function App() {
       <Form
         title={openRegisterForm ? 'Создать новый аккаунт для офицеров' : 'Войти в аккаунт'}
         titleButton={openRegisterForm ? 'Создать' : 'Войти'}
-        error={error.message}
+        error={error}
         loading={loading}
         submit={openRegisterForm ? register : login}>
         {
