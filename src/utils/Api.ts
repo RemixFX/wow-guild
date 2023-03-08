@@ -112,6 +112,7 @@ class Api {
     return fetch(`${this._url}/signup`, {
       method: 'POST',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify({
         name: user.name,
         password: user.password

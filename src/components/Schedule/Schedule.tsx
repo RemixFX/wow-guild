@@ -211,16 +211,15 @@ const Schedule = () => {
           )}
         </div>
       </CSSTransition>
-      {(selectedEvent || selectedDate) &&
-        <EventForm
-          date={selectedDate}
-          withEvent={selectedEvent}
-          error={errorForm}
-          loading={loadingEvent}
-          submit={selectedDate ? createEvent : changeEvent}
-          onDelete={deleteEvent}
-          title={createTitle()}
-        />}
+      <EventForm
+        date={selectedDate}
+        withEvent={selectedEvent}
+        error={errorForm}
+        loading={loadingEvent}
+        submit={selectedDate ? createEvent : changeEvent}
+        onDelete={deleteEvent}
+        title={createTitle()}
+      />
       <Footer />
     </section>
   )
