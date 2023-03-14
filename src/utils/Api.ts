@@ -198,7 +198,7 @@ class Api {
   }
 
   changeNote(note: string, playerID: string, raidID: string) {
-    return fetch(`${this._url}/update`, {
+    return fetch(`${this._url}/update-note`, {
       method: 'PUT',
       headers: this._headers,
       credentials: 'include',

@@ -210,6 +210,7 @@ export const fetchChangeNote = (note: string, playerID: string, raidID: string) 
   try {
     dispatch(bracketsSlice.actions.bracketNoteFetching());
     const response = await dbApi.changeNote(note, playerID, raidID);
+    console.log(response)
     setTimeout(() => {
       dispatch(bracketsSlice.actions.bracketNoteFetchingSuccess(response))
     }, 1000)
