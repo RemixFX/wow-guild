@@ -16,7 +16,7 @@ import Modal from "../Modal/Modal";
 
 function App() {
   const dispatch = useAppDispatch();
-  const { loggedIn, infoMessage } = useAppSelector(state => state.admin)
+  const { infoMessage } = useAppSelector(state => state.admin)
 
   // Запрос данных при загрузке сайта
   useEffect(() => {
@@ -40,8 +40,6 @@ function App() {
   useEffect(() => {
     dispatch(fetchEvents())
   }, [])
-
-  console.log(loggedIn)
 
   return (
     <div className="App">

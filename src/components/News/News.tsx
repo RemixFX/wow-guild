@@ -55,6 +55,7 @@ const News = () => {
   const handleCloseForm = () => {
     dispatch(newsSlice.actions.isClosingForm())
     setIsCheckValid(true)
+    formInput.setValue('')
   }
 
   return (
