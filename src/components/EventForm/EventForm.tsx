@@ -45,29 +45,16 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
     dispatch(scheduleSlice.actions.iscloseEventForm())
   })
 
-  // Очистка инпутов
-  const clearInputForm = () => {
-    selectInput.setValue('')
-    timeInput.setValue('')
-    raidleaderInput.setValue('')
-    selectInput.setIsDirty(false)
-    timeInput.setIsDirty(false)
-    raidleaderInput.setIsDirty(false)
-    setShowInput(false)
-  }
-
-  // Закрытие формы при нажатии на область и очистка инпутов
+  // Закрытие формы при нажатии на область
   const closeOnBackDropClick = (evt: MouseEvent<HTMLElement>) => {
     if (evt.target === modal.current) {
       modal.current?.close();
-      clearInputForm()
     }
   }
 
- // Закрытие формы и очистка инпутов
+ // Закрытие формы
   const closeForm = () => {
     modal.current?.close()
-    clearInputForm()
   }
 
   // Запрос списка игроков если они ещё не были получены
@@ -100,7 +87,7 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
     }
   }
 
-  // Отправка формы и очистка значений полей
+  // Отправка формы
   const submitForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     submit({
@@ -110,7 +97,6 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
       raidleader: raidleaderInput.value,
       time: timeInput.value
     })
-    clearInputForm()
   }
 
   // Удаление события
