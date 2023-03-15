@@ -57,7 +57,7 @@ function useInput(initialState: string, validations: Validation) {
   const onBlur = () => {
     setIsDirty(true)
   }
-  return { value, setValue, isDirty, onChange, onBlur, ...valid }
+  return { value, setValue, isDirty, setIsDirty, onChange, onBlur, ...valid }
 }
 
 export {useInput}

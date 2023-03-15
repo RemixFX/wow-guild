@@ -211,6 +211,7 @@ const Schedule = () => {
           )}
         </div>
       </CSSTransition>
+      {(selectedDate || selectedEvent) &&
       <EventForm
         date={selectedDate}
         withEvent={selectedEvent}
@@ -220,6 +221,7 @@ const Schedule = () => {
         onDelete={deleteEvent}
         title={createTitle()}
       />
+    }
       <Footer />
     </section>
   )

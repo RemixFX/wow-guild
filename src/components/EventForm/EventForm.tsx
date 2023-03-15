@@ -24,6 +24,7 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
 
   const modal: RefObject<HTMLDialogElement> = useRef(null)
   const keyRef: RefObject<HTMLInputElement> = useRef(null);
+  const placeholderRef = useRef(null)
   const [showInput, setShowInput] = useState(false);
   const raidleaderInput = useInput(withEvent ? withEvent.raidleader : '', { minLength: 2, isEmpty: true })
   const timeInput = useInput(withEvent ? withEvent.time : '', { minLength: 2, isEmpty: true })
@@ -34,18 +35,39 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
   const { openEventForm } = useAppSelector(state => state.schedule)
   const dispatch = useAppDispatch()
 
+  // Открытие или закрытие формы
   useEffect(() => {
     openEventForm ? modal.current?.showModal() : modal.current?.close();
   }, [openEventForm])
 
+  // Отправка значение что область должна быть закрыта, при нажатии на 'Escape'
   modal.current?.addEventListener('close', () => {
     dispatch(scheduleSlice.actions.iscloseEventForm())
   })
 
+  // Очистка инпутов
+  const clearInputForm = () => {
+    selectInput.setValue('')
+    timeInput.setValue('')
+    raidleaderInput.setValue('')
+    selectInput.setIsDirty(false)
+    timeInput.setIsDirty(false)
+    raidleaderInput.setIsDirty(false)
+    setShowInput(false)
+  }
+
+  // Закрытие формы при нажатии на область и очистка инпутов
   const closeOnBackDropClick = (evt: MouseEvent<HTMLElement>) => {
     if (evt.target === modal.current) {
       modal.current?.close();
+      clearInputForm()
     }
+  }
+
+ // Закрытие формы и очистка инпутов
+  const closeForm = () => {
+    modal.current?.close()
+    clearInputForm()
   }
 
   // Запрос списка игроков если они ещё не были получены
@@ -53,19 +75,21 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
     players.length === 0 && dispatch(fetchPlayers(GUILD_ID, GUILD_REALM_ID))
   }, [])
 
+  // Показ предлагаемых игроков если совпадает со значением ввода
   useEffect(() => {
     if (raidleaderInput.value !== resultSearch[0]?.name) {
       setSearchName(resultSearch)
     }
   }, [raidleaderInput.value])
 
-
+  //  Фокус на поле для собственного названия рейда, при его появлении
   useEffect(() => {
     if (showInput && keyRef.current) {
       keyRef.current.focus()
     }
   }, [showInput, keyRef]);
 
+  // Показ поля для собственного названия рейда, при выборе его из списка
   const handleSelectEvent = (e: ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === 'Своё событие') {
       selectInput.setValue('');
@@ -76,6 +100,7 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
     }
   }
 
+  // Отправка формы и очистка значений полей
   const submitForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     submit({
@@ -85,12 +110,15 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
       raidleader: raidleaderInput.value,
       time: timeInput.value
     })
+    clearInputForm()
   }
 
+  // Удаление события
   const handleDeleteEvent = () => {
     onDelete(withEvent!.id)
   }
 
+  // Сохранение значения поля 'РЛ' при выборе из списка предлагаемых вариантов
   const handleClickPlaceholderItem = (value: string) => {
     raidleaderInput.setValue(value)
     setSearchName([])
@@ -101,7 +129,7 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
       <div className='modal__wrapper'>
         <h3 className="modal__header modal__header_style_gold">{title}</h3>
         <button type="button" className="modal__close-button"
-          onClick={() => modal.current?.close()}> &#215;</button>
+          onClick={closeForm}> &#215;</button>
         <div className="modal__inner">
           <form className="event-form" onSubmit={(evt) => submitForm(evt)}>
             <label className="event-form__label">Название события
@@ -140,7 +168,7 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
               <span className="event-form__error">
                 {raidleaderInput.isDirty && raidleaderInput.error}
               </span>
-              <ul className="event-form__placeholder">
+              <ul className="event-form__placeholder" ref={placeholderRef}>
                 {searchName.length > 0 &&
                   searchName.map((value, index: number) => (
                     <li className="event-form__placeholder-item"
