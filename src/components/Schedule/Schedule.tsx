@@ -192,8 +192,8 @@ const Schedule = () => {
                       {loggedIn && <button className="card__change-event-button"
                         onClick={() => { handleOpenModalWithEvent(event) }}></button>}
                     </div>
-                    <span className="card__element-owner">{event.raidleader}</span>
-                    <span className="card__element-time">{event.time}</span>
+                    <span className="card__element-owner">РЛ: {event.raidleader}</span>
+                    <span className="card__element-time">Время: {event.time}</span>
                   </div>)}
                 {loading ? <Preloader addClass={''} /> :
                   element.eventsOfDay.length < 4 &&
