@@ -208,7 +208,6 @@ class Api {
   }
 }
 
-
 const headers = new Headers(
   [
     ['Accept', 'application/json'],
@@ -221,15 +220,10 @@ const sirusApi = new Api({
   headers: headers
 });
 
+//Если сервер запускается локально, использовать "http://localhost:3001"
 const dbApi = new Api({
-  url: "http://localhost:3001",
-  //url: "https://wow-guild.herokuapp.com",
+  url: "http://89.111.137.180/api",
   headers: headers
 });
 
-const mockApi = new Api({
-  url: "https://api.publicapis.org",
-  headers: headers
-});
-
-export { sirusApi, dbApi, mockApi };
+export { sirusApi, dbApi };
