@@ -41,11 +41,10 @@ const ModalBrackets: FC<IProps> = ({ isClose, bracketPlayers }) => {
   const handleClickCopyButton = async () => {
     html2canvas(modalRef.current as HTMLElement, { backgroundColor: null, scale: 1.4 })
       .then((canvas) => {
-        canvas.toBlob((blob) => {
-          const blobItem = new ClipboardItem({ 'image/png': blob! });
-          navigator.clipboard.write([blobItem]);
-          setIsCopied(true)
-        })
+        canvas.toBlob((blob: Blob | null) => blob && navigator.clipboard.write(
+           [new window.ClipboardItem({[blob.type]: blob})]
+        ))
+        setIsCopied(true)
       })
       .catch((err) => console.log(err))
   }
