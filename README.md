@@ -1,5 +1,7 @@
 # Сайт гильдии, для игры World of Warcraft
 
+## https://wow-sirus.online
+
 **предназначен для проекта [sirus.one](https://sirus.one/)*
 
 # Описание 

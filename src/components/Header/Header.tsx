@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import Topbar from '../Topbar/Topbar';
-const logo_sirus = require('../../images/logo_sirus1.png');
-const guild_logo = require('../../images/guild_name2.png');
+const logo_sirus = require('../../images/logo_sirus.png');
+const guild_logo = require('../../images/guild_name.png');
 
 
 const Header = () => {
