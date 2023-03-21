@@ -111,7 +111,7 @@ const EventForm: FC<IProps> = ({ withEvent, date, title, error, loading, submit,
   }
 
   return (
-    <dialog className='modal modal_style_gold' ref={modal} onClick={(evt) => closeOnBackDropClick(evt)}>
+    <dialog className='modal modal_style_gold' ref={modal} onMouseDown={(evt) => closeOnBackDropClick(evt)}>
       <div className='modal__wrapper'>
         <h3 className="modal__header modal__header_style_gold">{title}</h3>
         <button type="button" className="modal__close-button"

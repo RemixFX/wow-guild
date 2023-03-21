@@ -33,7 +33,7 @@ const Modal: FC<{ login: (values: IAccount) => void, register: (values: IAccount
   return (
     <dialog className={`modal ${(location.pathname === '/schedule'
       || location.pathname === '/brackets') && 'modal_style_gold'}`}
-      ref={modal} onClick={(evt) => closeOnBackDropClick(evt)}>
+      ref={modal} onMouseDown={(evt) => closeOnBackDropClick(evt)}>
       {openLoginForm &&
         <Form error={error} loading={loading} submit={login}
           title="Войти в аккаунт" titleButton="Войти" handleCloseForm={closeForm}>

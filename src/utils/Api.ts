@@ -220,8 +220,9 @@ const sirusApi = new Api({
   headers: headers
 });
 
-//Если сервер запускается локально, использовать "http://localhost:3001"
+//Если сервер запускается локально, использовать "http://localhost:3001/api"
 const dbApi = new Api({
+  //url: "http://localhost:3001/api",
   url: "https://wow-sirus.online/api",
   headers: headers
 });

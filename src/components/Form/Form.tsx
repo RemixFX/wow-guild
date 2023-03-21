@@ -12,7 +12,7 @@ interface IProps {
   loading: boolean;
   titleButton: string;
   submit: (values: IAccount) => void;
-  handleCloseForm: () => void
+  handleCloseForm: () => void;
 }
 
 const Form: FC<IProps> = ({ children, title, error, loading, titleButton, submit, handleCloseForm }) => {

@@ -69,7 +69,7 @@ const Brackets = () => {
         </ul>
         )}
 
-      <dialog className="brackets__modal" ref={modal} onClick={(e) => closeOnBackDropClick(e)}>
+      <dialog className="brackets__modal" ref={modal} onMouseDown={(e) => closeOnBackDropClick(e)}>
         <form className="brackets__form" onSubmit={e => changeNote(e)}>
           <textarea className="brackets__form-input" ref={inputValue}></textarea>
           <div className="brackets__modal-buttons">
