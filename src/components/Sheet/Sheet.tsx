@@ -6,19 +6,19 @@ const Sheet: FC<{ player: IPlayer }> = ({ player }) => {
   let rank;
   switch (player.pivot.rank) {
     case 0:
-      rank = 'ГМ'
+      rank = 'мастер гильдии'
       break;
     case 1:
-      rank = 'ст. офицер'
+      rank = 'мастер гильдии'
       break;
     case 2:
       rank = 'офицер'
       break;
     case 3:
-      rank = 'проф рейдер'
+      rank = '1ый состав'
       break;
     case 4:
-      rank = 'рейдер'
+      rank = '2ой состав'
       break;
     case 5:
       rank = 'твин'
