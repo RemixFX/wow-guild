@@ -176,3 +176,11 @@
   background-position: center;
   background-size: 300px;
 }
+
+@media screen and (max-width: 1035px) {
+  .bracket__raid-tools {
+    min-width: 500px;
+    justify-content: space-between;
+    margin: auto;
+  }
+}

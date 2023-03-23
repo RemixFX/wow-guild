@@ -9,6 +9,7 @@
   align-self: center;
   margin-bottom: 10px;
   margin-top: 10px;
+  font-size: 1.8rem;
   text-shadow: 2px 2px 3px rgba(255,255,255,0.1);
 }
 
@@ -22,12 +23,13 @@
 .card {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   background: linear-gradient(to right, #BF953F, #e1d29b,
    #cd9929, #e7de87, #AA771C);
   margin-left: 1%;
   margin-right: 1%;
   margin-bottom: 8px;
-  height: 11vh;
+  min-height: 11vh;
   position: relative;
   box-shadow: inset 0px 0px 3px 3px #e1d29b,
    5px 0px 7px 3px #4a4437, -5px 0px 7px 3px #4a4437;
@@ -88,6 +90,9 @@
   border-radius: 22px;
   margin: 5px;
   box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .card__element-top {
@@ -106,12 +111,6 @@
   padding: 8px;
   cursor: pointer;
   border: 0;
-}
-
-.card__element-owner, .card__element-title {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .card__element-title:hover {
@@ -163,9 +162,6 @@
 }
 
 @media screen and (max-width: 520px) {
-  .card {
-    font-size: 0.7rem;
-  }
   .card__element {
     min-height: 50px;
     padding: 6px 1px 6px 1px;
@@ -174,6 +170,21 @@
     margin: 3px;
   }
   .card__element_hidden {
+    background-size: 32px;
+  }
+  .card__change-event-button {
+    width: 10px;
+    height: 10px;
+    padding: 4px;
+  }
+}
+
+@media screen and (max-height: 882px) {
+  .card__element {
+    min-height: 50px;
+    margin: 3px;
+  }
+  .card__element_admin {
     background-size: 32px;
   }
 }

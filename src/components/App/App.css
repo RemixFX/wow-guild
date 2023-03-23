@@ -1,3 +1,7 @@
+html {
+  font-size: 16px;
+}
+
 .App {
   max-width: 100%;
   min-width: 320px;
@@ -11,3 +15,20 @@
   -moz-text-size-adjust: 100%;
 }
 
+@media screen and (max-height: 882px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-height: 710px) {
+  html {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 460px) {
+  html {
+    font-size: 11px;
+  }
+}
