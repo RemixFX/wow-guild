@@ -90,7 +90,8 @@
 }
 
 .header__guild-logo {
-  width: 36%;
+  width: 64%;
+  padding-top: 8px;
   grid-column: 1 / 4;
   margin: auto;
 }

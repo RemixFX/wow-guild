@@ -3,7 +3,7 @@ import { IEvents } from "../models/eventsModel";
 import { IPlayer } from "../models/playerModel";
 
 // ID гильдии
-const GUILD_ID = 5
+const GUILD_ID = 225
 
 // ID игрового мира гильдии
 const GUILD_REALM_ID = '57'
