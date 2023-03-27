@@ -1,7 +1,9 @@
 .schedule {
-  background-color: rgb(27, 27, 27);
-  height: 100vh;
   display: flex;
+  background-color: rgb(27, 27, 27);
+  position: fixed;
+  height: 100%;
+  width: 100%;
   flex-direction: column;
 }
 
@@ -113,6 +115,10 @@
   border: 0;
 }
 
+.card__element-title {
+  overflow: hidden;
+}
+
 .card__element-title:hover {
   overflow: inherit;
   text-overflow: inherit;
@@ -152,15 +158,6 @@
   height: 10px;
 }
 
-@media screen and (max-width: 640px) {
-  .card {
-    font-size: 0.9rem;
-  }
-  .card__element_hidden {
-    background-size: 42px;
-  }
-}
-
 @media screen and (max-width: 520px) {
   .card__element {
     min-height: 50px;
@@ -169,13 +166,25 @@
     max-width: calc((100% / 4) - 6px);
     margin: 3px;
   }
-  .card__element_hidden {
+  .card__element_admin {
     background-size: 32px;
   }
   .card__change-event-button {
     width: 10px;
     height: 10px;
     padding: 4px;
+  }
+  .schedule__loading {
+    height: 50px;
+  }
+  .schedule__loading .lds-spinner__element {
+    transform-origin: 40px 24px;
+    margin: 0;
+  }
+  .schedule__loading .lds-spinner__element::after {
+    width: 4px;
+    height: 12px;
+    left: 38px;
   }
 }
 
@@ -186,5 +195,17 @@
   }
   .card__element_admin {
     background-size: 32px;
+  }
+  .schedule__loading {
+    height: 50px;
+  }
+  .schedule__loading .lds-spinner__element {
+    transform-origin: 40px 24px;
+    margin: 0;
+  }
+  .schedule__loading .lds-spinner__element::after {
+    width: 4px;
+    height: 12px;
+    left: 38px;
   }
 }

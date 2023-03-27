@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { WheelEvent, useState, useMemo, useEffect } from "react";
+import { WheelEvent, useState, useMemo, useEffect, TouchEvent } from "react";
 import { CSSTransition } from 'react-transition-group';
 import { IEvents } from "../../models/eventsModel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchChangeEvents, fetchCreateEvents, fetchDeleteEvents, postNewsGuild } from "../../store/reducers/ActionCreators";
 import { scheduleSlice } from "../../store/reducers/scheduleSlice";
-import { cardStyle } from "../../utils/config";
+import { cardStyle, mobile } from "../../utils/config";
 import EventForm from "../EventForm/EventForm";
 import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
@@ -27,6 +27,7 @@ const Schedule = () => {
   const monthDays = new Date(nowYear, nowMonth + 1, 0).getDate()
   const previousMonthDays = new Date(nowYear, nowMonth, 0).getDate()
   const nextMonthDays = new Date(nowYear, nowMonth + 2, 0).getDate()
+  const [touchPosition, setTouchPosition] = useState<number | null>(null)
   const dispatch = useAppDispatch();
   const { loggedIn } = useAppSelector(state => state.admin)
   const { events, loading, loadingEvent, error, errorForm, openEventForm } = useAppSelector(state => state.schedule)
@@ -94,27 +95,55 @@ const Schedule = () => {
     }
   }, [openEventForm])
 
+  // Добавление предыдущих дат c событиями в календарь, при скролле вверх
+  const addPrevDates = () => {
+    setIsScrollDown(false)
+    setIsScrollUp(true)
+    if (index > indexCurrentData) return
+    setData((data.unshift(
+      arrAllDays[indexCurrentData - index]
+    ), data).slice(0, 7));
+    setIndex(state => state + 1)
+  }
+
+  // Добавление следующих дат c событиями в календарь, при скролле вниз
+  const addNextDates = () => {
+    setIsScrollUp(false)
+    setIsScrollDown(true)
+    if (-(index - 9) + indexCurrentData > arrAllDays.length) return
+    setData((data.push(
+      arrAllDays[indexCurrentData - (index - 8)]
+    ), data).slice(1, 8));
+    setIndex(state => state - 1)
+  }
+
   //Обновление отображаемого массива в зависимости от скролла
   const hundleMouseScroll = (e: WheelEvent) => {
     setIsScroll(true)
+    if (e.deltaY < 0) addPrevDates()
+    else addNextDates()
+  }
 
-    if (e.deltaY < 0) {
-      setIsScrollDown(false)
-      setIsScrollUp(true)
-      if (index > indexCurrentData) return
-      setData((data.unshift(
-        arrAllDays[indexCurrentData - index]
-      ), data).slice(0, 7));
-      setIndex(index + 1)
-    } else {
-      setIsScrollUp(false)
-      setIsScrollDown(true)
-      if (-(index - 9) + indexCurrentData > arrAllDays.length) return
-      setData((data.push(
-        arrAllDays[indexCurrentData - (index - 8)]
-      ), data).slice(1, 8));
-      setIndex(index - 1)
+  // Отслеживание начала touch-swipe on mobile
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    const touchDown = e.touches[0].clientY
+    setTouchPosition(touchDown)
+  }
+
+  //Обновление отображаемого массива в зависимости от touch-swipe on mobile
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    const touchDown = touchPosition
+    if (touchDown === null) return
+    const currentTouch = e.touches[0].clientY
+    const diff = touchDown - currentTouch
+    setIsScroll(true)
+    if (diff < -5 && diff > -12) {
+      addPrevDates()
     }
+    if (diff > 5 && diff < 12) {
+      addNextDates()
+    }
+    setTouchPosition(null)
   }
 
   // Открытие формы для создания события
@@ -175,8 +204,8 @@ const Schedule = () => {
         timeout={290}
         onExit={() => setIsScroll(false)}
       >
-        <div className='schedule__block' onWheel={hundleMouseScroll} >
-
+        <div className='schedule__block' onTouchStart={handleTouchStart}
+          onWheel={hundleMouseScroll} onTouchMove={handleTouchMove} >
           {data.map((element, index) =>
             <article className='card' key={index}>
               <p className="card__date">{`${nowDateWithoutTime.getTime() === element.date.getTime() ? 'Cегодня,' : ''}
@@ -195,7 +224,7 @@ const Schedule = () => {
                     <span className="card__element-owner">РЛ: {event.raidleader}</span>
                     <span className="card__element-time">Время: {event.time}</span>
                   </div>)}
-                {loading ? <Preloader addClass={''} /> :
+                {loading ? <Preloader addClass={'schedule__loading'} /> :
                   element.eventsOfDay.length < 4 &&
                   <div className={`card__element ${(loggedIn && element.date >= nowDateWithoutTime)
                     && 'card__element_admin'}`} onClick={() => handleOpenModal(element.date)} >
@@ -212,17 +241,17 @@ const Schedule = () => {
         </div>
       </CSSTransition>
       {(selectedDate || selectedEvent) &&
-      <EventForm
-        date={selectedDate}
-        withEvent={selectedEvent}
-        error={errorForm}
-        loading={loadingEvent}
-        submit={selectedDate ? createEvent : changeEvent}
-        onDelete={deleteEvent}
-        title={createTitle()}
-      />
-    }
-      <Footer />
+        <EventForm
+          date={selectedDate}
+          withEvent={selectedEvent}
+          error={errorForm}
+          loading={loadingEvent}
+          submit={selectedDate ? createEvent : changeEvent}
+          onDelete={deleteEvent}
+          title={createTitle()}
+        />
+      }
+      {!mobile && <Footer />}
     </section>
   )
 }
