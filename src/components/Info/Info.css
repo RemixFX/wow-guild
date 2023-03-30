@@ -1,14 +1,28 @@
 .info {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  width: 85%;
+  margin: auto;
+  min-height: 50%;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #ffdb56;
+}
+
+.info__header {
+  font-size: 1.2rem;
+  padding-top: 3%;
+  margin: 0;
 }
 
 .info__text {
-  padding-top: 3%;
   margin: 0;
-  width: 80%;
-  min-height: 50%;
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #eebc1deb;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.info__span {
+  background-color: #3a3a3a;
+  color: white;
 }
